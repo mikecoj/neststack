@@ -1,0 +1,17 @@
+# Default owners for everything in the repo
+* @mikecoj
+
+# Package source requires core maintainer review
+packages/ @mikecoj
+
+# CI/CD and release configuration requires core maintainer review
+.github/ @mikecoj
+nx.json @mikecoj
+package.json @mikecoj
+pnpm-workspace.yaml @mikecoj
+tsconfig.base.json @mikecoj
+
+# Security-sensitive files
+SECURITY.md @mikecoj
+.devcontainer/ @mikecoj
+compose.yaml @mikecoj
