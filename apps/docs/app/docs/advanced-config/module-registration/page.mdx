@@ -26,12 +26,12 @@ export class AppModule {}
 
 ### Options
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `configs` | `ConfigDefinition[]` | — | Array of config definitions |
-| `isGlobal` | `boolean` | `true` | Make ConfigService available in all modules |
-| `envSource` | Record&lt;string, string or undefined&gt; | `process.env` | Custom env source |
-| `overrides` | Record&lt;string, Record&lt;string, unknown&gt;&gt; | — | Override specific values |
+| Option      | Type                                                | Default       | Description                                 |
+| ----------- | --------------------------------------------------- | ------------- | ------------------------------------------- |
+| `configs`   | `ConfigDefinition[]`                                | —             | Array of config definitions                 |
+| `isGlobal`  | `boolean`                                           | `true`        | Make ConfigService available in all modules |
+| `envSource` | Record&lt;string, string or undefined&gt;           | `process.env` | Custom env source                           |
+| `overrides` | Record&lt;string, Record&lt;string, unknown&gt;&gt; | —             | Override specific values                    |
 
 ### Custom Environment Source
 
@@ -45,7 +45,7 @@ AdvancedConfigModule.forRoot({
     DB_PORT: '5433',
     DB_PASSWORD: 'test-pw',
   },
-})
+});
 ```
 
 ### Overrides
@@ -58,7 +58,7 @@ AdvancedConfigModule.forRoot({
   overrides: {
     database: { poolSize: 50, ssl: true },
   },
-})
+});
 ```
 
 Override values take precedence over loader values but still pass through Zod validation.
@@ -175,7 +175,7 @@ export class HealthModule {}
 Register multiple namespaces in a single `forFeature()` call:
 
 ```typescript
-AdvancedConfigModule.forFeature(paymentsConfig, notificationsConfig)
+AdvancedConfigModule.forFeature(paymentsConfig, notificationsConfig);
 ```
 
 ### How It Works

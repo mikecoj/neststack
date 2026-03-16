@@ -25,11 +25,11 @@ Every `config.get('database.host')` is a single `Map.get()` call — no string s
 
 ### Why a Flat Map?
 
-| Approach | Time per read | Allocation per read |
-| --- | --- | --- |
-| Flat `Map.get()` | O(1) | None |
+| Approach                | Time per read        | Allocation per read      |
+| ----------------------- | -------------------- | ------------------------ |
+| Flat `Map.get()`        | O(1)                 | None                     |
 | String split + traverse | O(n) where n = depth | Array from `.split('.')` |
-| Recursive search | O(n) | Stack frames |
+| Recursive search        | O(n)                 | Stack frames             |
 
 The flat map trades a few microseconds of startup time (to build the map) for zero-cost reads at runtime.
 
@@ -63,11 +63,11 @@ Runtime:
 
 For a configuration with 5 namespaces and 30 total keys:
 
-| Operation | Time |
-| --- | --- |
-| Full registration + validation + freeze | ~2ms |
-| Single `get()` call | ~0.001ms (1μs) |
-| `getAll()` | ~0.01ms |
-| `getSafeAll()` (with masking) | ~0.05ms |
+| Operation                               | Time           |
+| --------------------------------------- | -------------- |
+| Full registration + validation + freeze | ~2ms           |
+| Single `get()` call                     | ~0.001ms (1μs) |
+| `getAll()`                              | ~0.01ms        |
+| `getSafeAll()` (with masking)           | ~0.05ms        |
 
 These are approximate values. Actual performance depends on hardware and config size.

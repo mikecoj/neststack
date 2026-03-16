@@ -43,16 +43,16 @@ All configuration is deep-frozen after validation using `Object.freeze()` applie
 
 ```typescript
 const db = config.namespace('database');
-db.host = 'hacked';  // TypeError: Cannot assign to read-only property 'host'
+db.host = 'hacked'; // TypeError: Cannot assign to read-only property 'host'
 ```
 
 ### Why Deep Freeze?
 
-| Approach | Runtime protection | Performance cost |
-| --- | --- | --- |
-| `Object.freeze()` | Yes — throws TypeError | Zero after initial freeze |
-| `Proxy` | Yes | Overhead on every access |
-| ReadonlyDeep&lt;T&gt; | No — TypeScript only | None |
+| Approach              | Runtime protection     | Performance cost          |
+| --------------------- | ---------------------- | ------------------------- |
+| `Object.freeze()`     | Yes — throws TypeError | Zero after initial freeze |
+| `Proxy`               | Yes                    | Overhead on every access  |
+| ReadonlyDeep&lt;T&gt; | No — TypeScript only   | None                      |
 
 `Object.freeze()` is a native operation with no runtime overhead after the initial call. It's the only approach that provides both runtime protection and zero-cost reads.
 
@@ -100,7 +100,7 @@ This prevents accidental overwrites and ensures each module owns its config.
 The `EnvSource` class treats empty strings as "not set":
 
 ```typescript
-env.getString('DB_HOST')  // throws if DB_HOST is "" or undefined
+env.getString('DB_HOST'); // throws if DB_HOST is "" or undefined
 ```
 
 This prevents accidentally using blank environment variables as valid values — a common source of bugs in production.

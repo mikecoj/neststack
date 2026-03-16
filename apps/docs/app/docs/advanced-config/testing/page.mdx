@@ -95,7 +95,7 @@ it('should throw on invalid config', async () => {
       imports: [
         AdvancedConfigModule.forRoot({
           configs: [testConfig],
-          envSource: {},  // DB_HOST is required
+          envSource: {}, // DB_HOST is required
         }),
       ],
     }).compile(),

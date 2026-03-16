@@ -47,9 +47,9 @@ Key design decisions:
 Resolves the value type at a given dot-path:
 
 ```typescript
-type HostType = PathValue<Config, 'database.host'>;  // string
-type PortType = PathValue<Config, 'database.port'>;  // number
-type DbType = PathValue<Config, 'database'>;          // { host: string; port: number }
+type HostType = PathValue<Config, 'database.host'>; // string
+type PortType = PathValue<Config, 'database.port'>; // number
+type DbType = PathValue<Config, 'database'>; // { host: string; port: number }
 ```
 
 ### Implementation

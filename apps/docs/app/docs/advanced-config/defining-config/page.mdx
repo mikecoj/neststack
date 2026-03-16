@@ -23,12 +23,12 @@ export const appConfig = defineConfig({
 
 ### Parameters
 
-| Parameter | Type | Required | Description |
-| --- | --- | --- | --- |
-| `namespace` | `string` | Yes | Unique identifier for this config group |
-| `schema` | `ZodSchema` | Yes | Zod schema for validation and defaults |
-| `load` | (ctx: LoadContext) =&gt; Partial&lt;T&gt; | No | Loader function to fetch values |
-| `secretKeys` | `string[]` | No | Keys to mask in logs and diagnostics |
+| Parameter    | Type                                      | Required | Description                             |
+| ------------ | ----------------------------------------- | -------- | --------------------------------------- |
+| `namespace`  | `string`                                  | Yes      | Unique identifier for this config group |
+| `schema`     | `ZodSchema`                               | Yes      | Zod schema for validation and defaults  |
+| `load`       | (ctx: LoadContext) =&gt; Partial&lt;T&gt; | No       | Loader function to fetch values         |
+| `secretKeys` | `string[]`                                | No       | Keys to mask in logs and diagnostics    |
 
 ## Zod Schemas
 
@@ -40,10 +40,10 @@ The schema serves three purposes:
 
 ```typescript
 const schema = z.object({
-  host: z.string(),                          // Required string
-  port: z.number().int().min(1).max(65535).default(5432),  // Number with constraints
-  ssl: z.boolean().default(false),           // Boolean with default
-  name: z.string().min(1),                   // Required non-empty string
+  host: z.string(), // Required string
+  port: z.number().int().min(1).max(65535).default(5432), // Number with constraints
+  ssl: z.boolean().default(false), // Boolean with default
+  name: z.string().min(1), // Required non-empty string
   poolSize: z.number().min(1).max(100).default(10),
 });
 ```
@@ -86,14 +86,14 @@ export const databaseConfig = defineConfig({
 
 ### EnvSource Methods
 
-| Method | Returns | Behavior if missing |
-| --- | --- | --- |
-| `getString(key, default?)` | `string` | Throws if no default provided |
-| `getNumber(key, default?)` | `number` | Throws if no default provided |
-| `getBoolean(key, default?)` | `boolean` | Throws if no default provided |
-| `getOptionalString(key)` | string or undefined | Returns `undefined` |
-| `getOptionalNumber(key)` | number or undefined | Returns `undefined` |
-| `getOptionalBoolean(key)` | boolean or undefined | Returns `undefined` |
+| Method                      | Returns              | Behavior if missing           |
+| --------------------------- | -------------------- | ----------------------------- |
+| `getString(key, default?)`  | `string`             | Throws if no default provided |
+| `getNumber(key, default?)`  | `number`             | Throws if no default provided |
+| `getBoolean(key, default?)` | `boolean`            | Throws if no default provided |
+| `getOptionalString(key)`    | string or undefined  | Returns `undefined`           |
+| `getOptionalNumber(key)`    | number or undefined  | Returns `undefined`           |
+| `getOptionalBoolean(key)`   | boolean or undefined | Returns `undefined`           |
 
 Empty strings (`""`) are treated as "not set" to prevent accidentally using blank values.
 
@@ -101,8 +101,8 @@ Empty strings (`""`) are treated as "not set" to prevent accidentally using blan
 
 The boolean methods accept these string values:
 
-| True values | False values |
-| --- | --- |
+| True values        | False values       |
+| ------------------ | ------------------ |
 | `true`, `1`, `yes` | `false`, `0`, `no` |
 
 Case-insensitive. Any other value throws an error.

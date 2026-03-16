@@ -17,9 +17,9 @@ export class DatabaseService {
   constructor(private readonly config: ConfigService) {}
 
   connect() {
-    const host = this.config.get('database.host');     // string
-    const port = this.config.get('database.port');     // number
-    const ssl = this.config.get('database.ssl');       // boolean
+    const host = this.config.get('database.host'); // string
+    const port = this.config.get('database.port'); // number
+    const ssl = this.config.get('database.ssl'); // boolean
   }
 }
 ```
@@ -62,11 +62,11 @@ Returns a `ConfigExplanation` object:
 }
 ```
 
-| Source | Meaning |
-| --- | --- |
-| `loader` | Value came from the `load()` function |
-| `default` | Value came from the Zod schema `.default()` |
-| `override` | Value came from `forRoot({ overrides })` |
+| Source     | Meaning                                     |
+| ---------- | ------------------------------------------- |
+| `loader`   | Value came from the `load()` function       |
+| `default`  | Value came from the Zod schema `.default()` |
+| `override` | Value came from `forRoot({ overrides })`    |
 
 ### printSafe()
 
@@ -111,26 +111,26 @@ export class AdminService {
   constructor(@Inject(CONFIG_STORE) private readonly store: ConfigStore) {}
 
   getAllConfig() {
-    return this.store.getAll();       // Full config (secrets visible)
+    return this.store.getAll(); // Full config (secrets visible)
   }
 
   getSafeConfig() {
-    return this.store.getSafeAll();   // Full config (secrets masked)
+    return this.store.getSafeAll(); // Full config (secrets masked)
   }
 }
 ```
 
 ### ConfigStore Methods
 
-| Method | Returns | Description |
-| --- | --- | --- |
-| `get(path)` | `T` | Get value by dot-path |
-| `getNamespace(name)` | `T` | Get entire namespace object |
-| `explain(path)` | `ConfigExplanation` | Trace value source |
-| `getAll()` | Record&lt;string, unknown&gt; | All namespaces (secrets visible) |
-| `getSafeAll()` | Record&lt;string, unknown&gt; | All namespaces (secrets masked) |
-| `printSafe()` | `void` | Log masked config |
-| `size` | `number` | Number of registered namespaces |
+| Method               | Returns                       | Description                      |
+| -------------------- | ----------------------------- | -------------------------------- |
+| `get(path)`          | `T`                           | Get value by dot-path            |
+| `getNamespace(name)` | `T`                           | Get entire namespace object      |
+| `explain(path)`      | `ConfigExplanation`           | Trace value source               |
+| `getAll()`           | Record&lt;string, unknown&gt; | All namespaces (secrets visible) |
+| `getSafeAll()`       | Record&lt;string, unknown&gt; | All namespaces (secrets masked)  |
+| `printSafe()`        | `void`                        | Log masked config                |
+| `size`               | `number`                      | Number of registered namespaces  |
 
 ## Usage Patterns
 

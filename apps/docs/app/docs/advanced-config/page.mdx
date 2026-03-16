@@ -22,14 +22,14 @@ yarn add @nestx/advanced-config zod
 
 Configuration is the foundation of every application. Getting it wrong means silent failures, security leaks, and debugging sessions that last hours. `@nestx/advanced-config` eliminates these problems:
 
-| Problem | How we solve it |
-| --- | --- |
-| Typos in config keys | Recursive dot-path types catch errors at compile time |
-| Invalid values at runtime | Zod validates every value at startup — fail fast, not at 3 AM |
-| Secrets in logs | Secret keys are automatically masked in all output |
-| Mutable config state | Deep-frozen objects throw TypeError on mutation |
-| Slow config access | Pre-built O(1) lookup map — no string parsing per read |
-| Boilerplate | `defineConfig()` gives you schema, loader, and types in one call |
+| Problem                   | How we solve it                                                  |
+| ------------------------- | ---------------------------------------------------------------- |
+| Typos in config keys      | Recursive dot-path types catch errors at compile time            |
+| Invalid values at runtime | Zod validates every value at startup — fail fast, not at 3 AM    |
+| Secrets in logs           | Secret keys are automatically masked in all output               |
+| Mutable config state      | Deep-frozen objects throw TypeError on mutation                  |
+| Slow config access        | Pre-built O(1) lookup map — no string parsing per read           |
+| Boilerplate               | `defineConfig()` gives you schema, loader, and types in one call |
 
 ## Quick Start
 
@@ -86,8 +86,8 @@ export class DatabaseService {
   constructor(private readonly config: ConfigService) {}
 
   connect() {
-    const host = this.config.get('database.host');     // string
-    const port = this.config.get('database.port');     // number
+    const host = this.config.get('database.host'); // string
+    const port = this.config.get('database.port'); // number
     // TypeScript knows the exact types
   }
 }

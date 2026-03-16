@@ -11,17 +11,17 @@ Creates a frozen `ConfigDefinition` from the provided options.
 ```typescript
 function defineConfig<N extends string, S extends ZodSchema>(
   options: ConfigDefinitionOptions<N, S>,
-): ConfigDefinition<N, S>
+): ConfigDefinition<N, S>;
 ```
 
 **Parameters:**
 
-| Name | Type | Description |
-| --- | --- | --- |
-| `options.namespace` | `string` | Unique identifier for this config group |
-| `options.schema` | `ZodSchema` | Zod schema for validation and type inference |
-| `options.load` | (ctx: LoadContext) =&gt; Partial&lt;z.infer&lt;S&gt;&gt; | Optional loader function |
-| `options.secretKeys` | `string[]` | Optional keys to mask in output |
+| Name                 | Type                                                     | Description                                  |
+| -------------------- | -------------------------------------------------------- | -------------------------------------------- |
+| `options.namespace`  | `string`                                                 | Unique identifier for this config group      |
+| `options.schema`     | `ZodSchema`                                              | Zod schema for validation and type inference |
+| `options.load`       | (ctx: LoadContext) =&gt; Partial&lt;z.infer&lt;S&gt;&gt; | Optional loader function                     |
+| `options.secretKeys` | `string[]`                                               | Optional keys to mask in output              |
 
 **Returns:** A frozen `ConfigDefinition` object.
 
@@ -43,12 +43,12 @@ static forRoot(options: AdvancedConfigModuleOptions): DynamicModule
 
 Registers configuration globally. Call once in the root `AppModule`.
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `configs` | `ConfigDefinition[]` | — | Config definitions to register |
-| `isGlobal` | `boolean` | `true` | Make providers available globally |
-| `envSource` | Record&lt;string, string or undefined&gt; | `process.env` | Custom env source |
-| `overrides` | Record&lt;string, Record&lt;string, unknown&gt;&gt; | — | Per-namespace overrides |
+| Option      | Type                                                | Default       | Description                       |
+| ----------- | --------------------------------------------------- | ------------- | --------------------------------- |
+| `configs`   | `ConfigDefinition[]`                                | —             | Config definitions to register    |
+| `isGlobal`  | `boolean`                                           | `true`        | Make providers available globally |
+| `envSource` | Record&lt;string, string or undefined&gt;           | `process.env` | Custom env source                 |
+| `overrides` | Record&lt;string, Record&lt;string, unknown&gt;&gt; | —             | Per-namespace overrides           |
 
 #### forRootAsync(options)
 
@@ -190,18 +190,18 @@ Typed wrapper around environment variables.
 
 ```typescript
 class EnvSource implements IEnvSource {
-  constructor(env?: Record<string, string | undefined>)
+  constructor(env?: Record<string, string | undefined>);
 }
 ```
 
-| Method | Signature | Missing behavior |
-| --- | --- | --- |
-| `getString` | `(key: string, default?: string) => string` | Throws |
-| `getNumber` | `(key: string, default?: number) => number` | Throws |
-| `getBoolean` | `(key: string, default?: boolean) => boolean` | Throws |
-| `getOptionalString` | (key: string) =&gt; string or undefined | Returns `undefined` |
-| `getOptionalNumber` | (key: string) =&gt; number or undefined | Returns `undefined` |
-| `getOptionalBoolean` | (key: string) =&gt; boolean or undefined | Returns `undefined` |
+| Method               | Signature                                     | Missing behavior    |
+| -------------------- | --------------------------------------------- | ------------------- |
+| `getString`          | `(key: string, default?: string) => string`   | Throws              |
+| `getNumber`          | `(key: string, default?: number) => number`   | Throws              |
+| `getBoolean`         | `(key: string, default?: boolean) => boolean` | Throws              |
+| `getOptionalString`  | (key: string) =&gt; string or undefined       | Returns `undefined` |
+| `getOptionalNumber`  | (key: string) =&gt; number or undefined       | Returns `undefined` |
+| `getOptionalBoolean` | (key: string) =&gt; boolean or undefined      | Returns `undefined` |
 
 ---
 
@@ -267,10 +267,10 @@ interface IEnvSource {
 
 ## Injection Tokens
 
-| Token | Value | Provides |
-| --- | --- | --- |
-| `CONFIG_STORE` | `Symbol('CONFIG_STORE')` | `ConfigStore` instance |
-| `ADVANCED_CONFIG_OPTIONS` | `Symbol('ADVANCED_CONFIG_OPTIONS')` | Module options |
+| Token                     | Value                               | Provides               |
+| ------------------------- | ----------------------------------- | ---------------------- |
+| `CONFIG_STORE`            | `Symbol('CONFIG_STORE')`            | `ConfigStore` instance |
+| `ADVANCED_CONFIG_OPTIONS` | `Symbol('ADVANCED_CONFIG_OPTIONS')` | Module options         |
 
 ---
 
