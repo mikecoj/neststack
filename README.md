@@ -12,14 +12,14 @@ The `apps/` folder contains applications that demonstrate how to use the package
 
 ## Packages
 
-| Package | Version | Description |
-| --- | --- | --- |
-| [`@nestx/advanced-config`](packages/advanced-config/) | 0.0.1 | Enterprise-grade, type-safe configuration module with Zod validation, secret masking, O(1) lookups, and full diagnostics |
+| Package                                               | Version | Description                                                                                                              |
+| ----------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
+| [`@nestx/advanced-config`](packages/advanced-config/) | 0.0.1   | Enterprise-grade, type-safe configuration module with Zod validation, secret masking, O(1) lookups, and full diagnostics |
 
 ## Applications
 
-| App | Description |
-| --- | --- |
+| App                  | Description                                                                            |
+| -------------------- | -------------------------------------------------------------------------------------- |
 | [`demo`](apps/demo/) | NestJS app showcasing every feature of `@nestx/advanced-config` through HTTP endpoints |
 
 ---
@@ -28,12 +28,12 @@ The `apps/` folder contains applications that demonstrate how to use the package
 
 Before you begin, make sure you have these tools installed on your machine:
 
-| Tool | Minimum Version | How to Check | Install Guide |
-| --- | --- | --- | --- |
-| **Node.js** | 22.0.0 | `node --version` | [nodejs.org](https://nodejs.org) or [Volta](https://volta.sh) |
-| **pnpm** | 10.x | `pnpm --version` | `corepack enable pnpm` (built into Node.js) |
-| **Git** | 2.x | `git --version` | [git-scm.com](https://git-scm.com) |
-| **Docker** (optional) | 24.x | `docker --version` | [docker.com](https://www.docker.com/get-started) |
+| Tool                  | Minimum Version | How to Check       | Install Guide                                                 |
+| --------------------- | --------------- | ------------------ | ------------------------------------------------------------- |
+| **Node.js**           | 22.0.0          | `node --version`   | [nodejs.org](https://nodejs.org) or [Volta](https://volta.sh) |
+| **pnpm**              | 10.x            | `pnpm --version`   | `corepack enable pnpm` (built into Node.js)                   |
+| **Git**               | 2.x             | `git --version`    | [git-scm.com](https://git-scm.com)                            |
+| **Docker** (optional) | 24.x            | `docker --version` | [docker.com](https://www.docker.com/get-started)              |
 
 **What are these tools?**
 
@@ -312,14 +312,14 @@ See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for full setup instructions.
 
 ## Documentation
 
-| Document | Description |
-| --- | --- |
-| **This file** | Repository overview and getting started |
-| [Development Guide](docs/DEVELOPMENT.md) | How to set up your development environment |
-| [Architecture](docs/ARCHITECTURE.md) | How the code is organized and why |
-| [Contributing](docs/CONTRIBUTING.md) | Code style, commit conventions, and PR process |
-| [@nestx/advanced-config](packages/advanced-config/README.md) | Full package documentation with API reference |
-| [Demo App](apps/demo/README.md) | Demo app endpoints and usage |
+| Document                                                     | Description                                    |
+| ------------------------------------------------------------ | ---------------------------------------------- |
+| **This file**                                                | Repository overview and getting started        |
+| [Development Guide](docs/DEVELOPMENT.md)                     | How to set up your development environment     |
+| [Architecture](docs/ARCHITECTURE.md)                         | How the code is organized and why              |
+| [Contributing](docs/CONTRIBUTING.md)                         | Code style, commit conventions, and PR process |
+| [@nestx/advanced-config](packages/advanced-config/README.md) | Full package documentation with API reference  |
+| [Demo App](apps/demo/README.md)                              | Demo app endpoints and usage                   |
 
 ---
 

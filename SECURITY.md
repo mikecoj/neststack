@@ -2,10 +2,10 @@
 
 ## Supported Versions
 
-| Version | Supported |
-| --- | --- |
-| Latest | Yes |
-| < Latest | No |
+| Version  | Supported |
+| -------- | --------- |
+| Latest   | Yes       |
+| < Latest | No        |
 
 Only the latest released version of each `@nestx/*` package receives security updates. We recommend always upgrading to the latest version.
 
