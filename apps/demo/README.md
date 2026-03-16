@@ -4,21 +4,21 @@ A NestJS application that exercises every feature of the `@nestx/advanced-config
 
 ## Features Demonstrated
 
-| Feature | Where |
-| --- | --- |
-| `defineConfig()` with Zod schemas | `src/config/database.config.ts`, `redis.config.ts` |
-| Schema-only config (Zod defaults, no loader) | `src/config/app.config.ts` |
-| `forRoot()` with multiple configs | `src/app/app.module.ts` |
-| `forFeature()` with inline plain options | `src/modules/health/health.module.ts` |
-| `ConfigService.get()` (dot-path access) | `GET /showcase/get/:path` |
-| `ConfigService.namespace()` (frozen object) | `GET /showcase/namespace/:name` |
-| `ConfigService.explain()` (diagnostics) | `GET /showcase/explain/:path` |
-| `ConfigStore.getSafeAll()` (masked secrets) | `GET /showcase/safe` |
-| `ConfigStore.getAll()` (full config) | `GET /showcase/all` |
-| Override behavior | `GET /showcase/overrides` |
-| `printSafe()` at startup | `src/main.ts` |
-| `secretKeys` masking | `database.password`, `redis.password` |
-| Environment variable loading | All loaders via `EnvSource` |
+| Feature                                      | Where                                              |
+| -------------------------------------------- | -------------------------------------------------- |
+| `defineConfig()` with Zod schemas            | `src/config/database.config.ts`, `redis.config.ts` |
+| Schema-only config (Zod defaults, no loader) | `src/config/app.config.ts`                         |
+| `forRoot()` with multiple configs            | `src/app/app.module.ts`                            |
+| `forFeature()` with inline plain options     | `src/modules/health/health.module.ts`              |
+| `ConfigService.get()` (dot-path access)      | `GET /showcase/get/:path`                          |
+| `ConfigService.namespace()` (frozen object)  | `GET /showcase/namespace/:name`                    |
+| `ConfigService.explain()` (diagnostics)      | `GET /showcase/explain/:path`                      |
+| `ConfigStore.getSafeAll()` (masked secrets)  | `GET /showcase/safe`                               |
+| `ConfigStore.getAll()` (full config)         | `GET /showcase/all`                                |
+| Override behavior                            | `GET /showcase/overrides`                          |
+| `printSafe()` at startup                     | `src/main.ts`                                      |
+| `secretKeys` masking                         | `database.password`, `redis.password`              |
+| Environment variable loading                 | All loaders via `EnvSource`                        |
 
 ## Quick Start
 
@@ -262,20 +262,20 @@ Expected output:
 
 ## Environment Variables
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| `DB_HOST` | `db` | PostgreSQL host |
-| `DB_PORT` | `5432` | PostgreSQL port |
-| `DB_NAME` | `nestx_demo` | Database name |
-| `DB_USER` | `nestx` | Database user |
-| `DB_PASSWORD` | - | Database password (required in prod) |
-| `DB_SSL` | `false` | Enable SSL for database connection |
-| `DB_POOL_SIZE` | `10` | Connection pool size |
-| `REDIS_HOST` | `redis` | Redis host |
-| `REDIS_PORT` | `6379` | Redis port |
-| `REDIS_PASSWORD` | - | Redis password (required in prod) |
-| `REDIS_DB` | `0` | Redis database index |
-| `REDIS_KEY_PREFIX` | - | Optional key prefix for Redis |
+| Variable           | Default      | Description                          |
+| ------------------ | ------------ | ------------------------------------ |
+| `DB_HOST`          | `db`         | PostgreSQL host                      |
+| `DB_PORT`          | `5432`       | PostgreSQL port                      |
+| `DB_NAME`          | `nestx_demo` | Database name                        |
+| `DB_USER`          | `nestx`      | Database user                        |
+| `DB_PASSWORD`      | -            | Database password (required in prod) |
+| `DB_SSL`           | `false`      | Enable SSL for database connection   |
+| `DB_POOL_SIZE`     | `10`         | Connection pool size                 |
+| `REDIS_HOST`       | `redis`      | Redis host                           |
+| `REDIS_PORT`       | `6379`       | Redis port                           |
+| `REDIS_PASSWORD`   | -            | Redis password (required in prod)    |
+| `REDIS_DB`         | `0`          | Redis database index                 |
+| `REDIS_KEY_PREFIX` | -            | Optional key prefix for Redis        |
 
 ## Architecture
 

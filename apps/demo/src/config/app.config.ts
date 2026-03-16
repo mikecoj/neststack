@@ -6,9 +6,7 @@ export const appConfig = defineConfig({
   schema: z.object({
     name: z.string().default('nestx-demo'),
     port: z.number().default(3000),
-    environment: z
-      .enum(['development', 'staging', 'production'])
-      .default('development'),
+    environment: z.enum(['development', 'staging', 'production']).default('development'),
     debug: z.boolean().default(true),
   }),
 });

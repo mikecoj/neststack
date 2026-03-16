@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
+    "declaration": true,
     "module": "commonjs",
     "types": ["node"],
     "experimentalDecorators": true,
@@ -9,5 +10,10 @@
     "target": "es2021",
     "moduleResolution": "node"
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "references": [
+    {
+      "path": "../../packages/advanced-config/tsconfig.lib.json"
+    }
+  ]
 }
