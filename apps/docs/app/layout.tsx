@@ -18,11 +18,7 @@ export const metadata: Metadata = {
 
 const REPO_BASE = 'https://github.com/mikecoj/nestx-advanced-packages';
 
-export default async function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   const pageMap = await getPageMap();
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
@@ -37,11 +33,7 @@ export default async function RootLayout({
           sidebar={{ defaultMenuCollapseLevel: 2, toggleButton: true }}
           navbar={
             <Navbar
-              logo={
-                <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>
-                  NestX
-                </span>
-              }
+              logo={<span style={{ fontWeight: 800, fontSize: '1.1rem' }}>NestX</span>}
               projectLink={REPO_BASE}
             />
           }
@@ -49,11 +41,7 @@ export default async function RootLayout({
             <Footer>
               <span>
                 MIT {new Date().getFullYear()} &copy;{' '}
-                <a
-                  href="https://github.com/mikecoj"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="https://github.com/mikecoj" target="_blank" rel="noopener noreferrer">
                   Mike Cojocari
                 </a>
               </span>
