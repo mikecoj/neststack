@@ -19,9 +19,7 @@ export class EnvSource implements IEnvSource {
     if (raw !== undefined && raw !== '') {
       const parsed = Number(raw);
       if (Number.isNaN(parsed)) {
-        throw new Error(
-          `Environment variable ${key} must be a valid number, received: "${raw}"`,
-        );
+        throw new Error(`Environment variable ${key} must be a valid number, received: "${raw}"`);
       }
       return parsed;
     }
@@ -54,9 +52,7 @@ export class EnvSource implements IEnvSource {
     }
     const parsed = Number(raw);
     if (Number.isNaN(parsed)) {
-      throw new Error(
-        `Environment variable ${key} must be a valid number, received: "${raw}"`,
-      );
+      throw new Error(`Environment variable ${key} must be a valid number, received: "${raw}"`);
     }
     return parsed;
   }
