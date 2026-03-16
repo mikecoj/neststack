@@ -13,17 +13,13 @@ export interface ConfigDefinitionOptions<
   secretKeys?: string[];
 }
 
-export interface ConfigDefinition<
-  N extends string = string,
-  S extends ZodSchema = ZodSchema,
-> {
+export interface ConfigDefinition<N extends string = string, S extends ZodSchema = ZodSchema> {
   readonly namespace: N;
   readonly schema: S;
   readonly load?: ConfigLoader<S>;
   readonly secretKeys: ReadonlyArray<string>;
 }
 
-export type ConfigDefinitionInput<
-  N extends string = string,
-  S extends ZodSchema = ZodSchema,
-> = ConfigDefinition<N, S> | ConfigDefinitionOptions<N, S>;
+export type ConfigDefinitionInput<N extends string = string, S extends ZodSchema = ZodSchema> =
+  | ConfigDefinition<N, S>
+  | ConfigDefinitionOptions<N, S>;

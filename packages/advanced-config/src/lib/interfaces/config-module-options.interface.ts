@@ -21,7 +21,5 @@ export interface AdvancedConfigModuleAsyncOptions extends Pick<ModuleMetadata, '
 }
 
 export interface AdvancedConfigOptionsFactory {
-  createAdvancedConfigOptions():
-    | Promise<AdvancedConfigModuleOptions>
-    | AdvancedConfigModuleOptions;
+  createAdvancedConfigOptions(): Promise<AdvancedConfigModuleOptions> | AdvancedConfigModuleOptions;
 }
