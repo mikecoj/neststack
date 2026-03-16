@@ -56,19 +56,19 @@ Enterprise-grade, type-safe dynamic configuration module for NestJS. Designed fo
 
 ## Features
 
-| Capability | Description |
-| --- | --- |
-| **Dynamic Module** | `forRoot()`, `forRootAsync()`, `forFeature()` following NestJS conventions |
-| **Zod Validation** | Schema-based validation with structured error messages at startup |
-| **Type-Safe Access** | Recursive `Path<T>` / `PathValue<T, P>` types for dot-notation autocomplete |
-| **Secret Masking** | Declared secret keys are masked as `********` in logs and diagnostics |
-| **Deep Freeze** | All configuration objects are recursively frozen after validation |
-| **O(1) Lookup** | Pre-compiled flat key map for constant-time access by dot-path |
-| **Typed Env Loaders** | `getString`, `getNumber`, `getBoolean` with clear error messages |
-| **Config Overrides** | Per-namespace overrides for testing and environment profiles |
-| **Diagnostics** | `explain()` traces where each value came from (loader, default, override) |
-| **Namespace Isolation** | Each config has a unique namespace; collisions are detected at startup |
-| **Zero Runtime Deps** | Only NestJS peer dependencies and Zod -- no transitive supply chain risk |
+| Capability              | Description                                                                 |
+| ----------------------- | --------------------------------------------------------------------------- |
+| **Dynamic Module**      | `forRoot()`, `forRootAsync()`, `forFeature()` following NestJS conventions  |
+| **Zod Validation**      | Schema-based validation with structured error messages at startup           |
+| **Type-Safe Access**    | Recursive `Path<T>` / `PathValue<T, P>` types for dot-notation autocomplete |
+| **Secret Masking**      | Declared secret keys are masked as `********` in logs and diagnostics       |
+| **Deep Freeze**         | All configuration objects are recursively frozen after validation           |
+| **O(1) Lookup**         | Pre-compiled flat key map for constant-time access by dot-path              |
+| **Typed Env Loaders**   | `getString`, `getNumber`, `getBoolean` with clear error messages            |
+| **Config Overrides**    | Per-namespace overrides for testing and environment profiles                |
+| **Diagnostics**         | `explain()` traces where each value came from (loader, default, override)   |
+| **Namespace Isolation** | Each config has a unique namespace; collisions are detected at startup      |
+| **Zero Runtime Deps**   | Only NestJS peer dependencies and Zod -- no transitive supply chain risk    |
 
 ---
 
@@ -86,12 +86,12 @@ Ensure your application has the following installed:
 pnpm add @nestjs/common @nestjs/core rxjs
 ```
 
-| Peer Dependency | Required Version |
-| --- | --- |
+| Peer Dependency  | Required Version       |
+| ---------------- | ---------------------- |
 | `@nestjs/common` | `^10.0.0 \|\| ^11.0.0` |
-| `@nestjs/core` | `^10.0.0 \|\| ^11.0.0` |
-| `rxjs` | `^7.0.0` |
-| `zod` | `^3.20.0 \|\| ^4.0.0` |
+| `@nestjs/core`   | `^10.0.0 \|\| ^11.0.0` |
+| `rxjs`           | `^7.0.0`               |
+| `zod`            | `^3.20.0 \|\| ^4.0.0`  |
 
 ---
 
@@ -232,12 +232,12 @@ const config = defineConfig({
 });
 ```
 
-| Option | Type | Required | Description |
-| --- | --- | --- | --- |
-| `namespace` | `string` | Yes | Unique identifier for this config block. Used as the prefix in dot-paths (e.g., `database.url`). |
-| `schema` | `ZodSchema` | Yes | Zod schema that validates the configuration. Provides defaults, type coercion, and constraints. |
-| `load` | `(ctx: LoadContext) => Partial<T>` | No | Loader function that produces the raw configuration from environment variables, secrets, or files. |
-| `secretKeys` | `string[]` | No | Top-level keys within this namespace that contain sensitive data. These are masked in `printSafe()` and flagged in `explain()`. |
+| Option       | Type                               | Required | Description                                                                                                                     |
+| ------------ | ---------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `namespace`  | `string`                           | Yes      | Unique identifier for this config block. Used as the prefix in dot-paths (e.g., `database.url`).                                |
+| `schema`     | `ZodSchema`                        | Yes      | Zod schema that validates the configuration. Provides defaults, type coercion, and constraints.                                 |
+| `load`       | `(ctx: LoadContext) => Partial<T>` | No       | Loader function that produces the raw configuration from environment variables, secrets, or files.                              |
+| `secretKeys` | `string[]`                         | No       | Top-level keys within this namespace that contain sensitive data. These are masked in `printSafe()` and flagged in `explain()`. |
 
 The returned `ConfigDefinition` is frozen (`Object.isFrozen(config) === true`) and its `secretKeys` array is also frozen.
 
@@ -275,9 +275,9 @@ The `load` function receives a `LoadContext` with typed accessors for environmen
 
 ```typescript
 interface LoadContext {
-  env: IEnvSource;        // typed environment variable access
-  secrets?: SecretSource;  // async secret store (Vault, KMS, etc.)
-  files?: FileSource;      // file-based config (JSON, YAML, text)
+  env: IEnvSource; // typed environment variable access
+  secrets?: SecretSource; // async secret store (Vault, KMS, etc.)
+  files?: FileSource; // file-based config (JSON, YAML, text)
 }
 ```
 
@@ -350,25 +350,25 @@ Use `forRoot()` when all configuration can be resolved synchronously at startup.
 ```typescript
 AdvancedConfigModule.forRoot({
   configs: [databaseConfig, authConfig, cacheConfig],
-  isGlobal: true,  // default: true -- available to all modules
-})
+  isGlobal: true, // default: true -- available to all modules
+});
 ```
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `configs` | `ConfigDefinition[]` | -- | Array of config definitions created with `defineConfig()` |
-| `envSource` | `Record<string, string \| undefined>` | `process.env` | Override the environment variable source. Useful for testing. |
-| `overrides` | `Record<string, Record<string, unknown>>` | -- | Per-namespace value overrides. Applied after loading, before validation. |
-| `isGlobal` | `boolean` | `true` | When `true`, `ConfigService` is available in all modules without importing. |
-| `strict` | `boolean` | -- | Reserved for future use. |
-| `cache` | `boolean` | -- | Reserved for future use. |
+| Option      | Type                                      | Default       | Description                                                                 |
+| ----------- | ----------------------------------------- | ------------- | --------------------------------------------------------------------------- |
+| `configs`   | `ConfigDefinition[]`                      | --            | Array of config definitions created with `defineConfig()`                   |
+| `envSource` | `Record<string, string \| undefined>`     | `process.env` | Override the environment variable source. Useful for testing.               |
+| `overrides` | `Record<string, Record<string, unknown>>` | --            | Per-namespace value overrides. Applied after loading, before validation.    |
+| `isGlobal`  | `boolean`                                 | `true`        | When `true`, `ConfigService` is available in all modules without importing. |
+| `strict`    | `boolean`                                 | --            | Reserved for future use.                                                    |
+| `cache`     | `boolean`                                 | --            | Reserved for future use.                                                    |
 
 **Multiple configs in a single forRoot:**
 
 ```typescript
 AdvancedConfigModule.forRoot({
   configs: [databaseConfig, redisConfig, authConfig, loggingConfig],
-})
+});
 ```
 
 ### forRootAsync() -- Asynchronous
@@ -385,7 +385,7 @@ AdvancedConfigModule.forRootAsync({
     envSource: process.env,
   }),
   inject: [VaultService],
-})
+});
 ```
 
 **Using `useClass`:**
@@ -406,7 +406,7 @@ class ConfigFactory implements AdvancedConfigOptionsFactory {
 AdvancedConfigModule.forRootAsync({
   imports: [VaultModule],
   useClass: ConfigFactory,
-})
+});
 ```
 
 **Using `useExisting`:**
@@ -416,7 +416,7 @@ AdvancedConfigModule.forRootAsync({
 AdvancedConfigModule.forRootAsync({
   imports: [SharedModule],
   useExisting: ConfigFactory,
-})
+});
 ```
 
 ### forFeature() -- Feature Modules
@@ -430,9 +430,7 @@ Use `forFeature()` to register additional configuration namespaces from feature 
 ```typescript
 // payments/payments.module.ts
 @Module({
-  imports: [
-    AdvancedConfigModule.forFeature(paymentsConfig),
-  ],
+  imports: [AdvancedConfigModule.forFeature(paymentsConfig)],
 })
 export class PaymentsModule {}
 ```
@@ -458,16 +456,13 @@ export class NotificationsModule {}
 **Mixing both forms:**
 
 ```typescript
-AdvancedConfigModule.forFeature(
-  paymentsConfig,
-  {
-    namespace: 'audit',
-    schema: z.object({
-      enabled: z.boolean().default(true),
-      retentionDays: z.number().default(365),
-    }),
-  },
-)
+AdvancedConfigModule.forFeature(paymentsConfig, {
+  namespace: 'audit',
+  schema: z.object({
+    enabled: z.boolean().default(true),
+    retentionDays: z.number().default(365),
+  }),
+});
 ```
 
 **With a loader:**
@@ -486,7 +481,7 @@ AdvancedConfigModule.forFeature({
     db: env.getNumber('REDIS_DB', 0),
   }),
   secretKeys: ['password'],
-})
+});
 ```
 
 ---
@@ -532,10 +527,10 @@ export class MyService {
 `ConfigService.get(path)` retrieves a single value using dot-notation. Lookups execute in O(1) time via a pre-compiled flat map.
 
 ```typescript
-const host = config.get('database.host' as any);     // string
-const port = config.get('database.port' as any);     // number
-const ssl = config.get('database.ssl' as any);       // boolean
-const issuer = config.get('auth.issuer' as any);     // string
+const host = config.get('database.host' as any); // string
+const port = config.get('database.port' as any); // number
+const ssl = config.get('database.ssl' as any); // boolean
+const issuer = config.get('auth.issuer' as any); // string
 ```
 
 **Error on missing keys:**
@@ -600,14 +595,14 @@ Returns:
 }
 ```
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `path` | `string` | The full dot-path that was queried |
-| `namespace` | `string` | The namespace portion of the path |
-| `key` | `string` | The key portion within the namespace |
-| `value` | `unknown` | The actual runtime value |
-| `source` | `'loader' \| 'default' \| 'override'` | Where the value came from |
-| `isSecret` | `boolean` | Whether this key was declared as a secret |
+| Field       | Type                                  | Description                               |
+| ----------- | ------------------------------------- | ----------------------------------------- |
+| `path`      | `string`                              | The full dot-path that was queried        |
+| `namespace` | `string`                              | The namespace portion of the path         |
+| `key`       | `string`                              | The key portion within the namespace      |
+| `value`     | `unknown`                             | The actual runtime value                  |
+| `source`    | `'loader' \| 'default' \| 'override'` | Where the value came from                 |
+| `isSecret`  | `boolean`                             | Whether this key was declared as a secret |
 
 **Source values:**
 
@@ -679,14 +674,14 @@ Produces:
 
 `EnvSource` is a typed wrapper around environment variables. It is automatically created by the module and injected into loader functions via the `LoadContext`.
 
-| Method | Return Type | Description |
-| --- | --- | --- |
-| `getString(key, default?)` | `string` | Returns the value. Throws if missing and no default. |
-| `getNumber(key, default?)` | `number` | Parses to number. Throws if non-numeric or missing. |
-| `getBoolean(key, default?)` | `boolean` | Parses to boolean. Throws if invalid or missing. |
-| `getOptionalString(key)` | `string \| undefined` | Returns the value or `undefined`. Never throws. |
-| `getOptionalNumber(key)` | `number \| undefined` | Parses to number or returns `undefined`. Throws if non-numeric. |
-| `getOptionalBoolean(key)` | `boolean \| undefined` | Parses to boolean or returns `undefined`. Throws if invalid. |
+| Method                      | Return Type            | Description                                                     |
+| --------------------------- | ---------------------- | --------------------------------------------------------------- |
+| `getString(key, default?)`  | `string`               | Returns the value. Throws if missing and no default.            |
+| `getNumber(key, default?)`  | `number`               | Parses to number. Throws if non-numeric or missing.             |
+| `getBoolean(key, default?)` | `boolean`              | Parses to boolean. Throws if invalid or missing.                |
+| `getOptionalString(key)`    | `string \| undefined`  | Returns the value or `undefined`. Never throws.                 |
+| `getOptionalNumber(key)`    | `number \| undefined`  | Parses to number or returns `undefined`. Throws if non-numeric. |
+| `getOptionalBoolean(key)`   | `boolean \| undefined` | Parses to boolean or returns `undefined`. Throws if invalid.    |
 
 ### Required vs Optional Variables
 
@@ -700,10 +695,10 @@ Environment variable DB_HOST is required but not set
 
 ```typescript
 load: ({ env }) => ({
-  host: env.getString('DB_HOST'),           // required -- throws if missing
-  port: env.getNumber('DB_PORT', 5432),     // required with default
+  host: env.getString('DB_HOST'), // required -- throws if missing
+  port: env.getNumber('DB_PORT', 5432), // required with default
   debugMode: env.getOptionalBoolean('DB_DEBUG'), // optional -- undefined if unset
-})
+});
 ```
 
 ### Type Coercion
@@ -716,8 +711,8 @@ Environment variable DB_PORT must be a valid number, received: "not-a-number"
 
 **Booleans:** The following string values are recognized (case-insensitive):
 
-| Truthy | Falsy |
-| --- | --- |
+| Truthy             | Falsy              |
+| ------------------ | ------------------ |
 | `true`, `1`, `yes` | `false`, `0`, `no` |
 
 Any other value throws:
@@ -746,7 +741,7 @@ AdvancedConfigModule.forRoot({
       ttl: 60,
     },
   },
-})
+});
 ```
 
 **Override precedence:** `Zod defaults < loader values < overrides`
@@ -872,8 +867,8 @@ type ValidPaths = Path<AppConfig>;
 Resolves the value type at a given path.
 
 ```typescript
-type HostType = PathValue<AppConfig, 'database.host'>;  // string
-type PortType = PathValue<AppConfig, 'database.port'>;  // number
+type HostType = PathValue<AppConfig, 'database.host'>; // string
+type PortType = PathValue<AppConfig, 'database.port'>; // number
 ```
 
 **Depth limit:** Recursion stops at depth 5 to prevent TypeScript compiler slowdowns on deeply nested types.
@@ -912,7 +907,7 @@ interface SecretSource {
 load: async ({ env, secrets }) => ({
   host: env.getString('DB_HOST'),
   password: await secrets!.get('database/password'),
-})
+});
 ```
 
 ### FileSource Interface
@@ -1145,7 +1140,11 @@ class VaultConfigFactory implements AdvancedConfigOptionsFactory {
       configs: [
         defineConfig({
           namespace: 'database',
-          schema: z.object({ host: z.string(), port: z.number().default(5432), password: z.string() }),
+          schema: z.object({
+            host: z.string(),
+            port: z.number().default(5432),
+            password: z.string(),
+          }),
           load: ({ env }) => ({
             host: env.getString('DB_HOST'),
             port: env.getNumber('DB_PORT', 5432),
@@ -1181,54 +1180,54 @@ export class AppModule {}
 
 ### Exports
 
-| Export | Kind | Description |
-| --- | --- | --- |
-| `AdvancedConfigModule` | Class | Dynamic module with `forRoot()`, `forRootAsync()`, `forFeature()` |
-| `ConfigService<T>` | Class | Injectable service for accessing configuration |
-| `ConfigStore` | Class | Internal store (also injectable via `CONFIG_STORE` token) |
-| `defineConfig(options)` | Function | Creates a frozen `ConfigDefinition` |
-| `EnvSource` | Class | Typed `process.env` wrapper implementing `IEnvSource` |
-| `ADVANCED_CONFIG_OPTIONS` | Symbol | Injection token for module options |
-| `CONFIG_STORE` | Symbol | Injection token for the config store |
+| Export                    | Kind     | Description                                                       |
+| ------------------------- | -------- | ----------------------------------------------------------------- |
+| `AdvancedConfigModule`    | Class    | Dynamic module with `forRoot()`, `forRootAsync()`, `forFeature()` |
+| `ConfigService<T>`        | Class    | Injectable service for accessing configuration                    |
+| `ConfigStore`             | Class    | Internal store (also injectable via `CONFIG_STORE` token)         |
+| `defineConfig(options)`   | Function | Creates a frozen `ConfigDefinition`                               |
+| `EnvSource`               | Class    | Typed `process.env` wrapper implementing `IEnvSource`             |
+| `ADVANCED_CONFIG_OPTIONS` | Symbol   | Injection token for module options                                |
+| `CONFIG_STORE`            | Symbol   | Injection token for the config store                              |
 
 ### Type Exports
 
-| Export | Kind | Description |
-| --- | --- | --- |
-| `IEnvSource` | Interface | Contract for typed environment variable access |
-| `LoadContext` | Interface | Context passed to loader functions |
-| `SecretSource` | Interface | Contract for async secret retrieval |
-| `FileSource` | Interface | Contract for file-based config loading |
-| `ConfigLoader<S>` | Type | Signature of a loader function |
-| `ConfigDefinitionOptions` | Interface | Input options for `defineConfig()` |
-| `ConfigDefinition` | Interface | Frozen output of `defineConfig()` |
-| `ConfigDefinitionInput` | Type | Union of `ConfigDefinition \| ConfigDefinitionOptions` |
-| `ConfigExplanation` | Interface | Return type of `explain()` |
-| `AdvancedConfigModuleOptions` | Interface | Options for `forRoot()` |
-| `AdvancedConfigModuleAsyncOptions` | Interface | Options for `forRootAsync()` |
-| `AdvancedConfigOptionsFactory` | Interface | Factory interface for `useClass` / `useExisting` |
-| `Path<T>` | Type | Union of valid dot-notation paths for `T` |
-| `PathValue<T, P>` | Type | Value type at path `P` in `T` |
+| Export                             | Kind      | Description                                            |
+| ---------------------------------- | --------- | ------------------------------------------------------ |
+| `IEnvSource`                       | Interface | Contract for typed environment variable access         |
+| `LoadContext`                      | Interface | Context passed to loader functions                     |
+| `SecretSource`                     | Interface | Contract for async secret retrieval                    |
+| `FileSource`                       | Interface | Contract for file-based config loading                 |
+| `ConfigLoader<S>`                  | Type      | Signature of a loader function                         |
+| `ConfigDefinitionOptions`          | Interface | Input options for `defineConfig()`                     |
+| `ConfigDefinition`                 | Interface | Frozen output of `defineConfig()`                      |
+| `ConfigDefinitionInput`            | Type      | Union of `ConfigDefinition \| ConfigDefinitionOptions` |
+| `ConfigExplanation`                | Interface | Return type of `explain()`                             |
+| `AdvancedConfigModuleOptions`      | Interface | Options for `forRoot()`                                |
+| `AdvancedConfigModuleAsyncOptions` | Interface | Options for `forRootAsync()`                           |
+| `AdvancedConfigOptionsFactory`     | Interface | Factory interface for `useClass` / `useExisting`       |
+| `Path<T>`                          | Type      | Union of valid dot-notation paths for `T`              |
+| `PathValue<T, P>`                  | Type      | Value type at path `P` in `T`                          |
 
 ### ConfigService Methods
 
-| Method | Signature | Description |
-| --- | --- | --- |
-| `get` | `get<P>(path: P): PathValue<T, P>` | O(1) value lookup by dot-path. Throws if not found. |
-| `namespace` | `namespace<K>(name: K): T[K]` | Returns the frozen namespace object. Throws if not registered. |
-| `explain` | `explain(path: string): ConfigExplanation` | Diagnostics for a specific path. |
-| `printSafe` | `printSafe(): void` | Logs all configuration with secrets masked. |
+| Method      | Signature                                  | Description                                                    |
+| ----------- | ------------------------------------------ | -------------------------------------------------------------- |
+| `get`       | `get<P>(path: P): PathValue<T, P>`         | O(1) value lookup by dot-path. Throws if not found.            |
+| `namespace` | `namespace<K>(name: K): T[K]`              | Returns the frozen namespace object. Throws if not registered. |
+| `explain`   | `explain(path: string): ConfigExplanation` | Diagnostics for a specific path.                               |
+| `printSafe` | `printSafe(): void`                        | Logs all configuration with secrets masked.                    |
 
 ### EnvSource Methods
 
-| Method | Signature | Description |
-| --- | --- | --- |
-| `getString` | `getString(key, default?): string` | Returns string value. Throws if missing and no default. |
-| `getNumber` | `getNumber(key, default?): number` | Parses to number. Throws if non-numeric or missing. |
-| `getBoolean` | `getBoolean(key, default?): boolean` | Parses to boolean. Throws if invalid or missing. |
-| `getOptionalString` | `getOptionalString(key): string \| undefined` | Returns value or `undefined`. |
-| `getOptionalNumber` | `getOptionalNumber(key): number \| undefined` | Parses or returns `undefined`. Throws if non-numeric. |
-| `getOptionalBoolean` | `getOptionalBoolean(key): boolean \| undefined` | Parses or returns `undefined`. Throws if invalid. |
+| Method               | Signature                                       | Description                                             |
+| -------------------- | ----------------------------------------------- | ------------------------------------------------------- |
+| `getString`          | `getString(key, default?): string`              | Returns string value. Throws if missing and no default. |
+| `getNumber`          | `getNumber(key, default?): number`              | Parses to number. Throws if non-numeric or missing.     |
+| `getBoolean`         | `getBoolean(key, default?): boolean`            | Parses to boolean. Throws if invalid or missing.        |
+| `getOptionalString`  | `getOptionalString(key): string \| undefined`   | Returns value or `undefined`.                           |
+| `getOptionalNumber`  | `getOptionalNumber(key): number \| undefined`   | Parses or returns `undefined`. Throws if non-numeric.   |
+| `getOptionalBoolean` | `getOptionalBoolean(key): boolean \| undefined` | Parses or returns `undefined`. Throws if invalid.       |
 
 ---
 
@@ -1241,14 +1240,14 @@ Always define required fields without Zod defaults. The application should crash
 ```typescript
 // Good: required fields fail fast
 schema: z.object({
-  url: z.string().url(),     // no default -- must be provided
+  url: z.string().url(), // no default -- must be provided
   port: z.number().default(5432), // safe default
-})
+});
 
 // Bad: hiding required config behind defaults
 schema: z.object({
-  url: z.string().default(''),  // will pass validation but fail at runtime
-})
+  url: z.string().default(''), // will pass validation but fail at runtime
+});
 ```
 
 ### 2. One namespace per bounded context
@@ -1272,7 +1271,7 @@ defineConfig({ namespace: 'app', schema: z.object({
 Any value that should not appear in logs, error messages, or monitoring dashboards must be listed in `secretKeys`:
 
 ```typescript
-secretKeys: ['password', 'apiKey', 'privateKey', 'token', 'secret']
+secretKeys: ['password', 'apiKey', 'privateKey', 'token', 'secret'];
 ```
 
 ### 4. Use Zod constraints for validation
@@ -1288,7 +1287,7 @@ schema: z.object({
   email: z.string().email(),
   mode: z.enum(['development', 'staging', 'production']),
   logLevel: z.enum(['debug', 'info', 'warn', 'error']),
-})
+});
 ```
 
 ### 5. Use overrides for testing, not mocked env vars
@@ -1299,7 +1298,7 @@ AdvancedConfigModule.forRoot({
   configs: [databaseConfig],
   envSource: { DB_HOST: 'localhost', DB_PASSWORD: 'test' },
   overrides: { database: { poolSize: 1 } },
-})
+});
 
 // Bad: modifying global state
 process.env.DB_HOST = 'localhost';
@@ -1326,13 +1325,13 @@ Keep root-level config minimal. Let feature modules own their configuration:
 // app.module.ts -- only core infrastructure config
 AdvancedConfigModule.forRoot({
   configs: [databaseConfig, loggingConfig],
-})
+});
 
 // payments/payments.module.ts -- owns its own config
-AdvancedConfigModule.forFeature(paymentsConfig)
+AdvancedConfigModule.forFeature(paymentsConfig);
 
 // notifications/notifications.module.ts
-AdvancedConfigModule.forFeature(notificationsConfig)
+AdvancedConfigModule.forFeature(notificationsConfig);
 ```
 
 ### 8. Reset between tests

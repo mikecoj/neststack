@@ -8,12 +8,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/lib/**/*.ts'],
-      exclude: [
-        'src/**/*.spec.ts',
-        'src/**/index.ts',
-        'src/lib/types/**',
-        'src/lib/interfaces/**',
-      ],
+      exclude: ['src/**/*.spec.ts', 'src/**/index.ts', 'src/lib/types/**', 'src/lib/interfaces/**'],
       thresholds: { lines: 100, branches: 100, functions: 100, statements: 100 },
     },
   },
