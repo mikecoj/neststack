@@ -1,0 +1,183 @@
+# Module Registration
+
+`AdvancedConfigModule` provides three registration methods following standard NestJS dynamic module patterns.
+
+## forRoot()
+
+Use `forRoot()` in your root `AppModule` to register configuration globally.
+
+```typescript
+import { Module } from '@nestjs/common';
+import { AdvancedConfigModule } from '@nestx/advanced-config';
+import { databaseConfig } from './config/database.config';
+import { redisConfig } from './config/redis.config';
+import { appConfig } from './config/app.config';
+
+@Module({
+  imports: [
+    AdvancedConfigModule.forRoot({
+      configs: [databaseConfig, redisConfig, appConfig],
+      isGlobal: true,
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+### Options
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `configs` | `ConfigDefinition[]` | — | Array of config definitions |
+| `isGlobal` | `boolean` | `true` | Make ConfigService available in all modules |
+| `envSource` | Record&lt;string, string or undefined&gt; | `process.env` | Custom env source |
+| `overrides` | Record&lt;string, Record&lt;string, unknown&gt;&gt; | — | Override specific values |
+
+### Custom Environment Source
+
+By default, values are read from `process.env`. You can provide a custom environment for testing:
+
+```typescript
+AdvancedConfigModule.forRoot({
+  configs: [databaseConfig],
+  envSource: {
+    DB_HOST: 'test-host',
+    DB_PORT: '5433',
+    DB_PASSWORD: 'test-pw',
+  },
+})
+```
+
+### Overrides
+
+Override specific values without changing environment variables or loader functions:
+
+```typescript
+AdvancedConfigModule.forRoot({
+  configs: [databaseConfig],
+  overrides: {
+    database: { poolSize: 50, ssl: true },
+  },
+})
+```
+
+Override values take precedence over loader values but still pass through Zod validation.
+
+## forRootAsync()
+
+Use `forRootAsync()` when configuration options depend on async operations — for example, fetching secrets from a vault.
+
+### useFactory
+
+```typescript
+@Module({
+  imports: [
+    AdvancedConfigModule.forRootAsync({
+      imports: [VaultModule],
+      useFactory: async (vault: VaultService) => ({
+        configs: [databaseConfig],
+        envSource: {
+          ...process.env,
+          DB_PASSWORD: await vault.getSecret('db-password'),
+        },
+      }),
+      inject: [VaultService],
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+### useClass
+
+```typescript
+@Injectable()
+class ConfigOptionsService implements AdvancedConfigOptionsFactory {
+  async createAdvancedConfigOptions(): Promise<AdvancedConfigModuleOptions> {
+    return {
+      configs: [databaseConfig, redisConfig],
+    };
+  }
+}
+
+@Module({
+  imports: [
+    AdvancedConfigModule.forRootAsync({
+      useClass: ConfigOptionsService,
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+### useExisting
+
+```typescript
+@Module({
+  imports: [
+    AdvancedConfigModule.forRootAsync({
+      imports: [SharedModule],
+      useExisting: ExistingConfigFactory,
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+`useExisting` reuses an already-registered provider instead of creating a new one.
+
+## forFeature()
+
+Use `forFeature()` in feature modules to register additional configuration namespaces. This keeps config definitions close to the modules that use them.
+
+### With defineConfig
+
+```typescript
+import { Module } from '@nestjs/common';
+import { AdvancedConfigModule, defineConfig } from '@nestx/advanced-config';
+import { z } from 'zod';
+
+const healthConfig = defineConfig({
+  namespace: 'health',
+  schema: z.object({
+    intervalMs: z.number().default(30000),
+    timeout: z.number().default(5000),
+  }),
+});
+
+@Module({
+  imports: [AdvancedConfigModule.forFeature(healthConfig)],
+})
+export class HealthModule {}
+```
+
+### With Inline Options
+
+You can also pass plain options directly — `forFeature()` will call `defineConfig()` internally:
+
+```typescript
+@Module({
+  imports: [
+    AdvancedConfigModule.forFeature({
+      namespace: 'health',
+      schema: z.object({
+        intervalMs: z.number().default(30000),
+        timeout: z.number().default(5000),
+      }),
+    }),
+  ],
+})
+export class HealthModule {}
+```
+
+### Multiple Configs
+
+Register multiple namespaces in a single `forFeature()` call:
+
+```typescript
+AdvancedConfigModule.forFeature(paymentsConfig, notificationsConfig)
+```
+
+### How It Works
+
+`forFeature()` reuses the `EnvSource` initialized by `forRoot()`. If `forRoot()` was called with a custom `envSource`, feature modules will use the same source — no need to pass it again.

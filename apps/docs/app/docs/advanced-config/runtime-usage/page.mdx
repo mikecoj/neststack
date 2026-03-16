@@ -1,0 +1,182 @@
+# Runtime Usage
+
+Once the module is registered, inject `ConfigService` to access configuration values.
+
+## ConfigService
+
+### get()
+
+Retrieve a value by dot-path. Returns the exact type inferred from your Zod schema.
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestx/advanced-config';
+
+@Injectable()
+export class DatabaseService {
+  constructor(private readonly config: ConfigService) {}
+
+  connect() {
+    const host = this.config.get('database.host');     // string
+    const port = this.config.get('database.port');     // number
+    const ssl = this.config.get('database.ssl');       // boolean
+  }
+}
+```
+
+If the path does not exist, `get()` throws an error:
+
+```
+Configuration key "database.nonexistent" does not exist
+```
+
+### namespace()
+
+Get the entire config object for a namespace as a typed, frozen object:
+
+```typescript
+const db = this.config.namespace('database');
+// db.host, db.port, db.ssl, db.password, etc.
+```
+
+This returns the complete validated and frozen config for that namespace.
+
+### explain()
+
+Trace where a specific value came from — useful for debugging and diagnostics:
+
+```typescript
+const explanation = this.config.explain('database.host');
+```
+
+Returns a `ConfigExplanation` object:
+
+```typescript
+{
+  path: 'database.host',
+  namespace: 'database',
+  key: 'host',
+  value: 'localhost',
+  source: 'loader',     // 'loader' | 'default' | 'override'
+  isSecret: false,
+}
+```
+
+| Source | Meaning |
+| --- | --- |
+| `loader` | Value came from the `load()` function |
+| `default` | Value came from the Zod schema `.default()` |
+| `override` | Value came from `forRoot({ overrides })` |
+
+### printSafe()
+
+Print the entire configuration to the NestJS logger with secrets masked:
+
+```typescript
+this.config.printSafe();
+```
+
+Output:
+
+```
+[ConfigStore] Configuration:
+{
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "password": "********",
+    "ssl": false,
+    "poolSize": 10
+  },
+  "redis": {
+    "host": "redis",
+    "port": 6379,
+    "password": "********"
+  }
+}
+```
+
+This is commonly called at application startup to verify configuration without exposing secrets.
+
+## ConfigStore
+
+For advanced use cases, you can inject the `ConfigStore` directly:
+
+```typescript
+import { Inject } from '@nestjs/common';
+import { ConfigStore, CONFIG_STORE } from '@nestx/advanced-config';
+
+@Injectable()
+export class AdminService {
+  constructor(@Inject(CONFIG_STORE) private readonly store: ConfigStore) {}
+
+  getAllConfig() {
+    return this.store.getAll();       // Full config (secrets visible)
+  }
+
+  getSafeConfig() {
+    return this.store.getSafeAll();   // Full config (secrets masked)
+  }
+}
+```
+
+### ConfigStore Methods
+
+| Method | Returns | Description |
+| --- | --- | --- |
+| `get(path)` | `T` | Get value by dot-path |
+| `getNamespace(name)` | `T` | Get entire namespace object |
+| `explain(path)` | `ConfigExplanation` | Trace value source |
+| `getAll()` | Record&lt;string, unknown&gt; | All namespaces (secrets visible) |
+| `getSafeAll()` | Record&lt;string, unknown&gt; | All namespaces (secrets masked) |
+| `printSafe()` | `void` | Log masked config |
+| `size` | `number` | Number of registered namespaces |
+
+## Usage Patterns
+
+### At Startup
+
+```typescript
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
+
+  config.printSafe();
+
+  const port = config.get('app.port');
+  await app.listen(port);
+}
+```
+
+### In Feature Modules
+
+Feature modules access the global `ConfigService` without importing `AdvancedConfigModule` (when `isGlobal: true`):
+
+```typescript
+@Injectable()
+export class PaymentService {
+  constructor(private readonly config: ConfigService) {}
+
+  processPayment() {
+    const apiKey = this.config.get('payments.apiKey');
+    // ...
+  }
+}
+```
+
+### In Controllers
+
+```typescript
+@Controller('health')
+export class HealthController {
+  constructor(private readonly config: ConfigService) {}
+
+  @Get()
+  check() {
+    return {
+      status: 'ok',
+      config: this.config.namespace('health'),
+    };
+  }
+}
+```
