@@ -65,10 +65,7 @@ export class AdvancedConfigModule {
 
     return {
       module: AdvancedConfigModule,
-      providers: [
-        { provide: CONFIG_STORE, useValue: this.globalStore },
-        ConfigService,
-      ],
+      providers: [{ provide: CONFIG_STORE, useValue: this.globalStore }, ConfigService],
       exports: [ConfigService, CONFIG_STORE],
     };
   }
@@ -103,9 +100,7 @@ export class AdvancedConfigModule {
     this.envSourceInstance = new EnvSource(options.envSource);
 
     for (const config of options.configs) {
-      const rawData = config.load
-        ? config.load({ env: this.envSourceInstance })
-        : {};
+      const rawData = config.load ? config.load({ env: this.envSourceInstance }) : {};
       const overrides = options.overrides?.[config.namespace];
       this.globalStore.register(
         config,

@@ -47,9 +47,7 @@ describe('Integration Test', () => {
   it('should work end-to-end with loaders, validation, and service injection', async () => {
     @Injectable()
     class DatabaseService {
-      constructor(
-        @Inject(CONFIG_STORE) private readonly store: ConfigStore,
-      ) {}
+      constructor(@Inject(CONFIG_STORE) private readonly store: ConfigStore) {}
 
       getConnectionUrl(): string {
         return this.store.get<string>('database.url');

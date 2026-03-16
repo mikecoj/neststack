@@ -180,9 +180,9 @@ describe('AdvancedConfigModule', () => {
     });
 
     it('should throw when no factory method is provided', () => {
-      expect(() =>
-        AdvancedConfigModule.forRootAsync({} as any),
-      ).toThrow('requires useFactory, useClass, or useExisting');
+      expect(() => AdvancedConfigModule.forRootAsync({} as any)).toThrow(
+        'requires useFactory, useClass, or useExisting',
+      );
     });
   });
 
@@ -269,13 +269,10 @@ describe('AdvancedConfigModule', () => {
             configs: [dbConfig],
             envSource: { DB_URL: 'postgres://localhost' },
           }),
-          AdvancedConfigModule.forFeature(
-            featureConfig,
-            {
-              namespace: 'flags',
-              schema: z.object({ darkMode: z.boolean().default(false) }),
-            },
-          ),
+          AdvancedConfigModule.forFeature(featureConfig, {
+            namespace: 'flags',
+            schema: z.object({ darkMode: z.boolean().default(false) }),
+          }),
         ],
       }).compile();
 
