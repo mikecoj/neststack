@@ -53,10 +53,9 @@ export default function HomePage() {
           with <span className="accent">confidence</span>
         </h1>
         <p className="hero-subtitle">
-          NestX is a collection of rigorously tested, type-safe NestJS packages
-          built for banking, fintech, and mission-critical applications. Every
-          module follows the same standard: strict types, full coverage, and
-          security-first design.
+          NestX is a collection of rigorously tested, type-safe NestJS packages built for banking,
+          fintech, and mission-critical applications. Every module follows the same standard: strict
+          types, full coverage, and security-first design.
         </p>
         <div className="hero-actions">
           <Link href="/docs/advanced-config" className="btn btn-primary">
@@ -74,8 +73,8 @@ export default function HomePage() {
       <section className="features">
         <h2 className="section-title">Why NestX?</h2>
         <p className="section-subtitle">
-          Each package solves a critical infrastructure concern so you can focus
-          on your business logic.
+          Each package solves a critical infrastructure concern so you can focus on your business
+          logic.
         </p>
         <div className="features-grid">
           {features.map((feature) => (
@@ -95,20 +94,16 @@ export default function HomePage() {
             <span className="package-badge">Stable</span>
           </div>
           <p className="package-description">
-            Type-safe configuration management with Zod validation, secret
-            masking, O(1) lookups, and deep immutability. The standard way to
-            handle configuration in enterprise NestJS applications.
+            Type-safe configuration management with Zod validation, secret masking, O(1) lookups,
+            and deep immutability. The standard way to handle configuration in enterprise NestJS
+            applications.
           </p>
-          <Link
-            href="/docs/advanced-config"
-            className="package-link"
-          >
+          <Link href="/docs/advanced-config" className="package-link">
             View documentation &rarr;
           </Link>
         </div>
         <p className="packages-coming">
-          More packages are in development. Each will follow the same enterprise
-          standards.
+          More packages are in development. Each will follow the same enterprise standards.
         </p>
       </section>
 
@@ -127,8 +122,8 @@ export default function HomePage() {
       <section className="cta">
         <h2 className="cta-title">Ready to get started?</h2>
         <p className="cta-description">
-          Install your first NestX package and have type-safe, validated
-          configuration running in minutes.
+          Install your first NestX package and have type-safe, validated configuration running in
+          minutes.
         </p>
         <Link href="/docs/advanced-config" className="btn btn-primary">
           Read the Docs
