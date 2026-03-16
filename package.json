@@ -1,0 +1,80 @@
+{
+  "name": "@nestx/source",
+  "version": "0.0.0",
+  "private": true,
+  "description": "NestX Advanced Packages Monorepo",
+  "license": "MIT",
+  "author": "Mike Cojocari",
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "build": "nx run-many -t build",
+    "build:config": "nx build advanced-config",
+    "build:docs": "nx build docs && nx postbuild docs",
+    "build:demo": "nx build demo",
+    "test": "nx run-many -t test",
+    "test:config": "nx test advanced-config",
+    "test:coverage": "nx test advanced-config --coverage",
+    "test:e2e": "nx e2e demo-e2e",
+    "lint": "nx run-many -t lint",
+    "typecheck": "nx run-many -t typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mdx,css,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,mdx,css,yml,yaml}\"",
+    "dev:docs": "nx dev docs",
+    "dev:demo": "nx serve demo",
+    "release": "nx release",
+    "release:version": "nx release version",
+    "release:changelog": "nx release changelog",
+    "release:publish": "nx release publish",
+    "graph": "nx graph",
+    "clean": "nx reset"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "nx",
+      "unrs-resolver",
+      "@nestjs/core",
+      "@swc/core",
+      "@parcel/watcher",
+      "sharp"
+    ]
+  },
+  "devDependencies": {
+    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.0",
+    "@nx/js": "^22.5.4",
+    "@nx/nest": "^22.5.4",
+    "@nx/node": "22.5.4",
+    "@nx/vitest": "^22.5.4",
+    "@nx/web": "22.5.4",
+    "@nx/webpack": "22.5.4",
+    "@swc-node/register": "~1.11.1",
+    "@swc/core": "~1.15.5",
+    "@swc/helpers": "~0.5.18",
+    "@types/node": "20.19.9",
+    "@vitest/coverage-v8": "^4.1.0",
+    "nx": "^22.5.4",
+    "prettier": "~3.6.2",
+    "tslib": "^2.3.0",
+    "typescript": "^5.9.3",
+    "start-server-and-test": "^2.0.4",
+    "verdaccio": "^6.0.5",
+    "vitest": "^4.1.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "axios": "^1.6.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.0",
+    "zod": "^4.3.6"
+  },
+  "nx": {
+    "includedScripts": []
+  },
+  "volta": {
+    "node": "22.22.1"
+  }
+}

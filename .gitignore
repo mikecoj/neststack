@@ -1,0 +1,46 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+tmp
+
+# NX
+.nx
+
+# Next.js (apps/docs)
+.next
+out
+
+# TypeScript
+*.tsbuildinfo
+
+# Coverage
+coverage
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Local env overrides
+.env
+.env.local
+.env.*.local
+
+# Dev container secrets (use .env.example as template)
+.devcontainer/.env
+
+# Lock files (keep pnpm-lock.yaml)
+package-lock.json
+yarn.lock
