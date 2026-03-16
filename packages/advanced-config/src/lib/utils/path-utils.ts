@@ -1,7 +1,4 @@
-export function buildLookupMap(
-  config: Record<string, unknown>,
-  prefix = '',
-): Map<string, unknown> {
+export function buildLookupMap(config: Record<string, unknown>, prefix = ''): Map<string, unknown> {
   const map = new Map<string, unknown>();
 
   for (const key of Object.keys(config)) {
