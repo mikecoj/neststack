@@ -53,11 +53,11 @@ pnpm nx serve demo  # Start the demo app
 
 The dev container starts three Docker services defined in `.devcontainer/compose.yaml`:
 
-| Service | Image | Port | Purpose |
-| --- | --- | --- | --- |
-| `app` | Custom (Node.js 22) | -- | Your development environment |
-| `db` | `postgres:16-alpine` | 5432 | PostgreSQL database |
-| `redis` | `redis:7-alpine` | 6379 | Redis cache |
+| Service | Image                | Port | Purpose                      |
+| ------- | -------------------- | ---- | ---------------------------- |
+| `app`   | Custom (Node.js 22)  | --   | Your development environment |
+| `db`    | `postgres:16-alpine` | 5432 | PostgreSQL database          |
+| `redis` | `redis:7-alpine`     | 6379 | Redis cache                  |
 
 All ports are forwarded to your host machine, so you can connect to PostgreSQL at `localhost:5432` and Redis at `localhost:6379` from database tools like pgAdmin or RedisInsight.
 
@@ -76,12 +76,12 @@ The dev container follows banking/fintech security standards:
 
 The dev environment uses these default credentials (defined in `.devcontainer/.env`):
 
-| Variable | Value |
-| --- | --- |
-| `POSTGRES_USER` | `nestx` |
+| Variable            | Value              |
+| ------------------- | ------------------ |
+| `POSTGRES_USER`     | `nestx`            |
 | `POSTGRES_PASSWORD` | `nestx_dev_secret` |
-| `POSTGRES_DB` | `nestx_demo` |
-| `REDIS_PASSWORD` | `redis_dev_secret` |
+| `POSTGRES_DB`       | `nestx_demo`       |
+| `REDIS_PASSWORD`    | `redis_dev_secret` |
 
 These are for local development only. Never use these in production.
 
@@ -228,11 +228,11 @@ pnpm nx show project advanced-config
 
 This repo uses three NX plugins (configured in `nx.json`):
 
-| Plugin | What it does |
-| --- | --- |
-| `@nx/js/typescript` | Infers `build` and `typecheck` targets from `tsconfig.lib.json` |
-| `@nx/vitest` | Infers `test` targets from `vitest.config.ts` |
-| `@nx/webpack/plugin` | Infers `build` and `serve` targets from `webpack.config.js` |
+| Plugin               | What it does                                                    |
+| -------------------- | --------------------------------------------------------------- |
+| `@nx/js/typescript`  | Infers `build` and `typecheck` targets from `tsconfig.lib.json` |
+| `@nx/vitest`         | Infers `test` targets from `vitest.config.ts`                   |
+| `@nx/webpack/plugin` | Infers `build` and `serve` targets from `webpack.config.js`     |
 
 Plugins auto-detect configuration files in each project and create targets automatically, so you don't need to manually define every target in `project.json`.
 
@@ -446,10 +446,10 @@ pnpm nx build demo
 
 ### Build output
 
-| Project | Output Directory | Contents |
-| --- | --- | --- |
+| Project           | Output Directory                 | Contents                                |
+| ----------------- | -------------------------------- | --------------------------------------- |
 | `advanced-config` | `dist/packages/advanced-config/` | `.js` files + `.d.ts` type declarations |
-| `demo` | `dist/apps/demo/` | Bundled application (single `main.js`) |
+| `demo`            | `dist/apps/demo/`                | Bundled application (single `main.js`)  |
 
 ### Clean build cache
 
@@ -506,20 +506,20 @@ NX_VERBOSE_LOGGING=true pnpm nx build advanced-config
 
 ### For the demo app
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| `DB_HOST` | `db` | PostgreSQL host |
-| `DB_PORT` | `5432` | PostgreSQL port |
-| `DB_NAME` | `nestx_demo` | Database name |
-| `DB_USER` | `nestx` | Database user |
-| `DB_PASSWORD` | `nestx_dev_secret` | Database password |
-| `DB_SSL` | `false` | Enable SSL |
-| `DB_POOL_SIZE` | `10` | Connection pool size |
-| `REDIS_HOST` | `redis` | Redis host |
-| `REDIS_PORT` | `6379` | Redis port |
-| `REDIS_PASSWORD` | `redis_dev_secret` | Redis password |
-| `REDIS_DB` | `0` | Redis database index |
-| `REDIS_KEY_PREFIX` | -- | Optional key prefix |
+| Variable           | Default            | Description          |
+| ------------------ | ------------------ | -------------------- |
+| `DB_HOST`          | `db`               | PostgreSQL host      |
+| `DB_PORT`          | `5432`             | PostgreSQL port      |
+| `DB_NAME`          | `nestx_demo`       | Database name        |
+| `DB_USER`          | `nestx`            | Database user        |
+| `DB_PASSWORD`      | `nestx_dev_secret` | Database password    |
+| `DB_SSL`           | `false`            | Enable SSL           |
+| `DB_POOL_SIZE`     | `10`               | Connection pool size |
+| `REDIS_HOST`       | `redis`            | Redis host           |
+| `REDIS_PORT`       | `6379`             | Redis port           |
+| `REDIS_PASSWORD`   | `redis_dev_secret` | Redis password       |
+| `REDIS_DB`         | `0`                | Redis database index |
+| `REDIS_KEY_PREFIX` | --                 | Optional key prefix  |
 
 ### For Docker Compose
 

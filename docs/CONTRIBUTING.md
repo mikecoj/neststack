@@ -72,13 +72,13 @@ npx prettier --check .  # Code is formatted
 
 This project uses [Prettier](https://prettier.io/) for formatting. Configuration is in `.prettierrc`:
 
-| Setting | Value |
-| --- | --- |
-| Single quotes | `true` |
+| Setting         | Value              |
+| --------------- | ------------------ |
+| Single quotes   | `true`             |
 | Trailing commas | `all` (everywhere) |
-| Print width | `100` characters |
-| Tab width | `2` spaces |
-| Semicolons | `true` (always) |
+| Print width     | `100` characters   |
+| Tab width       | `2` spaces         |
+| Semicolons      | `true` (always)    |
 
 Format your files before committing:
 
@@ -90,15 +90,15 @@ If you use VS Code with the Prettier extension and `editor.formatOnSave` enabled
 
 ### File naming
 
-| Item | Convention | Example |
-| --- | --- | --- |
-| Source files | `kebab-case.ts` | `config-store.ts` |
-| Test files | `kebab-case.spec.ts` (colocated) | `config-store.spec.ts` |
-| Interface files | `kebab-case.interface.ts` | `config-definition.interface.ts` |
-| Module files | `kebab-case.module.ts` | `health.module.ts` |
-| Controller files | `kebab-case.controller.ts` | `showcase.controller.ts` |
-| Config definition files | `kebab-case.config.ts` | `database.config.ts` |
-| Barrel files | `index.ts` | `index.ts` |
+| Item                    | Convention                       | Example                          |
+| ----------------------- | -------------------------------- | -------------------------------- |
+| Source files            | `kebab-case.ts`                  | `config-store.ts`                |
+| Test files              | `kebab-case.spec.ts` (colocated) | `config-store.spec.ts`           |
+| Interface files         | `kebab-case.interface.ts`        | `config-definition.interface.ts` |
+| Module files            | `kebab-case.module.ts`           | `health.module.ts`               |
+| Controller files        | `kebab-case.controller.ts`       | `showcase.controller.ts`         |
+| Config definition files | `kebab-case.config.ts`           | `database.config.ts`             |
+| Barrel files            | `index.ts`                       | `index.ts`                       |
 
 ### Import ordering
 
@@ -112,7 +112,7 @@ Organize imports in this order, separated by blank lines:
 ### Comments
 
 - Do not add comments that just restate what the code does.
-- Add comments to explain *why* something is done a certain way, not *what* it does.
+- Add comments to explain _why_ something is done a certain way, not _what_ it does.
 - Use JSDoc comments on public APIs (interfaces, exported functions, public methods).
 
 ```typescript
@@ -140,16 +140,16 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/) w
 
 ### Types
 
-| Type | When to use | Gitmoji |
-| --- | --- | --- |
-| `feat` | New feature | Depends on feature |
-| `fix` | Bug fix | :bug: |
-| `docs` | Documentation changes | :memo: |
-| `refactor` | Code change that doesn't fix a bug or add a feature | :recycle: |
-| `test` | Adding or updating tests | :white_check_mark: |
-| `chore` | Build process, CI, tooling | :wrench: |
-| `perf` | Performance improvement | :zap: |
-| `style` | Formatting, whitespace (no code change) | :art: |
+| Type       | When to use                                         | Gitmoji            |
+| ---------- | --------------------------------------------------- | ------------------ |
+| `feat`     | New feature                                         | Depends on feature |
+| `fix`      | Bug fix                                             | :bug:              |
+| `docs`     | Documentation changes                               | :memo:             |
+| `refactor` | Code change that doesn't fix a bug or add a feature | :recycle:          |
+| `test`     | Adding or updating tests                            | :white_check_mark: |
+| `chore`    | Build process, CI, tooling                          | :wrench:           |
+| `perf`     | Performance improvement                             | :zap:              |
+| `style`    | Formatting, whitespace (no code change)             | :art:              |
 
 ### Scope
 
@@ -352,12 +352,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['src/lib/**/*.ts'],
-      exclude: [
-        'src/**/*.spec.ts',
-        'src/**/index.ts',
-        'src/lib/types/**',
-        'src/lib/interfaces/**',
-      ],
+      exclude: ['src/**/*.spec.ts', 'src/**/index.ts', 'src/lib/types/**', 'src/lib/interfaces/**'],
       thresholds: { lines: 100, branches: 100, functions: 100, statements: 100 },
     },
   },
@@ -393,10 +388,10 @@ Create a `README.md` in the package root. Follow the same structure as the [`@ne
 Update the root `README.md` packages table:
 
 ```markdown
-| Package | Version | Description |
-| --- | --- | --- |
-| [`@nestx/advanced-config`](packages/advanced-config/) | 0.0.1 | ... |
-| [`@nestx/my-package`](packages/my-package/) | 0.0.1 | ... |
+| Package                                               | Version | Description |
+| ----------------------------------------------------- | ------- | ----------- |
+| [`@nestx/advanced-config`](packages/advanced-config/) | 0.0.1   | ...         |
+| [`@nestx/my-package`](packages/my-package/)           | 0.0.1   | ...         |
 ```
 
 ---
@@ -413,19 +408,19 @@ Update the root `README.md` packages table:
 
 ### Documentation files
 
-| File | What it covers |
-| --- | --- |
-| `README.md` (root) | Repository overview, getting started |
-| `docs/DEVELOPMENT.md` | Dev environment setup |
-| `docs/ARCHITECTURE.md` | Code structure and design decisions |
-| `docs/CONTRIBUTING.md` | This file -- how to contribute |
-| `packages/*/README.md` | Per-package documentation |
-| `apps/*/README.md` | Per-app documentation |
+| File                   | What it covers                       |
+| ---------------------- | ------------------------------------ |
+| `README.md` (root)     | Repository overview, getting started |
+| `docs/DEVELOPMENT.md`  | Dev environment setup                |
+| `docs/ARCHITECTURE.md` | Code structure and design decisions  |
+| `docs/CONTRIBUTING.md` | This file -- how to contribute       |
+| `packages/*/README.md` | Per-package documentation            |
+| `apps/*/README.md`     | Per-app documentation                |
 
 ### Writing style
 
 - Write for a junior engineer who's never seen this codebase before
-- Explain *why* before *how*
+- Explain _why_ before _how_
 - Use concrete examples, not abstract descriptions
 - Include expected output for command examples
 - Keep sentences short and direct

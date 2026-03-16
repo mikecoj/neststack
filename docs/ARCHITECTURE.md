@@ -1,6 +1,6 @@
 # Architecture
 
-This document explains how the NestX monorepo is organized, how the `@nestx/advanced-config` package works internally, and the design decisions behind it. Read this if you want to understand *why* things are the way they are, not just *how* to use them.
+This document explains how the NestX monorepo is organized, how the `@nestx/advanced-config` package works internally, and the design decisions behind it. Read this if you want to understand _why_ things are the way they are, not just _how_ to use them.
 
 ---
 
@@ -171,19 +171,19 @@ The ConfigStore is the heart of the system. It's a singleton (static on the modu
 
 **Data structures:**
 
-| Field | Type | Purpose |
-| --- | --- | --- |
-| `namespaces` | `Map<string, NamespaceEntry>` | Stores validated, frozen data per namespace |
-| `lookupMap` | `Map<string, unknown>` | Flat key-value map for O(1) dot-path access |
-| `allSecretKeys` | `Set<string>` | Tracks which paths are secrets |
+| Field           | Type                          | Purpose                                     |
+| --------------- | ----------------------------- | ------------------------------------------- |
+| `namespaces`    | `Map<string, NamespaceEntry>` | Stores validated, frozen data per namespace |
+| `lookupMap`     | `Map<string, unknown>`        | Flat key-value map for O(1) dot-path access |
+| `allSecretKeys` | `Set<string>`                 | Tracks which paths are secrets              |
 
 Each `NamespaceEntry` contains:
 
 ```typescript
 {
-  definition: ConfigDefinition;    // The original config definition
-  data: Readonly<Record<string, unknown>>;  // Validated, frozen data
-  source: Map<string, 'loader' | 'default' | 'override'>;  // Where each key came from
+  definition: ConfigDefinition; // The original config definition
+  data: Readonly<Record<string, unknown>>; // Validated, frozen data
+  source: Map<string, 'loader' | 'default' | 'override'>; // Where each key came from
 }
 ```
 
@@ -233,12 +233,12 @@ Empty strings are treated as "not set" to prevent accidentally using `""` as a v
 
 #### Utilities
 
-| Utility | File | Purpose |
-| --- | --- | --- |
-| `deepFreeze` | `utils/deep-freeze.ts` | Recursively freezes objects and arrays |
-| `maskSecrets` | `utils/mask-secrets.ts` | Deep-clones config and replaces secret values with `********` |
-| `buildLookupMap` | `utils/path-utils.ts` | Flattens nested objects into `"prefix.key" => value` entries |
-| `getByPath` | `utils/path-utils.ts` | Traverses an object by dot-path (used internally, not for runtime access) |
+| Utility          | File                    | Purpose                                                                   |
+| ---------------- | ----------------------- | ------------------------------------------------------------------------- |
+| `deepFreeze`     | `utils/deep-freeze.ts`  | Recursively freezes objects and arrays                                    |
+| `maskSecrets`    | `utils/mask-secrets.ts` | Deep-clones config and replaces secret values with `********`             |
+| `buildLookupMap` | `utils/path-utils.ts`   | Flattens nested objects into `"prefix.key" => value` entries              |
+| `getByPath`      | `utils/path-utils.ts`   | Traverses an object by dot-path (used internally, not for runtime access) |
 
 ### Type System
 
@@ -259,7 +259,7 @@ type Paths = Path<T>;
 Resolves the value type at a given path:
 
 ```typescript
-type V = PathValue<T, "database.host">;  // string
+type V = PathValue<T, 'database.host'>; // string
 ```
 
 **Depth limit**: Recursion stops at depth 5 to prevent TypeScript compiler slowdowns. In practice, config objects rarely exceed 3 levels of nesting.
@@ -274,7 +274,7 @@ The demo app (`apps/demo/`) is structured to showcase every feature through HTTP
 AppModule (forRoot)
   |
   +-- databaseConfig    defineConfig with loader + secretKeys
-  +-- redisConfig       defineConfig with loader + secretKeys  
+  +-- redisConfig       defineConfig with loader + secretKeys
   +-- appConfig         defineConfig with schema-only defaults
   |
   +-- HealthModule (forFeature with inline options)
@@ -329,13 +329,13 @@ Docker Host (your machine)
 
 ### Why Zod instead of class-validator?
 
-| Criteria | Zod | class-validator |
-| --- | --- | --- |
-| Type inference | Automatic from schema | Requires separate interface |
-| Runtime + types | Single source of truth | Types and validation are separate |
-| Composability | Schemas compose naturally | Requires class inheritance |
-| Bundle size | Small (~50KB) | Larger with class-transformer |
-| Default values | Built into `.default()` | Requires manual handling |
+| Criteria        | Zod                       | class-validator                   |
+| --------------- | ------------------------- | --------------------------------- |
+| Type inference  | Automatic from schema     | Requires separate interface       |
+| Runtime + types | Single source of truth    | Types and validation are separate |
+| Composability   | Schemas compose naturally | Requires class inheritance        |
+| Bundle size     | Small (~50KB)             | Larger with class-transformer     |
+| Default values  | Built into `.default()`   | Requires manual handling          |
 
 Zod provides both validation and TypeScript types from a single schema definition. With class-validator, you'd need to maintain both a class and an interface, which can drift apart.
 
