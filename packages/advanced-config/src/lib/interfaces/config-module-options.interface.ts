@@ -1,5 +1,10 @@
-import { InjectionToken, ModuleMetadata, OptionalFactoryDependency, Type } from '@nestjs/common';
-import { ConfigDefinition } from './config-definition.interface';
+import type {
+  InjectionToken,
+  ModuleMetadata,
+  OptionalFactoryDependency,
+  Type,
+} from '@nestjs/common';
+import type { ConfigDefinition } from './config-definition.interface';
 
 export interface AdvancedConfigModuleOptions {
   configs: ConfigDefinition[];

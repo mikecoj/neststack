@@ -1,4 +1,4 @@
-import { IEnvSource } from './env-source.interface';
+import type { IEnvSource } from './env-source.interface';
 
 export interface SecretSource {
   get(key: string): Promise<string>;
