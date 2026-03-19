@@ -1,16 +1,19 @@
 import { Controller, Get } from '@nestjs/common';
-import { ConfigService } from '@nestx/advanced-config';
+import type { CombineConfigs, ConfigService } from '@nestx/advanced-config';
+import type { healthConfig } from './health.config';
+
+type HealthConfigType = CombineConfigs<typeof healthConfig>;
 
 @Controller('health')
 export class HealthController {
-  constructor(private readonly config: ConfigService) {}
+  constructor(private readonly config: ConfigService<HealthConfigType>) {}
 
   @Get()
   check() {
-    const healthConfig = this.config.namespace('health');
+    const health = this.config.namespace('health');
     return {
       status: 'ok',
-      config: healthConfig,
+      config: health,
     };
   }
 

@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import { ConfigService, ConfigStore, CONFIG_STORE } from '@nestx/advanced-config';
+import { CONFIG_STORE, type ConfigService, type ConfigStore } from '@nestx/advanced-config';
 
 @Controller('showcase')
 export class ShowcaseController {
@@ -12,7 +12,7 @@ export class ShowcaseController {
   getValue(@Param('path') path: string) {
     return {
       path,
-      value: this.config.get(path as any),
+      value: this.config.get(path),
     };
   }
 
@@ -20,7 +20,7 @@ export class ShowcaseController {
   getNamespace(@Param('name') name: string) {
     return {
       namespace: name,
-      config: this.config.namespace(name as any),
+      config: this.config.namespace(name),
     };
   }
 
