@@ -4,6 +4,15 @@
   "implicitDependencies": ["demo"],
   "projectType": "application",
   "targets": {
+    "lint": {
+      "command": "biome lint {projectRoot}"
+    },
+    "format": {
+      "command": "biome format --write {projectRoot}"
+    },
+    "check": {
+      "command": "biome check --write {projectRoot}"
+    },
     "e2e": {
       "executor": "nx:run-commands",
       "options": {
