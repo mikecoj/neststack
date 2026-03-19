@@ -9,6 +9,39 @@
     "sharedGlobals": ["{workspaceRoot}/tsconfig.base.json"]
   },
   "targetDefaults": {
+    "lint": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json",
+        {
+          "externalDependencies": ["@biomejs/biome"]
+        }
+      ]
+    },
+    "format": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json",
+        {
+          "externalDependencies": ["@biomejs/biome"]
+        }
+      ]
+    },
+    "check": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/biome.json",
+        {
+          "externalDependencies": ["@biomejs/biome"]
+        }
+      ]
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"],

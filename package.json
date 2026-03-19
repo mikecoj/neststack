@@ -16,9 +16,10 @@
     "test:coverage": "nx test advanced-config --coverage",
     "test:e2e": "nx e2e demo-e2e",
     "lint": "nx run-many -t lint",
+    "format": "nx run-many -t format",
+    "check": "nx run-many -t check",
+    "lint:ci": "biome ci .",
     "typecheck": "nx run-many -t typecheck",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,mdx,css,yml,yaml}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,mdx,css,yml,yaml}\"",
     "dev:docs": "nx dev docs",
     "dev:demo": "nx serve demo",
     "release": "nx release",
@@ -46,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.8",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
     "@nx/js": "^22.5.4",
@@ -61,7 +63,6 @@
     "@types/node": "20.19.9",
     "@vitest/coverage-v8": "^4.1.0",
     "nx": "^22.5.4",
-    "prettier": "~3.6.2",
     "start-server-and-test": "^2.0.4",
     "tslib": "^2.3.0",
     "typescript": "^5.9.3",
@@ -80,8 +81,5 @@
   },
   "nx": {
     "includedScripts": []
-  },
-  "volta": {
-    "node": "22.22.1"
   }
 }

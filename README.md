@@ -28,12 +28,12 @@ The `apps/` folder contains applications that demonstrate how to use the package
 
 Before you begin, make sure you have these tools installed on your machine:
 
-| Tool                  | Minimum Version | How to Check       | Install Guide                                                 |
-| --------------------- | --------------- | ------------------ | ------------------------------------------------------------- |
-| **Node.js**           | 22.0.0          | `node --version`   | [nodejs.org](https://nodejs.org) or [Volta](https://volta.sh) |
-| **pnpm**              | 10.x            | `pnpm --version`   | `corepack enable pnpm` (built into Node.js)                   |
-| **Git**               | 2.x             | `git --version`    | [git-scm.com](https://git-scm.com)                            |
-| **Docker** (optional) | 24.x            | `docker --version` | [docker.com](https://www.docker.com/get-started)              |
+| Tool                  | Minimum Version | How to Check       | Install Guide                                    |
+| --------------------- | --------------- | ------------------ | ------------------------------------------------ |
+| **Node.js**           | 22.0.0          | `node --version`   | [nodejs.org](https://nodejs.org)                 |
+| **pnpm**              | 10.x            | `pnpm --version`   | `corepack enable pnpm` (built into Node.js)      |
+| **Git**               | 2.x             | `git --version`    | [git-scm.com](https://git-scm.com)               |
+| **Docker** (optional) | 24.x            | `docker --version` | [docker.com](https://www.docker.com/get-started) |
 
 **What are these tools?**
 
