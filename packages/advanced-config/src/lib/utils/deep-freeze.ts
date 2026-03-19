@@ -1,4 +1,6 @@
-export function deepFreeze<T extends Record<string, unknown>>(obj: T): Readonly<T> {
+import type { DeepReadonly } from '../types';
+
+export function deepFreeze<T extends Record<string, unknown>>(obj: T): DeepReadonly<T> {
   Object.freeze(obj);
 
   for (const key of Object.keys(obj)) {
@@ -8,5 +10,5 @@ export function deepFreeze<T extends Record<string, unknown>>(obj: T): Readonly<
     }
   }
 
-  return obj;
+  return obj as DeepReadonly<T>;
 }
