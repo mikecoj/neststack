@@ -44,6 +44,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Lint all packages
+        run: pnpm nx run-many -t lint
+
       - name: Build all packages
         run: pnpm nx run-many -t build
 
@@ -54,7 +57,7 @@ jobs:
         run: pnpm nx run-many -t typecheck
 
       - name: Security audit
-        run: pnpm audit --audit-level=moderate
+        run: pnpm audit --audit-level=high
 
       - name: Version and changelog (dry run)
         if: inputs.dry-run == 'true'

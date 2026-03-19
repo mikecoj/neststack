@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   ci:
-    name: Build, Test & Audit
+    name: Lint, Build, Test & Audit
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -40,6 +40,9 @@ jobs:
       - name: Derive NX SHAs
         uses: nrwl/nx-set-shas@v4
 
+      - name: Lint affected
+        run: pnpm nx affected -t lint
+
       - name: Build affected
         run: pnpm nx affected -t build
 
@@ -49,8 +52,8 @@ jobs:
       - name: Test affected
         run: pnpm nx affected -t test -- --coverage
 
-      - name: Format check
-        run: npx prettier --check .
+      - name: Lint & format check
+        run: pnpm biome ci --reporter=default --reporter=github .
 
       - name: Security audit
         run: pnpm audit --audit-level=high
@@ -60,5 +63,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
-          path: coverage/
+          path: packages/advanced-config/coverage/
           retention-days: 14
