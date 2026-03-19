@@ -1,1 +1,1 @@
-export type { Path, PathValue } from './path.type';
+export type { DeepReadonly, Path, PathValue, UnionToIntersection } from './path.type';

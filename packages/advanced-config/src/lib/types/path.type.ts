@@ -5,6 +5,28 @@
 
 type Primitive = string | number | boolean | bigint | symbol | undefined | null;
 
+/**
+ * Recursively marks all properties (and nested properties) as readonly.
+ * Accurately reflects the runtime behaviour of `deepFreeze`.
+ */
+export type DeepReadonly<T> = T extends Primitive
+  ? T
+  : T extends ReadonlyArray<infer U>
+    ? ReadonlyArray<DeepReadonly<U>>
+    : T extends object
+      ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
+      : T;
+
+/**
+ * Converts a union type into an intersection type.
+ * Used by `CombineConfigs` to merge per-namespace config maps.
+ */
+export type UnionToIntersection<U> = (U extends unknown ? (x: U) => void : never) extends (
+  x: infer I,
+) => void
+  ? I
+  : never;
+
 export type Path<T, Depth extends number[] = []> = Depth['length'] extends 5
   ? never
   : T extends Primitive
