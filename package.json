@@ -30,12 +30,6 @@
     "clean": "nx reset"
   },
   "pnpm": {
-    "overrides": {
-      "minimatch": ">=7.4.8",
-      "serialize-javascript": ">=7.0.3",
-      "lodash": ">=4.17.23",
-      "file-type": ">=21.3.2"
-    },
     "onlyBuiltDependencies": [
       "esbuild",
       "nx",
