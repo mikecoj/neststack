@@ -4,6 +4,15 @@
   "projectType": "application",
   "sourceRoot": "apps/docs",
   "targets": {
+    "lint": {
+      "command": "biome lint {projectRoot}"
+    },
+    "format": {
+      "command": "biome format --write {projectRoot}"
+    },
+    "check": {
+      "command": "biome check --write {projectRoot}"
+    },
     "dev": {
       "command": "next dev",
       "options": { "cwd": "apps/docs" }
