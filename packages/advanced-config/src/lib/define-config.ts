@@ -1,5 +1,5 @@
-import { ZodSchema } from 'zod';
-import { ConfigDefinition, ConfigDefinitionOptions } from './interfaces';
+import type { ZodSchema } from 'zod';
+import type { ConfigDefinition, ConfigDefinitionOptions } from './interfaces';
 
 export function defineConfig<N extends string, S extends ZodSchema>(
   options: ConfigDefinitionOptions<N, S>,

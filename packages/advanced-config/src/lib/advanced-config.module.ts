@@ -1,31 +1,32 @@
-import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
-import { ADVANCED_CONFIG_OPTIONS, CONFIG_STORE } from './constants';
-import { ConfigStore } from './config-store';
+import { type DynamicModule, Module, type Provider } from '@nestjs/common';
 import { ConfigService } from './config.service';
-import { EnvSource } from './loaders';
-import {
-  AdvancedConfigModuleOptions,
+import { ConfigStore } from './config-store';
+import { ADVANCED_CONFIG_OPTIONS, CONFIG_STORE } from './constants';
+import { defineConfig } from './define-config';
+import type {
   AdvancedConfigModuleAsyncOptions,
+  AdvancedConfigModuleOptions,
   AdvancedConfigOptionsFactory,
   ConfigDefinition,
   ConfigDefinitionInput,
 } from './interfaces';
-import { defineConfig } from './define-config';
+import { EnvSource } from './loaders';
 
 @Module({})
+// biome-ignore lint/complexity/noStaticOnlyClass: NestJS @Module() requires a class; static members are the DynamicModule factory pattern
 export class AdvancedConfigModule {
   private static readonly globalStore = new ConfigStore();
   private static envSourceInstance: EnvSource = new EnvSource();
 
   static forRoot(options: AdvancedConfigModuleOptions): DynamicModule {
-    this.processConfigs(options);
+    AdvancedConfigModule.processConfigs(options);
 
     return {
       module: AdvancedConfigModule,
       global: options.isGlobal ?? true,
       providers: [
         { provide: ADVANCED_CONFIG_OPTIONS, useValue: options },
-        { provide: CONFIG_STORE, useValue: this.globalStore },
+        { provide: CONFIG_STORE, useValue: AdvancedConfigModule.globalStore },
         ConfigService,
       ],
       exports: [ConfigService, CONFIG_STORE],
@@ -33,7 +34,7 @@ export class AdvancedConfigModule {
   }
 
   static forRootAsync(options: AdvancedConfigModuleAsyncOptions): DynamicModule {
-    const asyncProviders = this.createAsyncProviders(options);
+    const asyncProviders = AdvancedConfigModule.createAsyncProviders(options);
 
     return {
       module: AdvancedConfigModule,
@@ -41,12 +42,12 @@ export class AdvancedConfigModule {
       imports: options.imports ?? [],
       providers: [
         ...asyncProviders,
-        { provide: CONFIG_STORE, useValue: this.globalStore },
+        { provide: CONFIG_STORE, useValue: AdvancedConfigModule.globalStore },
         ConfigService,
         {
           provide: 'ADVANCED_CONFIG_INIT',
           useFactory: (moduleOptions: AdvancedConfigModuleOptions) => {
-            this.processConfigs(moduleOptions);
+            AdvancedConfigModule.processConfigs(moduleOptions);
             return true;
           },
           inject: [ADVANCED_CONFIG_OPTIONS],
@@ -58,14 +59,19 @@ export class AdvancedConfigModule {
 
   static forFeature(...configs: ConfigDefinitionInput[]): DynamicModule {
     for (const input of configs) {
-      const config = this.normalizeConfig(input);
-      const rawData = config.load ? config.load({ env: this.envSourceInstance }) : {};
-      this.globalStore.register(config, rawData as Record<string, unknown>);
+      const config = AdvancedConfigModule.normalizeConfig(input);
+      const rawData = config.load
+        ? config.load({ env: AdvancedConfigModule.envSourceInstance })
+        : {};
+      AdvancedConfigModule.globalStore.register(config, rawData as Record<string, unknown>);
     }
 
     return {
       module: AdvancedConfigModule,
-      providers: [{ provide: CONFIG_STORE, useValue: this.globalStore }, ConfigService],
+      providers: [
+        { provide: CONFIG_STORE, useValue: AdvancedConfigModule.globalStore },
+        ConfigService,
+      ],
       exports: [ConfigService, CONFIG_STORE],
     };
   }
@@ -75,18 +81,18 @@ export class AdvancedConfigModule {
    */
   static reset(): void {
     const freshStore = new ConfigStore();
-    const storeProto = Object.getPrototypeOf(this.globalStore);
-    const freshProto = Object.getPrototypeOf(freshStore);
 
     for (const key of Object.getOwnPropertyNames(freshStore)) {
-      (this.globalStore as any)[key] = (freshStore as any)[key];
+      (AdvancedConfigModule.globalStore as unknown as Record<string, unknown>)[key] = (
+        freshStore as unknown as Record<string, unknown>
+      )[key];
     }
 
-    this.envSourceInstance = new EnvSource();
+    AdvancedConfigModule.envSourceInstance = new EnvSource();
   }
 
   private static normalizeConfig(input: ConfigDefinitionInput): ConfigDefinition {
-    if (this.isConfigDefinition(input)) {
+    if (AdvancedConfigModule.isConfigDefinition(input)) {
       return input;
     }
     return defineConfig(input);
@@ -97,12 +103,14 @@ export class AdvancedConfigModule {
   }
 
   private static processConfigs(options: AdvancedConfigModuleOptions): void {
-    this.envSourceInstance = new EnvSource(options.envSource);
+    AdvancedConfigModule.envSourceInstance = new EnvSource(options.envSource);
 
     for (const config of options.configs) {
-      const rawData = config.load ? config.load({ env: this.envSourceInstance }) : {};
+      const rawData = config.load
+        ? config.load({ env: AdvancedConfigModule.envSourceInstance })
+        : {};
       const overrides = options.overrides?.[config.namespace];
-      this.globalStore.register(
+      AdvancedConfigModule.globalStore.register(
         config,
         rawData as Record<string, unknown>,
         overrides as Record<string, unknown> | undefined,

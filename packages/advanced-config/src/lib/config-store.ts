@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ZodError } from 'zod';
-import { ConfigDefinition, ConfigExplanation } from './interfaces';
-import { deepFreeze, buildLookupMap, maskSecrets } from './utils';
+import type { ZodError } from 'zod';
+import type { ConfigDefinition, ConfigExplanation } from './interfaces';
+import type { DeepReadonly } from './types';
+import { buildLookupMap, deepFreeze, maskSecrets } from './utils';
 
 interface NamespaceEntry {
   definition: ConfigDefinition;
-  data: Readonly<Record<string, unknown>>;
+  data: DeepReadonly<Record<string, unknown>>;
   source: Map<string, 'loader' | 'default' | 'override'>;
 }
 
@@ -113,7 +114,7 @@ export class ConfigStore {
 
   printSafe(): void {
     const safe = this.getSafeAll();
-    this.logger.log('Configuration:\n' + JSON.stringify(safe, null, 2));
+    this.logger.log(`Configuration:\n${JSON.stringify(safe, null, 2)}`);
   }
 
   get size(): number {

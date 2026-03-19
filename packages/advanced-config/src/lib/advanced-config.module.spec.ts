@@ -1,13 +1,13 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { Test } from '@nestjs/testing';
 import { Injectable } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { AdvancedConfigModule } from './advanced-config.module';
 import { ConfigService } from './config.service';
-import { ConfigStore } from './config-store';
-import { defineConfig } from './define-config';
+import type { ConfigStore } from './config-store';
 import { CONFIG_STORE } from './constants';
-import { AdvancedConfigOptionsFactory, AdvancedConfigModuleOptions } from './interfaces';
+import { defineConfig } from './define-config';
+import type { AdvancedConfigModuleOptions, AdvancedConfigOptionsFactory } from './interfaces';
 
 const dbConfig = defineConfig({
   namespace: 'database',
@@ -40,8 +40,8 @@ describe('AdvancedConfigModule', () => {
 
       const service = module.get(ConfigService);
       expect(service).toBeInstanceOf(ConfigService);
-      expect(service.get('database.url' as any)).toBe('postgres://localhost');
-      expect(service.get('database.port' as any)).toBe(5432);
+      expect(service.get('database.url')).toBe('postgres://localhost');
+      expect(service.get('database.port')).toBe(5432);
     });
 
     it('should apply overrides', async () => {
@@ -56,7 +56,7 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('database.url' as any)).toBe('postgres://test');
+      expect(service.get('database.url')).toBe('postgres://test');
     });
 
     it('should handle configs without a load function', async () => {
@@ -75,8 +75,8 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('simple.enabled' as any)).toBe(true);
-      expect(service.get('simple.name' as any)).toBe('app');
+      expect(service.get('simple.enabled')).toBe(true);
+      expect(service.get('simple.name')).toBe('app');
     });
 
     it('should register multiple configs', async () => {
@@ -121,7 +121,7 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('database.url' as any)).toBe('postgres://async');
+      expect(service.get('database.url')).toBe('postgres://async');
     });
 
     it('should support useClass', async () => {
@@ -144,7 +144,7 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('database.url' as any)).toBe('postgres://from-class');
+      expect(service.get('database.url')).toBe('postgres://from-class');
     });
 
     it('should support useExisting', async () => {
@@ -176,7 +176,7 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('database.url' as any)).toBe('postgres://from-existing');
+      expect(service.get('database.url')).toBe('postgres://from-existing');
     });
 
     it('should throw when no factory method is provided', () => {
@@ -204,7 +204,7 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('feature.enabled' as any)).toBe(true);
+      expect(service.get('feature.enabled')).toBe(true);
     });
 
     it('should accept plain options without calling defineConfig first', async () => {
@@ -225,8 +225,8 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('cache.ttl' as any)).toBe(3600);
-      expect(service.get('cache.maxItems' as any)).toBe(1000);
+      expect(service.get('cache.ttl')).toBe(3600);
+      expect(service.get('cache.maxItems')).toBe(1000);
     });
 
     it('should accept plain options with loader and secretKeys', async () => {
@@ -253,7 +253,7 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('redis.url' as any)).toBe('redis://localhost:6379');
+      expect(service.get('redis.url')).toBe('redis://localhost:6379');
       expect(service.explain('redis.password').isSecret).toBe(true);
     });
 
@@ -277,8 +277,8 @@ describe('AdvancedConfigModule', () => {
       }).compile();
 
       const service = module.get(ConfigService);
-      expect(service.get('feature.enabled' as any)).toBe(true);
-      expect(service.get('flags.darkMode' as any)).toBe(false);
+      expect(service.get('feature.enabled')).toBe(true);
+      expect(service.get('flags.darkMode')).toBe(false);
     });
   });
 });

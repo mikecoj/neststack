@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
+import type { ConfigStore } from './config-store';
 import { CONFIG_STORE } from './constants';
-import { ConfigStore } from './config-store';
-import { ConfigExplanation } from './interfaces';
-import type { Path, PathValue } from './types';
+import type { ConfigExplanation } from './interfaces';
+import type { DeepReadonly, Path, PathValue } from './types';
 
 @Injectable()
 export class ConfigService<TConfig extends Record<string, unknown> = Record<string, unknown>> {
@@ -15,8 +15,8 @@ export class ConfigService<TConfig extends Record<string, unknown> = Record<stri
     return this.store.get<PathValue<TConfig, P>>(path);
   }
 
-  namespace<K extends string & keyof TConfig>(name: K): TConfig[K] {
-    return this.store.getNamespace<TConfig[K]>(name);
+  namespace<K extends string & keyof TConfig>(name: K): DeepReadonly<TConfig[K]> {
+    return this.store.getNamespace<DeepReadonly<TConfig[K]>>(name);
   }
 
   explain(path: string): ConfigExplanation {

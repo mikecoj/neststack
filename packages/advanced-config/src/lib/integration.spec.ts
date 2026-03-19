@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { Inject, Injectable, Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { Injectable, Inject, Module } from '@nestjs/common';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import { AdvancedConfigModule } from './advanced-config.module';
 import { ConfigService } from './config.service';
-import { defineConfig } from './define-config';
+import type { ConfigStore } from './config-store';
 import { CONFIG_STORE } from './constants';
-import { ConfigStore } from './config-store';
+import { defineConfig } from './define-config';
 
 const databaseConfig = defineConfig({
   namespace: 'database',
@@ -85,10 +85,10 @@ describe('Integration Test', () => {
     expect(dbService.getConnectionUrl()).toBe('postgres://localhost:5432/mydb');
     expect(dbService.getPoolSize()).toBe(10);
 
-    expect(configService.get('auth.issuer' as any)).toBe('https://auth.example.com');
-    expect(configService.get('auth.clientId' as any)).toBe('client-123');
+    expect(configService.get('auth.issuer')).toBe('https://auth.example.com');
+    expect(configService.get('auth.clientId')).toBe('client-123');
 
-    const dbNamespace = configService.namespace('database' as any);
+    const dbNamespace = configService.namespace('database');
     expect(Object.isFrozen(dbNamespace)).toBe(true);
     expect((dbNamespace as any).ssl).toBe(false);
 
@@ -127,9 +127,9 @@ describe('Integration Test', () => {
 
     const service = module.get(ConfigService);
 
-    expect(service.get('database.url' as any)).toBe('postgres://localhost:5432/mydb');
-    expect(service.get('payments.apiKey' as any)).toBe('pk_test_123');
-    expect(service.get('payments.currency' as any)).toBe('USD');
+    expect(service.get('database.url')).toBe('postgres://localhost:5432/mydb');
+    expect(service.get('payments.apiKey')).toBe('pk_test_123');
+    expect(service.get('payments.currency')).toBe('USD');
 
     const safeExplanation = service.explain('payments.apiKey');
     expect(safeExplanation.isSecret).toBe(true);
@@ -155,8 +155,8 @@ describe('Integration Test', () => {
     }).compile();
 
     const service = module.get(ConfigService);
-    expect(service.get('database.url' as any)).toBe('postgres://localhost:5432/testdb');
-    expect(service.get('database.password' as any)).toBe('test-pass');
+    expect(service.get('database.url')).toBe('postgres://localhost:5432/testdb');
+    expect(service.get('database.password')).toBe('test-pass');
   });
 
   it('should reject invalid configuration at bootstrap', () => {

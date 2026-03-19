@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { ConfigStore } from './config-store';
 import { ConfigService } from './config.service';
+import { ConfigStore } from './config-store';
 import { defineConfig } from './define-config';
 
 describe('ConfigService', () => {
@@ -37,25 +37,25 @@ describe('ConfigService', () => {
 
   describe('get', () => {
     it('should retrieve a config value by dot-path', () => {
-      expect(service.get('database.url' as any)).toBe('postgres://localhost');
+      expect(service.get('database.url')).toBe('postgres://localhost');
     });
 
     it('should retrieve a default value', () => {
-      expect(service.get('database.port' as any)).toBe(5432);
+      expect(service.get('database.port')).toBe(5432);
     });
 
     it('should retrieve from different namespaces', () => {
-      expect(service.get('auth.issuer' as any)).toBe('https://auth.example.com');
+      expect(service.get('auth.issuer')).toBe('https://auth.example.com');
     });
 
     it('should throw for non-existent keys', () => {
-      expect(() => service.get('missing.key' as any)).toThrow();
+      expect(() => service.get('missing.key')).toThrow();
     });
   });
 
   describe('namespace', () => {
     it('should return a full namespace object', () => {
-      const db = service.namespace('database' as any);
+      const db = service.namespace('database');
       expect(db).toEqual({
         url: 'postgres://localhost',
         port: 5432,
@@ -64,12 +64,12 @@ describe('ConfigService', () => {
     });
 
     it('should return a frozen namespace object', () => {
-      const db = service.namespace('database' as any);
+      const db = service.namespace('database');
       expect(Object.isFrozen(db)).toBe(true);
     });
 
     it('should throw for non-existent namespace', () => {
-      expect(() => service.namespace('missing' as any)).toThrow();
+      expect(() => service.namespace('missing')).toThrow();
     });
   });
 
