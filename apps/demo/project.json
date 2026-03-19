@@ -4,6 +4,15 @@
   "sourceRoot": "apps/demo/src",
   "projectType": "application",
   "targets": {
+    "lint": {
+      "command": "biome lint {projectRoot}"
+    },
+    "format": {
+      "command": "biome format --write {projectRoot}"
+    },
+    "check": {
+      "command": "biome check --write {projectRoot}"
+    },
     "build": {
       "executor": "nx:run-commands",
       "dependsOn": ["^build"],
