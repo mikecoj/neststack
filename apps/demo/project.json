@@ -18,12 +18,12 @@
       "dependsOn": ["^build"],
       "options": {
         "command": "webpack-cli build",
-        "args": ["--node-env=production"],
+        "args": ["--mode=production"],
         "cwd": "apps/demo"
       },
       "configurations": {
         "development": {
-          "args": ["--node-env=development"]
+          "args": ["--mode=development"]
         }
       }
     },
