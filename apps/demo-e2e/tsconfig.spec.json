@@ -4,7 +4,8 @@
     "outDir": "../../dist/out-tsc",
     "declaration": true,
     "module": "commonjs",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "noPropertyAccessFromIndexSignature": false
   },
   "include": ["jest.config.cts", "jest.config.ts", "src/**/*.ts"]
 }
