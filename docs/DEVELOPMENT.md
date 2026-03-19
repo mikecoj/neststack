@@ -93,17 +93,7 @@ If you prefer not to use Docker, you can set up everything locally.
 
 ### 1. Install Node.js 22+
 
-We recommend [Volta](https://volta.sh/) for managing Node.js versions:
-
-```bash
-# Install Volta (macOS/Linux)
-curl https://get.volta.sh | bash
-
-# Install Node.js 22
-volta install node@22
-```
-
-Or download directly from [nodejs.org](https://nodejs.org/).
+Download and install from [nodejs.org](https://nodejs.org/) (LTS 22.x or later).
 
 Verify your installation:
 
