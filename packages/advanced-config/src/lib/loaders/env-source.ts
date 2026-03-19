@@ -1,4 +1,4 @@
-import { IEnvSource } from '../interfaces';
+import type { IEnvSource } from '../interfaces';
 
 export class EnvSource implements IEnvSource {
   constructor(private readonly env: Record<string, string | undefined> = process.env) {}
