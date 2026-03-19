@@ -4,9 +4,18 @@
     "applyChanges": true
   },
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
-    "production": ["default", "!{projectRoot}/**/*.spec.ts", "!{projectRoot}/vitest.config.ts"],
-    "sharedGlobals": ["{workspaceRoot}/tsconfig.base.json"]
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.spec.ts",
+      "!{projectRoot}/vitest.config.ts"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/tsconfig.base.json"
+    ]
   },
   "targetDefaults": {
     "lint": {
@@ -16,7 +25,9 @@
         "^default",
         "{workspaceRoot}/biome.json",
         {
-          "externalDependencies": ["@biomejs/biome"]
+          "externalDependencies": [
+            "@biomejs/biome"
+          ]
         }
       ]
     },
@@ -27,7 +38,9 @@
         "^default",
         "{workspaceRoot}/biome.json",
         {
-          "externalDependencies": ["@biomejs/biome"]
+          "externalDependencies": [
+            "@biomejs/biome"
+          ]
         }
       ]
     },
@@ -38,13 +51,20 @@
         "^default",
         "{workspaceRoot}/biome.json",
         {
-          "externalDependencies": ["@biomejs/biome"]
+          "externalDependencies": [
+            "@biomejs/biome"
+          ]
         }
       ]
     },
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"],
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ],
       "cache": true
     },
     "typecheck": {
@@ -55,8 +75,13 @@
     },
     "@nx/js:tsc": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
   },
   "plugins": [
@@ -91,7 +116,9 @@
     }
   ],
   "release": {
-    "projects": ["packages/*"],
+    "projects": [
+      "packages/*"
+    ],
     "projectsRelationship": "independent",
     "version": {
       "preVersionCommand": "pnpm dlx nx run-many -t build",
@@ -109,5 +136,6 @@
     "releaseTag": {
       "pattern": "{projectName}@{version}"
     }
-  }
+  },
+  "nxCloudId": "69bbdd7cd26daaceed749a2f"
 }
