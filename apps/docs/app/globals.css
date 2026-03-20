@@ -1,0 +1,426 @@
+:root {
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-text: #1a1a2e;
+  --color-text-muted: #6b7280;
+  --color-accent: #d17842;
+  --color-accent-hover: #e08a52;
+  --color-border: #e5e7eb;
+  --color-code-bg: #f1f3f5;
+
+  /* Override Nextra theme to match custom palette */
+  --nextra-bg: 248, 249, 250;
+  --nextra-primary-hue: 25deg;
+  --nextra-primary-saturation: 63%;
+  --nextra-primary-lightness: 54%;
+}
+
+.dark {
+  --color-bg: #0c1015;
+  --color-surface: #141a21;
+  --color-text: #ffffff;
+  --color-text-muted: #9ca3af;
+  --color-accent: #d17842;
+  --color-accent-hover: #e08a52;
+  --color-border: #1e2a35;
+  --color-code-bg: #1a2230;
+
+  /* Override Nextra theme to match custom palette */
+  --nextra-bg: 12, 16, 21;
+  --nextra-primary-hue: 25deg;
+  --nextra-primary-saturation: 63%;
+  --nextra-primary-lightness: 55%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Footer - override Nextra gray/neutral to match custom palette */
+div:has(> footer) {
+  background: var(--color-bg);
+}
+
+footer {
+  color: var(--color-text-muted);
+}
+
+footer a {
+  color: var(--color-accent);
+}
+footer a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* Navbar - full palette override */
+.nextra-navbar,
+.nextra-navbar-blur,
+nav[class*="nextra-nav"],
+header nav {
+  background: var(--color-bg);
+  background-color: var(--color-bg);
+  border-color: var(--color-border);
+}
+.nextra-navbar a,
+nav[class*="nextra-nav"] a {
+  color: var(--color-text-muted);
+}
+.nextra-navbar a:hover,
+nav[class*="nextra-nav"] a:hover {
+  color: var(--color-text);
+}
+.nextra-navbar svg {
+  color: var(--color-text-muted);
+}
+
+/* Sidebar - full palette override */
+.nextra-sidebar-container,
+aside[class*="nextra-sidebar"],
+[class*="nextra-sidebar"] {
+  background: var(--color-bg);
+  background-color: var(--color-bg);
+  border-color: var(--color-border);
+}
+.nextra-sidebar-container a,
+[class*="nextra-sidebar"] a {
+  color: var(--color-text-muted);
+}
+.nextra-sidebar-container a:hover,
+[class*="nextra-sidebar"] a:hover {
+  color: var(--color-text);
+}
+
+/* Theme switch / toggle area in sidebar */
+[class*="nextra-sidebar"] button,
+[class*="nextra-sidebar"] [role="button"],
+.nextra-navbar button,
+.nextra-navbar [role="button"] {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+[class*="nextra-sidebar"] button:hover,
+[class*="nextra-sidebar"] [role="button"]:hover,
+.nextra-navbar button:hover,
+.nextra-navbar [role="button"]:hover {
+  background: var(--color-surface);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Override Nextra's default border color */
+.nextra-border {
+  border-color: var(--color-border);
+}
+
+/* Force Nextra layout backgrounds to use our palette (navbar + sidebar use bg/surface) */
+.x\:bg-nextra-bg,
+.x\:bg-nextra-bg\/70 {
+  background-color: var(--color-bg);
+}
+.dark .x\:bg-gray-100,
+.dark .x\:bg-gray-200,
+.dark .x\:bg-neutral-900 {
+  background-color: var(--color-surface);
+}
+.dark .x\:border-gray-200,
+.dark .x\:border-gray-300 {
+  border-color: var(--color-border);
+}
+
+/* Links in content */
+.nextra-content a:not(.btn):not(.package-link) {
+  color: var(--color-accent);
+}
+.nextra-content a:not(.btn):not(.package-link):hover {
+  color: var(--color-accent-hover);
+}
+
+/* Sidebar active item */
+.nextra-sidebar-container li.active > a {
+  color: var(--color-accent);
+}
+
+/* ─── Landing page ─── */
+
+.landing {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 5rem 0 3.5rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  padding: 0.3rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin: 0 0 1.25rem;
+}
+
+.hero-title .accent {
+  color: var(--color-accent);
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+  max-width: 620px;
+  margin: 0 0 2rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+}
+
+.hero-install {
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+}
+
+.hero-install code {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+.btn-secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Sections */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 0.5rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+}
+
+/* Features */
+.features {
+  padding: 3.5rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.feature-card {
+  padding: 1.5rem;
+  border-radius: 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition: border-color 0.15s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--color-accent);
+}
+
+.feature-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+}
+
+.feature-description {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Packages section */
+.packages-section {
+  padding: 3.5rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.package-card {
+  padding: 2rem;
+  border-radius: 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  margin-top: 2rem;
+}
+
+.package-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.package-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  margin: 0;
+}
+
+.package-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.1);
+  border: 1px solid rgba(22, 163, 74, 0.25);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+}
+
+.package-description {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  margin: 0 0 1rem;
+}
+
+.package-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+.package-link:hover {
+  color: var(--color-accent-hover);
+}
+
+.packages-coming {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  margin-top: 2rem;
+  font-style: italic;
+}
+
+/* Trust / built for production */
+.trust {
+  padding: 3.5rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.75rem 2rem;
+  max-width: 720px;
+  margin: 2rem auto 0;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.trust-check {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* CTA */
+.cta {
+  text-align: center;
+  padding: 3.5rem 0 5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.cta-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+.cta-description {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin: 0 0 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero {
+    padding: 3rem 0 2rem;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .trust-grid {
+    grid-template-columns: 1fr;
+  }
+}

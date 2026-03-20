@@ -1,0 +1,106 @@
+# Security
+
+`@nestx/advanced-config` is built with security as a first-class concern, following practices recommended for banking and fintech applications.
+
+## Secret Masking
+
+Any key listed in `secretKeys` is automatically masked when using `printSafe()` or `getSafeAll()`:
+
+```typescript
+export const dbConfig = defineConfig({
+  namespace: 'database',
+  schema: z.object({
+    host: z.string(),
+    password: z.string(),
+    apiKey: z.string(),
+  }),
+  load: ({ env }) => ({
+    host: env.getString('DB_HOST'),
+    password: env.getString('DB_PASSWORD'),
+    apiKey: env.getString('API_KEY'),
+  }),
+  secretKeys: ['password', 'apiKey'],
+});
+```
+
+### How It Works
+
+1. During registration, secret keys are prefixed with the namespace and stored in a Set&lt;string&gt; (e.g., `"database.password"`)
+2. `getSafeAll()` deep-clones the config and replaces any value whose full path matches a secret key with `"********"`
+3. `printSafe()` calls `getSafeAll()` and logs the result
+4. `explain()` sets `isSecret: true` for secret paths
+
+### Best Practices
+
+- Always list passwords, API keys, tokens, and connection strings in `secretKeys`
+- Call `printSafe()` at startup instead of manually logging config
+- Use `getSafeAll()` for admin/debug endpoints instead of `getAll()`
+- Never log the return value of `getAll()` — it contains unmasked secrets
+
+## Immutability (Deep Freeze)
+
+All configuration is deep-frozen after validation using `Object.freeze()` applied recursively:
+
+```typescript
+const db = config.namespace('database');
+db.host = 'hacked'; // TypeError: Cannot assign to read-only property 'host'
+```
+
+### Why Deep Freeze?
+
+| Approach              | Runtime protection     | Performance cost          |
+| --------------------- | ---------------------- | ------------------------- |
+| `Object.freeze()`     | Yes — throws TypeError | Zero after initial freeze |
+| `Proxy`               | Yes                    | Overhead on every access  |
+| ReadonlyDeep&lt;T&gt; | No — TypeScript only   | None                      |
+
+`Object.freeze()` is a native operation with no runtime overhead after the initial call. It's the only approach that provides both runtime protection and zero-cost reads.
+
+### What Gets Frozen
+
+- The top-level namespace object
+- All nested objects recursively
+- Arrays within the config
+- The `ConfigDefinition` returned by `defineConfig()`
+- The `secretKeys` array
+
+## Fail-Fast Validation
+
+Invalid configuration causes the application to crash at startup:
+
+```
+Config validation failed for namespace "database":
+  database.port: Expected number, received string
+  database.host: Required
+```
+
+This is intentional. Catching config errors at startup is far better than discovering them at runtime when a user hits the affected code path.
+
+### Validation Flow
+
+1. Loader function returns raw data
+2. Raw data is merged with any overrides
+3. Merged data passes through `schema.safeParse()`
+4. If validation fails, an error with all issues is thrown
+5. If validation passes, the result is deep-frozen and stored
+
+## Namespace Isolation
+
+Each config definition has a unique namespace. Attempting to register a duplicate throws an error:
+
+```
+Configuration namespace "database" is already registered.
+Each namespace must be unique.
+```
+
+This prevents accidental overwrites and ensures each module owns its config.
+
+## Environment Variable Safety
+
+The `EnvSource` class treats empty strings as "not set":
+
+```typescript
+env.getString('DB_HOST'); // throws if DB_HOST is "" or undefined
+```
+
+This prevents accidentally using blank environment variables as valid values — a common source of bugs in production.

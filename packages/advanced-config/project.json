@@ -1,0 +1,29 @@
+{
+  "name": "advanced-config",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/advanced-config/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "command": "biome lint {projectRoot}"
+    },
+    "format": {
+      "command": "biome format --write {projectRoot}"
+    },
+    "check": {
+      "command": "biome check --write {projectRoot}"
+    },
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "stripLeadingPaths": true,
+        "outputPath": "packages/advanced-config/dist",
+        "tsConfig": "packages/advanced-config/tsconfig.lib.json",
+        "main": "packages/advanced-config/src/index.ts",
+        "assets": ["packages/advanced-config/*.md"]
+      }
+    }
+  }
+}

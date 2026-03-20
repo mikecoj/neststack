@@ -1,0 +1,38 @@
+{
+  "$schema": "https://swc.rs/schema.json",
+  "jsc": {
+    "target": "es2023",
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true
+    },
+    "transform": {
+      "decoratorMetadata": true,
+      "legacyDecorator": true
+    },
+    "keepClassNames": true,
+    "externalHelpers": false,
+    "loose": true,
+    "minify": {
+      "compress": {
+        "unused": true,
+        "dead_code": true,
+        "drop_debugger": true,
+        "passes": 2
+      },
+      "mangle": {
+        "keepClassNames": true
+      },
+      "format": {
+        "comments": false
+      }
+    }
+  },
+  "module": {
+    "type": "commonjs"
+  },
+  "minify": true,
+  "sourceMaps": true,
+  "inlineSourcesContent": true,
+  "exclude": ["vitest.config.ts", ".*\\.spec.tsx?$", ".*\\.test.tsx?$"]
+}

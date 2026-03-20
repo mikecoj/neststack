@@ -1,0 +1,133 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "sync": {
+    "applyChanges": true
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": [
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/vitest.config.ts"
+    ],
+    "sharedGlobals": ["{workspaceRoot}/tsconfig.base.json"]
+  },
+  "targetDefaults": {
+    "lint": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        {
+          "externalDependencies": ["@biomejs/biome"]
+        }
+      ]
+    },
+    "format": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        {
+          "externalDependencies": ["@biomejs/biome"]
+        }
+      ]
+    },
+    "check": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "{workspaceRoot}/biome.json",
+        {
+          "externalDependencies": ["@biomejs/biome"]
+        }
+      ]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"],
+      "cache": true
+    },
+    "typecheck": {
+      "cache": true,
+      "dependsOn": ["^typecheck"]
+    }
+  },
+  "plugins": [
+    {
+      "plugin": "@nx/js/typescript",
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        },
+        "build": false
+      }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "test",
+        "testMode": "run"
+      }
+    },
+    {
+      "plugin": "@nx/webpack/plugin",
+      "include": ["apps/demo/**/*"],
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps",
+        "serveStaticTargetName": "serve-static"
+      }
+    }
+  ],
+  "release": {
+    "projects": ["packages/*"],
+    "projectsRelationship": "independent",
+    "git": {
+      "commitMessage": "chore(release): publish {version} [skip ci]"
+    },
+    "version": {
+      "preVersionCommand": "pnpm nx run-many -t build",
+      "conventionalCommits": true,
+      "preserveLocalDependencyProtocols": true,
+      "manifestRootsToUpdate": ["{projectRoot}"],
+      "fallbackCurrentVersionResolver": "disk"
+    },
+    "changelog": {
+      "workspaceChangelog": false,
+      "projectChangelogs": {
+        "entryWhenNoChanges": false,
+        "renderOptions": {
+          "authors": true,
+          "commitReferences": true,
+          "versionTitleDate": true
+        }
+      }
+    },
+    "conventionalCommits": {
+      "types": {
+        "feat": { "semverBump": "minor", "changelog": { "title": "Features" } },
+        "fix": { "semverBump": "patch", "changelog": { "title": "Bug Fixes" } },
+        "perf": { "semverBump": "patch", "changelog": { "title": "Performance Improvements" } },
+        "revert": { "semverBump": "patch", "changelog": { "title": "Reverts" } },
+        "refactor": { "semverBump": "none", "changelog": { "title": "Code Refactoring" } },
+        "docs": { "semverBump": "none", "changelog": { "title": "Documentation" } },
+        "chore": { "semverBump": "none", "changelog": { "hidden": true } },
+        "build": { "semverBump": "none", "changelog": { "hidden": true } },
+        "ci": { "semverBump": "none", "changelog": { "hidden": true } },
+        "style": { "semverBump": "none", "changelog": { "hidden": true } },
+        "test": { "semverBump": "none", "changelog": { "hidden": true } }
+      }
+    },
+    "releaseTag": {
+      "pattern": "{projectName}@{version}"
+    }
+  },
+  "nxCloudId": "69bbdd7cd26daaceed749a2f",
+  "selectivelyHashTsConfig": true,
+  "analytics": true
+}

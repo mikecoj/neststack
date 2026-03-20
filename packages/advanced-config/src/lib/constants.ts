@@ -1,0 +1,2 @@
+export const ADVANCED_CONFIG_OPTIONS = Symbol('ADVANCED_CONFIG_OPTIONS');
+export const CONFIG_STORE = Symbol('CONFIG_STORE');

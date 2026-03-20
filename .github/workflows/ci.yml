@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'feat-*']
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Lint, Build, Test & Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@a15d269cd4658e1107c09f1fabf4cbd7bd1f308a # v4.4.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Derive NX SHAs
+        uses: nrwl/nx-set-shas@15514ee4353489ef5a1644bcdae44f0ae2ea45f3 # v4.4.0
+
+      - name: Lint affected
+        run: pnpm nx affected -t lint
+
+      - name: Build affected
+        run: pnpm nx affected -t build
+
+      - name: Typecheck affected
+        run: pnpm nx affected -t typecheck
+
+      - name: Test affected
+        run: pnpm nx affected -t test -- --coverage
+
+      - name: Lint & format check
+        run: pnpm biome ci --reporter=default --reporter=github .
+
+      - name: Security audit
+        run: pnpm audit --audit-level=moderate
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: coverage-reports
+          path: packages/advanced-config/coverage/
+          retention-days: 14

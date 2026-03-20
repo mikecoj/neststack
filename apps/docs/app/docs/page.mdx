@@ -1,0 +1,30 @@
+# Packages
+
+NestX provides a suite of enterprise-grade NestJS modules, each solving a critical infrastructure concern with strict type safety, rigorous testing, and security-first design.
+
+Every package follows these principles:
+
+- **100% test coverage** — every line, branch, and function is tested
+- **Zod-powered validation** — runtime safety with automatic TypeScript inference
+- **Immutable by default** — configuration and state are frozen after initialization
+- **Zero-config defaults** — sensible defaults that work out of the box
+- **Peer dependency model** — you control your NestJS and Zod versions
+
+## Available Packages
+
+### [@nestx/advanced-config](/docs/advanced-config)
+
+Type-safe, validated configuration management for NestJS applications. Define schemas with Zod, load from environment variables, validate at startup, and access with full auto-completion.
+
+- Zod schema validation with automatic TypeScript inference
+- O(1) dot-path lookups via pre-built flat map
+- Secret masking in logs and diagnostics
+- Deep-frozen immutable configuration
+- `forRoot()` / `forRootAsync()` / `forFeature()` dynamic module patterns
+- Built-in `EnvSource` with typed getters and fail-fast semantics
+
+[Get started with @nestx/advanced-config &rarr;](/docs/advanced-config)
+
+---
+
+_More packages are coming soon. Each will follow the same enterprise standards — strict types, full coverage, and production-ready from day one._

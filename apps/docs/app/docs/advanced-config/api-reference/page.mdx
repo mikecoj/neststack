@@ -1,0 +1,291 @@
+# API Reference
+
+Complete API surface of `@nestx/advanced-config`.
+
+## Functions
+
+### defineConfig(options)
+
+Creates a frozen `ConfigDefinition` from the provided options.
+
+```typescript
+function defineConfig<N extends string, S extends ZodSchema>(
+  options: ConfigDefinitionOptions<N, S>,
+): ConfigDefinition<N, S>;
+```
+
+**Parameters:**
+
+| Name                 | Type                                                     | Description                                  |
+| -------------------- | -------------------------------------------------------- | -------------------------------------------- |
+| `options.namespace`  | `string`                                                 | Unique identifier for this config group      |
+| `options.schema`     | `ZodSchema`                                              | Zod schema for validation and type inference |
+| `options.load`       | (ctx: LoadContext) =&gt; Partial&lt;z.infer&lt;S&gt;&gt; | Optional loader function                     |
+| `options.secretKeys` | `string[]`                                               | Optional keys to mask in output              |
+
+**Returns:** A frozen `ConfigDefinition` object.
+
+**Throws:** If `namespace` is empty or `schema` is missing.
+
+---
+
+## Classes
+
+### AdvancedConfigModule
+
+NestJS dynamic module for configuration management.
+
+#### forRoot(options)
+
+```typescript
+static forRoot(options: AdvancedConfigModuleOptions): DynamicModule
+```
+
+Registers configuration globally. Call once in the root `AppModule`.
+
+| Option      | Type                                                | Default       | Description                       |
+| ----------- | --------------------------------------------------- | ------------- | --------------------------------- |
+| `configs`   | `ConfigDefinition[]`                                | —             | Config definitions to register    |
+| `isGlobal`  | `boolean`                                           | `true`        | Make providers available globally |
+| `envSource` | Record&lt;string, string or undefined&gt;           | `process.env` | Custom env source                 |
+| `overrides` | Record&lt;string, Record&lt;string, unknown&gt;&gt; | —             | Per-namespace overrides           |
+
+#### forRootAsync(options)
+
+```typescript
+static forRootAsync(options: AdvancedConfigModuleAsyncOptions): DynamicModule
+```
+
+Async version of `forRoot()`. Supports `useFactory`, `useClass`, `useExisting`.
+
+#### forFeature(...configs)
+
+```typescript
+static forFeature(...configs: ConfigDefinitionInput[]): DynamicModule
+```
+
+Registers additional namespaces. Accepts both `ConfigDefinition` and `ConfigDefinitionOptions`.
+
+#### reset()
+
+```typescript
+static reset(): void
+```
+
+Clears all state. **For testing only.**
+
+---
+
+### ConfigService&lt;TConfig&gt;
+
+Injectable service for accessing configuration.
+
+#### get(path)
+
+```typescript
+get<P extends string & Path<TConfig>>(path: P): PathValue<TConfig, P>
+```
+
+Returns the value at the given dot-path. Throws if the path does not exist.
+
+#### namespace(name)
+
+```typescript
+namespace<K extends string & keyof TConfig>(name: K): TConfig[K]
+```
+
+Returns the entire config object for a namespace. The returned object is frozen.
+
+#### explain(path)
+
+```typescript
+explain(path: string): ConfigExplanation
+```
+
+Returns diagnostic information about a config value.
+
+#### printSafe()
+
+```typescript
+printSafe(): void
+```
+
+Logs the entire configuration with secrets masked.
+
+---
+
+### ConfigStore
+
+Low-level store holding all registered configuration.
+
+#### register(definition, rawData, overrides?)
+
+```typescript
+register(
+  definition: ConfigDefinition,
+  rawData: Record<string, unknown>,
+  overrides?: Record<string, unknown>,
+): void
+```
+
+Validates, freezes, and stores a config namespace. Throws on duplicate namespace or validation failure.
+
+#### get(path)
+
+```typescript
+get<T = unknown>(path: string): T
+```
+
+O(1) lookup by dot-path.
+
+#### getNamespace(name)
+
+```typescript
+getNamespace<T = Record<string, unknown>>(name: string): T
+```
+
+Returns the frozen data for a namespace.
+
+#### explain(path)
+
+```typescript
+explain(path: string): ConfigExplanation
+```
+
+#### getAll()
+
+```typescript
+getAll(): Record<string, unknown>
+```
+
+Returns all namespaces. **Secrets are visible.**
+
+#### getSafeAll()
+
+```typescript
+getSafeAll(): Record<string, unknown>
+```
+
+Returns all namespaces with secrets masked.
+
+#### printSafe()
+
+```typescript
+printSafe(): void
+```
+
+#### size
+
+```typescript
+get size(): number
+```
+
+Number of registered namespaces.
+
+---
+
+### EnvSource
+
+Typed wrapper around environment variables.
+
+```typescript
+class EnvSource implements IEnvSource {
+  constructor(env?: Record<string, string | undefined>);
+}
+```
+
+| Method               | Signature                                     | Missing behavior    |
+| -------------------- | --------------------------------------------- | ------------------- |
+| `getString`          | `(key: string, default?: string) => string`   | Throws              |
+| `getNumber`          | `(key: string, default?: number) => number`   | Throws              |
+| `getBoolean`         | `(key: string, default?: boolean) => boolean` | Throws              |
+| `getOptionalString`  | (key: string) =&gt; string or undefined       | Returns `undefined` |
+| `getOptionalNumber`  | (key: string) =&gt; number or undefined       | Returns `undefined` |
+| `getOptionalBoolean` | (key: string) =&gt; boolean or undefined      | Returns `undefined` |
+
+---
+
+## Interfaces
+
+### ConfigDefinition
+
+```typescript
+interface ConfigDefinition<N extends string = string, S extends ZodSchema = ZodSchema> {
+  readonly namespace: N;
+  readonly schema: S;
+  readonly load?: ConfigLoader<S>;
+  readonly secretKeys: ReadonlyArray<string>;
+}
+```
+
+### ConfigDefinitionOptions
+
+```typescript
+interface ConfigDefinitionOptions<N extends string = string, S extends ZodSchema = ZodSchema> {
+  namespace: N;
+  schema: S;
+  load?: ConfigLoader<S>;
+  secretKeys?: string[];
+}
+```
+
+### ConfigExplanation
+
+```typescript
+interface ConfigExplanation {
+  path: string;
+  namespace: string;
+  key: string;
+  value: unknown;
+  source: 'loader' | 'default' | 'override';
+  isSecret: boolean;
+}
+```
+
+### LoadContext
+
+```typescript
+interface LoadContext {
+  env: IEnvSource;
+}
+```
+
+### IEnvSource
+
+```typescript
+interface IEnvSource {
+  getString(key: string, defaultValue?: string): string;
+  getNumber(key: string, defaultValue?: number): number;
+  getBoolean(key: string, defaultValue?: boolean): boolean;
+  getOptionalString(key: string): string | undefined;
+  getOptionalNumber(key: string): number | undefined;
+  getOptionalBoolean(key: string): boolean | undefined;
+}
+```
+
+---
+
+## Injection Tokens
+
+| Token                     | Value                               | Provides               |
+| ------------------------- | ----------------------------------- | ---------------------- |
+| `CONFIG_STORE`            | `Symbol('CONFIG_STORE')`            | `ConfigStore` instance |
+| `ADVANCED_CONFIG_OPTIONS` | `Symbol('ADVANCED_CONFIG_OPTIONS')` | Module options         |
+
+---
+
+## Types
+
+### Path&lt;T&gt;
+
+```typescript
+type Path<T, Depth extends number[] = []> = /* recursive union of all dot-paths */
+```
+
+Depth limit: 5 levels.
+
+### PathValue&lt;T, P&gt;
+
+```typescript
+type PathValue<T, P extends string> = /* resolved type at path P in type T */
+```
