@@ -2,7 +2,7 @@
 
 ## Project Identity
 
-This is `@nestx/advanced-config` — an enterprise-grade, type-safe NestJS configuration module designed for banking and fintech applications. It lives in an Nx monorepo.
+This is `@neststack/config` — an enterprise-grade, type-safe NestJS configuration module designed for banking and fintech applications. It lives in an Nx monorepo.
 
 ## Tech Stack
 
