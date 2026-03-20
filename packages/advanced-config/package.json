@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Enterprise-grade, type-safe dynamic configuration module for NestJS with Zod validation, secret masking, and O(1) lookups",
   "type": "commonjs",
-  "main": "./src/index.js",
-  "types": "./src/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "author": "Mike Cojocari",
   "repository": {
@@ -27,14 +27,7 @@
     "secret-masking",
     "validation"
   ],
-  "files": [
-    "src/**/*.js",
-    "src/**/*.d.ts",
-    "src/**/*.js.map",
-    "README.md",
-    "CHANGELOG.md",
-    "LICENSE"
-  ],
+  "files": ["dist", "*.md", "LICENSE"],
   "publishConfig": {
     "access": "public",
     "provenance": true

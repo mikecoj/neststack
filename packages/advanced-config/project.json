@@ -22,10 +22,11 @@
       "command": "biome check --write {projectRoot}"
     },
     "build": {
-      "executor": "@nx/js:tsc",
+      "executor": "@nx/js:swc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/advanced-config",
+        "stripLeadingPaths": true,
+        "outputPath": "packages/advanced-config/dist",
         "tsConfig": "packages/advanced-config/tsconfig.lib.json",
         "packageJson": "packages/advanced-config/package.json",
         "main": "packages/advanced-config/src/index.ts",
@@ -34,7 +35,7 @@
     },
     "nx-release-publish": {
       "options": {
-        "packageRoot": "dist/{projectRoot}"
+        "packageRoot": "{projectRoot}/dist"
       }
     }
   }

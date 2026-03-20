@@ -1,0 +1,26 @@
+{
+  "jsc": {
+    "target": "es2023",
+    "parser": {
+      "syntax": "typescript",
+      "decorators": true
+    },
+    "transform": {
+      "decoratorMetadata": true,
+      "legacyDecorator": true
+    },
+    "keepClassNames": true,
+    "externalHelpers": false,
+    "loose": true
+  },
+  "module": {
+    "type": "commonjs"
+  },
+  "sourceMaps": true,
+  "exclude": [
+    "jest.config.ts",
+    "jest.config.cts",
+    ".*\\.spec.tsx?$",
+    ".*\\.test.tsx?$"
+  ]
+}
