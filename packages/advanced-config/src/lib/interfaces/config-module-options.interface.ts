@@ -9,8 +9,6 @@ import type { ConfigDefinition } from './config-definition.interface';
 export interface AdvancedConfigModuleOptions {
   configs: ConfigDefinition[];
   envSource?: Record<string, string | undefined>;
-  strict?: boolean;
-  cache?: boolean;
   overrides?: Record<string, Record<string, unknown>>;
   isGlobal?: boolean;
 }
