@@ -111,24 +111,79 @@
     },
     "conventionalCommits": {
       "types": {
-        "feat": { "semverBump": "minor", "changelog": { "title": "Features" } },
-        "fix": { "semverBump": "patch", "changelog": { "title": "Bug Fixes" } },
-        "perf": { "semverBump": "patch", "changelog": { "title": "Performance Improvements" } },
-        "revert": { "semverBump": "patch", "changelog": { "title": "Reverts" } },
-        "refactor": { "semverBump": "none", "changelog": { "title": "Code Refactoring" } },
-        "docs": { "semverBump": "none", "changelog": { "title": "Documentation" } },
-        "chore": { "semverBump": "none", "changelog": { "hidden": true } },
-        "build": { "semverBump": "none", "changelog": { "hidden": true } },
-        "ci": { "semverBump": "none", "changelog": { "hidden": true } },
-        "style": { "semverBump": "none", "changelog": { "hidden": true } },
-        "test": { "semverBump": "none", "changelog": { "hidden": true } }
+        "feat": {
+          "semverBump": "minor",
+          "changelog": {
+            "title": "Features"
+          }
+        },
+        "fix": {
+          "semverBump": "patch",
+          "changelog": {
+            "title": "Bug Fixes"
+          }
+        },
+        "perf": {
+          "semverBump": "patch",
+          "changelog": {
+            "title": "Performance Improvements"
+          }
+        },
+        "revert": {
+          "semverBump": "patch",
+          "changelog": {
+            "title": "Reverts"
+          }
+        },
+        "refactor": {
+          "semverBump": "none",
+          "changelog": {
+            "title": "Code Refactoring"
+          }
+        },
+        "docs": {
+          "semverBump": "none",
+          "changelog": {
+            "title": "Documentation"
+          }
+        },
+        "chore": {
+          "semverBump": "none",
+          "changelog": {
+            "hidden": true
+          }
+        },
+        "build": {
+          "semverBump": "none",
+          "changelog": {
+            "hidden": true
+          }
+        },
+        "ci": {
+          "semverBump": "none",
+          "changelog": {
+            "hidden": true
+          }
+        },
+        "style": {
+          "semverBump": "none",
+          "changelog": {
+            "hidden": true
+          }
+        },
+        "test": {
+          "semverBump": "none",
+          "changelog": {
+            "hidden": true
+          }
+        }
       }
     },
     "releaseTag": {
       "pattern": "{projectName}@{version}"
     }
   },
-  "nxCloudId": "69bbdd7cd26daaceed749a2f",
+  "nxCloudId": "69bdb949d44bb01c0365705d",
   "selectivelyHashTsConfig": true,
   "analytics": true
 }
