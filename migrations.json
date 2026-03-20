@@ -1,0 +1,11 @@
+{
+  "migrations": [],
+  "nx-console": {
+    "initialGitRef": {
+      "ref": "503b08b6e716e2743d45cd51373abf387fbfb2d6",
+      "subject": "chore(nx): 🔧 update preVersionCommand to specify projects for build"
+    },
+    "targetVersion": "latest",
+    "confirmedPackageUpdates": true
+  }
+}
