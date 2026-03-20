@@ -1,6 +1,6 @@
 # NestStack Advanced Packages
 
-> **[View the full documentation](https://mikecoj.github.io/neststack-advanced-packages/)**
+> **[View the full documentation](https://mikecoj.github.io/neststack/)**
 
 An NX monorepo containing enterprise-grade NestJS packages designed for banking, fintech, and mission-critical applications. Every package is built with strict type safety, comprehensive testing, and security-first design.
 
@@ -49,8 +49,8 @@ Before you begin, make sure you have these tools installed on your machine:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-org/neststack-advanced-packages.git
-cd neststack-advanced-packages
+git clone https://github.com/your-org/neststack.git
+cd neststack
 ```
 
 ### 2. Install dependencies
@@ -148,7 +148,7 @@ See the [demo app README](apps/demo/README.md) for the complete endpoint referen
 ## Project Structure
 
 ```
-neststack-advanced-packages/
+neststack/
   .devcontainer/            Dev container configuration (Docker-based dev environment)
     devcontainer.json       VS Code dev container settings
     compose.yaml            Docker Compose for dev container services
