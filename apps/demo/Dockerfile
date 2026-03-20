@@ -1,4 +1,4 @@
-FROM node:22-alpine AS builder
+FROM node:25-alpine AS builder
 RUN corepack enable pnpm
 
 WORKDIR /build
@@ -9,7 +9,7 @@ COPY apps/demo/ apps/demo/
 RUN pnpm install --frozen-lockfile
 RUN pnpm nx build demo
 
-FROM node:22-alpine AS runner
+FROM node:25-alpine AS runner
 RUN addgroup -g 1001 -S appgroup && adduser -S appuser -u 1001 -G appgroup
 
 WORKDIR /app
