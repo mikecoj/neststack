@@ -15,8 +15,8 @@ services:
       - NODE_ENV=development
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_NAME=${POSTGRES_DB:-nestx_demo}
-      - DB_USER=${POSTGRES_USER:-nestx}
+      - DB_NAME=${POSTGRES_DB:-neststack_demo}
+      - DB_USER=${POSTGRES_USER:-neststack}
       - DB_PASSWORD=${POSTGRES_PASSWORD:-dev_local_only}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -30,7 +30,7 @@ services:
       resources:
         limits:
           memory: 2G
-          cpus: '2.0'
+          cpus: "2.0"
     tmpfs:
       - /tmp:noexec,nosuid,size=256m
 
@@ -48,18 +48,22 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-nestx}
+      POSTGRES_USER: ${POSTGRES_USER:-neststack}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dev_local_only}
-      POSTGRES_DB: ${POSTGRES_DB:-nestx_demo}
+      POSTGRES_DB: ${POSTGRES_DB:-neststack_demo}
     volumes:
       - pgdata:/var/lib/postgresql/data
     tmpfs:
       - /tmp:noexec,nosuid,size=64m
       - /run/postgresql:noexec,nosuid,size=16m
     ports:
-      - '5432:5432'
+      - "5432:5432"
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-nestx} -d ${POSTGRES_DB:-nestx_demo}']
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-neststack} -d ${POSTGRES_DB:-neststack_demo}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -68,7 +72,7 @@ services:
       resources:
         limits:
           memory: 512M
-          cpus: '0.5'
+          cpus: "0.5"
 
   redis:
     image: redis:7-alpine
@@ -86,9 +90,10 @@ services:
     tmpfs:
       - /tmp:noexec,nosuid,size=32m
     ports:
-      - '6379:6379'
+      - "6379:6379"
     healthcheck:
-      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD:-dev_local_only}', 'ping']
+      test:
+        ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-dev_local_only}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -97,7 +102,7 @@ services:
       resources:
         limits:
           memory: 256M
-          cpus: '0.25'
+          cpus: "0.25"
 
 volumes:
   pgdata:

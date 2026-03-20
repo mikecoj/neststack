@@ -1,0 +1,29 @@
+{
+  "name": "config",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/config/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "command": "biome lint {projectRoot}"
+    },
+    "format": {
+      "command": "biome format --write {projectRoot}"
+    },
+    "check": {
+      "command": "biome check --write {projectRoot}"
+    },
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "stripLeadingPaths": true,
+        "outputPath": "packages/config/dist",
+        "tsConfig": "packages/config/tsconfig.lib.json",
+        "main": "packages/config/src/index.ts",
+        "assets": ["packages/config/*.md"]
+      }
+    }
+  }
+}

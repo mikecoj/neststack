@@ -1,0 +1,123 @@
+# @neststack/config
+
+Enterprise-grade, type-safe configuration for NestJS. Define your configuration with Zod schemas, validate at startup, and access everything with full TypeScript inference — no runtime surprises.
+
+## Installation
+
+```bash
+npm install @neststack/config zod
+```
+
+```bash
+pnpm add @neststack/config zod
+```
+
+```bash
+yarn add @neststack/config zod
+```
+
+**Requirements:** Node.js 22+, NestJS 11+, Zod 3.20+ or 4.x
+
+## Why This Package?
+
+Configuration is the foundation of every application. Getting it wrong means silent failures, security leaks, and debugging sessions that last hours. `@neststack/config` eliminates these problems:
+
+| Problem                   | How we solve it                                                  |
+| ------------------------- | ---------------------------------------------------------------- |
+| Typos in config keys      | Recursive dot-path types catch errors at compile time            |
+| Invalid values at runtime | Zod validates every value at startup — fail fast, not at 3 AM    |
+| Secrets in logs           | Secret keys are automatically masked in all output               |
+| Mutable config state      | Deep-frozen objects throw TypeError on mutation                  |
+| Slow config access        | Pre-built O(1) lookup map — no string parsing per read           |
+| Boilerplate               | `defineConfig()` gives you schema, loader, and types in one call |
+
+## Quick Start
+
+### 1. Define your configuration
+
+```typescript
+import { defineConfig } from '@neststack/config';
+import { z } from 'zod';
+
+export const databaseConfig = defineConfig({
+  namespace: 'database',
+  schema: z.object({
+    host: z.string(),
+    port: z.number().default(5432),
+    name: z.string(),
+    password: z.string(),
+  }),
+  load: ({ env }) => ({
+    host: env.getString('DB_HOST', 'localhost'),
+    port: env.getNumber('DB_PORT', 5432),
+    name: env.getString('DB_NAME', 'mydb'),
+    password: env.getString('DB_PASSWORD'),
+  }),
+  secretKeys: ['password'],
+});
+```
+
+### 2. Register the module
+
+```typescript
+import { Module } from '@nestjs/common';
+import { NestStackConfigModule } from '@neststack/config';
+import { databaseConfig } from './config/database.config';
+
+@Module({
+  imports: [
+    NestStackConfigModule.forRoot({
+      configs: [databaseConfig],
+      isGlobal: true,
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+### 3. Use with full type safety
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@neststack/config';
+
+@Injectable()
+export class DatabaseService {
+  constructor(private readonly config: ConfigService) {}
+
+  connect() {
+    const host = this.config.get('database.host'); // string
+    const port = this.config.get('database.port'); // number
+    // TypeScript knows the exact types
+  }
+}
+```
+
+### 4. Safe logging at startup
+
+```typescript
+const config = app.get(ConfigService);
+config.printSafe();
+```
+
+```json
+{
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "name": "mydb",
+    "password": "********"
+  }
+}
+```
+
+## Core Concepts
+
+- **[Defining Configuration](/docs/config/defining-config)** — Zod schemas, loader functions, environment variables, secrets
+- **[Module Registration](/docs/config/module-registration)** — `forRoot()`, `forRootAsync()`, `forFeature()`
+- **[Runtime Usage](/docs/config/runtime-usage)** — `ConfigService` API: `get()`, `namespace()`, `explain()`, `printSafe()`
+- **[Security](/docs/config/security)** — Secret masking, immutability, fail-fast validation
+- **[Performance](/docs/config/performance)** — O(1) lookups, flat map architecture, freeze semantics
+- **[Type System](/docs/config/type-system)** — Recursive `Path` and `PathValue` types
+- **[Testing](/docs/config/testing)** — Patterns for unit and integration testing
+- **[API Reference](/docs/config/api-reference)** — Complete API surface

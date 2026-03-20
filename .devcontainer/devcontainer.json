@@ -1,5 +1,5 @@
 {
-  "name": "NestX Advanced Packages",
+  "name": "NestStack Advanced Packages",
   "dockerComposeFile": ["compose.yaml"],
   "service": "app",
   "workspaceFolder": "/workspace",

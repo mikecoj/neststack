@@ -2,7 +2,7 @@ export { appConfig } from './app.config';
 export { databaseConfig } from './database.config';
 export { redisConfig } from './redis.config';
 
-import type { CombineConfigs } from '@nestx/advanced-config';
+import type { CombineConfigs } from '@neststack/config';
 import type { appConfig } from './app.config';
 import type { databaseConfig } from './database.config';
 import type { redisConfig } from './redis.config';

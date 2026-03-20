@@ -1,8 +1,8 @@
 ---
-applyTo: "packages/advanced-config/**"
+applyTo: "packages/config/**"
 ---
 
-# @nestx/advanced-config — Package Review Rules
+# @neststack/config — Package Review Rules
 
 This is the core configuration library for enterprise banking applications. Apply these rules in addition to the general security review instructions.
 
@@ -52,4 +52,4 @@ This is the core configuration library for enterprise banking applications. Appl
 - `defineConfig()` in `define-config.ts` — the standard way to declare typed config with schema, defaults, and secret keys
 - `ConfigStore` in `config-store.ts` — immutable store with O(1) path lookups via precomputed lookup maps
 - `ConfigService` in `config.service.ts` — type-safe path access with automatic secret masking
-- `AdvancedConfigModule` in `advanced-config.module.ts` — dynamic module with `forRoot()` / `forRootAsync()` / `forFeature()`
+- `NestStackConfigModule` in `neststack-config.module.ts` — dynamic module with `forRoot()` / `forRootAsync()` / `forFeature()`

@@ -1,0 +1,105 @@
+# Type System
+
+`@neststack/config` provides recursive TypeScript types for fully-typed dot-notation access. These types give you auto-completion and compile-time safety for every config key.
+
+## Path&lt;T&gt;
+
+Generates a union of all valid dot-notation paths for a given type:
+
+```typescript
+type Config = {
+  database: { host: string; port: number };
+  app: { name: string };
+};
+
+type AllPaths = Path<Config>;
+// "database" | "database.host" | "database.port" | "app" | "app.name"
+```
+
+### How It Works
+
+Path&lt;T&gt; recursively walks the object type:
+
+```typescript
+type Path<T, Depth extends number[] = []> = Depth['length'] extends 5
+  ? never
+  : T extends Primitive
+    ? never
+    : T extends Array<unknown>
+      ? never
+      : {
+          [K in keyof T & string]: T[K] extends Primitive | Array<unknown>
+            ? K
+            : T[K] extends Record<string, unknown>
+              ? K | `${K}.${Path<T[K], [...Depth, 0]>}`
+              : K;
+        }[keyof T & string];
+```
+
+Key design decisions:
+
+- **Depth limit of 5** — prevents TypeScript compiler slowdowns. Config objects rarely exceed 3 levels of nesting.
+- **Primitives are leaf nodes** — `string`, `number`, `boolean` etc. don't expand further.
+- **Arrays are leaf nodes** — array indexing (`items.0.name`) is intentionally not supported to keep the type simple.
+
+## PathValue&lt;T, P&gt;
+
+Resolves the value type at a given dot-path:
+
+```typescript
+type HostType = PathValue<Config, 'database.host'>; // string
+type PortType = PathValue<Config, 'database.port'>; // number
+type DbType = PathValue<Config, 'database'>; // { host: string; port: number }
+```
+
+### Implementation
+
+```typescript
+type PathValue<T, P extends string> = P extends `${infer K}.${infer Rest}`
+  ? K extends keyof T
+    ? PathValue<T[K], Rest>
+    : never
+  : P extends keyof T
+    ? T[P]
+    : never;
+```
+
+The type splits the path at the first dot, looks up the key, and recurses into the remaining path. When there are no more dots, it returns the value type directly.
+
+## Using with ConfigService
+
+`ConfigService` accepts a generic type parameter for full type safety:
+
+```typescript
+type MyConfig = {
+  database: { host: string; port: number; password: string };
+  app: { name: string; port: number };
+};
+
+@Injectable()
+export class MyService {
+  constructor(private readonly config: ConfigService<MyConfig>) {}
+
+  getHost(): string {
+    return this.config.get('database.host');
+    // TypeScript knows this returns string
+  }
+
+  getPort(): number {
+    return this.config.get('database.port');
+    // TypeScript knows this returns number
+  }
+}
+```
+
+Without the generic parameter, `ConfigService` uses `Record<string, unknown>` and paths are untyped.
+
+## Limitations
+
+1. **Depth limit** — paths deeper than 5 levels resolve to `never`. This is a practical trade-off; deeply nested config should be restructured.
+
+2. **Arrays** — array elements are not traversed. If you have `items: string[]`, the valid path is `"items"` but not `"items.0"`.
+
+3. **Union types** — if a config value can be multiple types (e.g., `string | number`), the path and value types still work correctly.
+
+4. **Performance** — deeply nested types with many keys can slow down the TypeScript compiler. Keep config objects reasonably flat (2-3 levels) for the best IDE experience.

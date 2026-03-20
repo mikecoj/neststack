@@ -52,7 +52,7 @@ describe('Showcase endpoints', () => {
 
     // Verify app config defaults
     expect(res.data.app).toMatchObject({
-      name: 'nestx-demo',
+      name: 'neststack-demo',
       port: 3000,
       environment: 'development',
       debug: true,
@@ -65,8 +65,8 @@ describe('Showcase endpoints', () => {
     // Verify database config loaded from env
     expect(res.data.database.host).toBe('localhost');
     expect(res.data.database.port).toBe(5432);
-    expect(res.data.database.name).toBe('nestx_test');
-    expect(res.data.database.user).toBe('nestx');
+    expect(res.data.database.name).toBe('neststack_test');
+    expect(res.data.database.user).toBe('neststack');
   });
 
   it('GET /showcase/all — should also return safe config (no raw secrets)', async () => {
@@ -112,7 +112,7 @@ describe('Showcase endpoints', () => {
     expect(res.data).toEqual({
       namespace: 'app',
       config: {
-        name: 'nestx-demo',
+        name: 'neststack-demo',
         port: 3000,
         environment: 'development',
         debug: true,
@@ -152,7 +152,7 @@ describe('Showcase endpoints', () => {
       path: 'app.name',
       namespace: 'app',
       key: 'name',
-      value: 'nestx-demo',
+      value: 'neststack-demo',
       source: 'default',
       isSecret: false,
     });
@@ -206,8 +206,8 @@ describe('Config data integrity', () => {
 
     // These were set via env vars in global-setup
     expect(res.data.config.host).toBe('localhost');
-    expect(res.data.config.name).toBe('nestx_test');
-    expect(res.data.config.user).toBe('nestx');
+    expect(res.data.config.name).toBe('neststack_test');
+    expect(res.data.config.user).toBe('neststack');
     expect(res.data.config.port).toBe(5432);
     expect(res.data.config.ssl).toBe(false);
     expect(res.data.config.poolSize).toBe(10);

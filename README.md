@@ -1,6 +1,6 @@
-# NestX Advanced Packages
+# NestStack Advanced Packages
 
-> **[View the full documentation](https://mikecoj.github.io/nestx-advanced-packages/)**
+> **[View the full documentation](https://mikecoj.github.io/neststack/)**
 
 An NX monorepo containing enterprise-grade NestJS packages designed for banking, fintech, and mission-critical applications. Every package is built with strict type safety, comprehensive testing, and security-first design.
 
@@ -14,13 +14,13 @@ The `apps/` folder contains applications that demonstrate how to use the package
 
 | Package                                               | Version | Description                                                                                                              |
 | ----------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [`@nestx/advanced-config`](packages/advanced-config/) | 0.0.1   | Enterprise-grade, type-safe configuration module with Zod validation, secret masking, O(1) lookups, and full diagnostics |
+| [`@neststack/config`](packages/config/) | 0.0.1   | Enterprise-grade, type-safe configuration module with Zod validation, secret masking, O(1) lookups, and full diagnostics |
 
 ## Applications
 
 | App                  | Description                                                                            |
 | -------------------- | -------------------------------------------------------------------------------------- |
-| [`demo`](apps/demo/) | NestJS app showcasing every feature of `@nestx/advanced-config` through HTTP endpoints |
+| [`demo`](apps/demo/) | NestJS app showcasing every feature of `@neststack/config` through HTTP endpoints |
 
 ---
 
@@ -49,8 +49,8 @@ Before you begin, make sure you have these tools installed on your machine:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-org/nestx-advanced-packages.git
-cd nestx-advanced-packages
+git clone https://github.com/your-org/neststack.git
+cd neststack
 ```
 
 ### 2. Install dependencies
@@ -75,7 +75,7 @@ This builds all packages in the correct order. NX automatically figures out whic
 pnpm test
 ```
 
-This runs the test suites for all packages. The `@nestx/advanced-config` package targets 100% code coverage.
+This runs the test suites for all packages. The `@neststack/config` package targets 100% code coverage.
 
 ### 5. Type check
 
@@ -89,7 +89,7 @@ This verifies TypeScript types are correct across all projects without producing
 
 ## Running the Demo Application
 
-The demo app showcases every feature of `@nestx/advanced-config`. You have three ways to run it:
+The demo app showcases every feature of `@neststack/config`. You have three ways to run it:
 
 ### Option A: Docker Compose (recommended for first-time users)
 
@@ -148,7 +148,7 @@ See the [demo app README](apps/demo/README.md) for the complete endpoint referen
 ## Project Structure
 
 ```
-nestx-advanced-packages/
+neststack/
   .devcontainer/            Dev container configuration (Docker-based dev environment)
     devcontainer.json       VS Code dev container settings
     compose.yaml            Docker Compose for dev container services
@@ -156,7 +156,7 @@ nestx-advanced-packages/
     .env                    Default environment variables for dev services
 
   apps/                     Applications (demos, examples)
-    demo/                   Demo application for @nestx/advanced-config
+    demo/                   Demo application for @neststack/config
       src/
         main.ts             App entry point, calls printSafe() at startup
         app/
@@ -168,11 +168,11 @@ nestx-advanced-packages/
     demo-e2e/               End-to-end tests for the demo app
 
   packages/                 Publishable NPM packages
-    advanced-config/        @nestx/advanced-config package
+    config/        @neststack/config package
       src/
         index.ts            Public API barrel file
         lib/
-          advanced-config.module.ts   The NestJS dynamic module
+          neststack-config.module.ts   The NestJS dynamic module
           config.service.ts           Injectable service (get, namespace, explain, printSafe)
           config-store.ts             Internal store with validation and O(1) lookup
           define-config.ts            Helper to create frozen config definitions
@@ -207,7 +207,7 @@ All commands are run from the repository root.
 
 ```bash
 pnpm build                    # Build all projects
-pnpm nx build advanced-config # Build only the config package
+pnpm nx build config # Build only the config package
 pnpm nx build demo            # Build only the demo app
 ```
 
@@ -215,19 +215,19 @@ pnpm nx build demo            # Build only the demo app
 
 ```bash
 pnpm test                     # Run all tests
-pnpm nx test advanced-config  # Test only the config package
+pnpm nx test config  # Test only the config package
 ```
 
 To run tests in watch mode (re-runs when files change):
 
 ```bash
-pnpm nx test advanced-config --watch
+pnpm nx test config --watch
 ```
 
 To see code coverage:
 
 ```bash
-pnpm nx test advanced-config --coverage
+pnpm nx test config --coverage
 ```
 
 ### Serving
@@ -241,7 +241,7 @@ pnpm nx serve demo --configuration=production  # Start in production mode
 
 ```bash
 pnpm typecheck                # Type check all projects
-pnpm nx typecheck advanced-config  # Type check only the config package
+pnpm nx typecheck config  # Type check only the config package
 ```
 
 ### Formatting
@@ -256,7 +256,7 @@ npx prettier --check .        # Check formatting without changing files
 ```bash
 npx nx graph                  # Open the project dependency graph in a browser
 npx nx show project demo      # Show project details and available targets
-npx nx show project advanced-config  # Show config package targets
+npx nx show project config  # Show config package targets
 npx nx affected -t test       # Run tests only for projects affected by your changes
 npx nx affected -t build      # Build only affected projects
 ```
@@ -269,7 +269,7 @@ npx nx affected -t build      # Build only affected projects
 
 NX is a build system for monorepos. It does three important things:
 
-1. **Dependency graph** -- It understands that `demo` depends on `advanced-config`, so it builds `advanced-config` first.
+1. **Dependency graph** -- It understands that `demo` depends on `config`, so it builds `config` first.
 2. **Caching** -- If nothing changed in a package, NX skips rebuilding/retesting it. This makes repeated builds fast.
 3. **Affected commands** -- `nx affected -t test` only tests packages that changed since the last commit.
 
@@ -277,7 +277,7 @@ You interact with NX through the `pnpm nx` (or `npx nx`) command. Each project h
 
 ### What is a Dynamic Module?
 
-In NestJS, a [dynamic module](https://docs.nestjs.com/fundamentals/dynamic-modules) is a module whose behavior can be configured when you import it. `@nestx/advanced-config` is a dynamic module with three registration methods:
+In NestJS, a [dynamic module](https://docs.nestjs.com/fundamentals/dynamic-modules) is a module whose behavior can be configured when you import it. `@neststack/config` is a dynamic module with three registration methods:
 
 - **`forRoot()`** -- Called once in the root module. Sets up the global config store.
 - **`forRootAsync()`** -- Same as `forRoot()` but supports async initialization (e.g., fetching secrets from a vault).
@@ -318,7 +318,7 @@ See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for full setup instructions.
 | [Development Guide](docs/DEVELOPMENT.md)                     | How to set up your development environment     |
 | [Architecture](docs/ARCHITECTURE.md)                         | How the code is organized and why              |
 | [Contributing](docs/CONTRIBUTING.md)                         | Code style, commit conventions, and PR process |
-| [@nestx/advanced-config](packages/advanced-config/README.md) | Full package documentation with API reference  |
+| [@neststack/config](packages/config/README.md) | Full package documentation with API reference  |
 | [Demo App](apps/demo/README.md)                              | Demo app endpoints and usage                   |
 
 ---
@@ -339,19 +339,19 @@ pnpm install
 NX is a dev dependency, not a global install. Use `pnpm nx` or `npx nx` instead of `nx` directly:
 
 ```bash
-pnpm nx build advanced-config  # correct
-nx build advanced-config       # may fail if not installed globally
+pnpm nx build config  # correct
+nx build config       # may fail if not installed globally
 ```
 
 ### Tests fail with "namespace already registered"
 
-The `ConfigStore` is a static singleton. If you're writing tests, call `AdvancedConfigModule.reset()` in `beforeEach`:
+The `ConfigStore` is a static singleton. If you're writing tests, call `NestStackConfigModule.reset()` in `beforeEach`:
 
 ```typescript
-import { AdvancedConfigModule } from '@nestx/advanced-config';
+import { NestStackConfigModule } from '@neststack/config';
 
 beforeEach(() => {
-  AdvancedConfigModule.reset();
+  NestStackConfigModule.reset();
 });
 ```
 

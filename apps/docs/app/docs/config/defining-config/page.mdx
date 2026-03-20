@@ -1,0 +1,159 @@
+# Defining Configuration
+
+Configuration definitions are the foundation of `@neststack/config`. Each definition declares a namespace, a Zod schema, an optional loader function, and optional secret keys.
+
+## The `defineConfig()` Function
+
+```typescript
+import { defineConfig } from '@neststack/config';
+import { z } from 'zod';
+
+export const appConfig = defineConfig({
+  namespace: 'app',
+  schema: z.object({
+    name: z.string().default('my-app'),
+    port: z.number().default(3000),
+    environment: z.enum(['development', 'staging', 'production']).default('development'),
+    debug: z.boolean().default(true),
+  }),
+});
+```
+
+`defineConfig()` validates the inputs, freezes the output, and returns a `ConfigDefinition` object. Freezing ensures the definition cannot be accidentally mutated after creation.
+
+### Parameters
+
+| Parameter    | Type                                      | Required | Description                             |
+| ------------ | ----------------------------------------- | -------- | --------------------------------------- |
+| `namespace`  | `string`                                  | Yes      | Unique identifier for this config group |
+| `schema`     | `ZodSchema`                               | Yes      | Zod schema for validation and defaults  |
+| `load`       | (ctx: LoadContext) =&gt; Partial&lt;T&gt; | No       | Loader function to fetch values         |
+| `secretKeys` | `string[]`                                | No       | Keys to mask in logs and diagnostics    |
+
+## Zod Schemas
+
+The schema serves three purposes:
+
+1. **Validation** — invalid values are caught at startup
+2. **Defaults** — use `.default()` to provide fallback values
+3. **TypeScript types** — the schema defines the type of the config object
+
+```typescript
+const schema = z.object({
+  host: z.string(), // Required string
+  port: z.number().int().min(1).max(65535).default(5432), // Number with constraints
+  ssl: z.boolean().default(false), // Boolean with default
+  name: z.string().min(1), // Required non-empty string
+  poolSize: z.number().min(1).max(100).default(10),
+});
+```
+
+If a required field is missing and has no default, validation fails at startup with a clear error:
+
+```
+Config validation failed for namespace "database":
+  database.host: Required
+```
+
+## Loader Functions
+
+A loader function fetches values from external sources. It receives a `LoadContext` with an `env` property — a typed `EnvSource` instance.
+
+```typescript
+export const databaseConfig = defineConfig({
+  namespace: 'database',
+  schema: z.object({
+    host: z.string(),
+    port: z.number().default(5432),
+    name: z.string(),
+    user: z.string(),
+    password: z.string(),
+    ssl: z.boolean().default(false),
+    poolSize: z.number().min(1).max(100).default(10),
+  }),
+  load: ({ env }) => ({
+    host: env.getString('DB_HOST', 'localhost'),
+    port: env.getNumber('DB_PORT', 5432),
+    name: env.getString('DB_NAME', 'mydb'),
+    user: env.getString('DB_USER', 'postgres'),
+    password: env.getString('DB_PASSWORD'),
+    ssl: env.getBoolean('DB_SSL', false),
+    poolSize: env.getNumber('DB_POOL_SIZE', 10),
+  }),
+  secretKeys: ['password'],
+});
+```
+
+### EnvSource Methods
+
+| Method                      | Returns              | Behavior if missing           |
+| --------------------------- | -------------------- | ----------------------------- |
+| `getString(key, default?)`  | `string`             | Throws if no default provided |
+| `getNumber(key, default?)`  | `number`             | Throws if no default provided |
+| `getBoolean(key, default?)` | `boolean`            | Throws if no default provided |
+| `getOptionalString(key)`    | string or undefined  | Returns `undefined`           |
+| `getOptionalNumber(key)`    | number or undefined  | Returns `undefined`           |
+| `getOptionalBoolean(key)`   | boolean or undefined | Returns `undefined`           |
+
+Empty strings (`""`) are treated as "not set" to prevent accidentally using blank values.
+
+### Boolean Parsing
+
+The boolean methods accept these string values:
+
+| True values        | False values       |
+| ------------------ | ------------------ |
+| `true`, `1`, `yes` | `false`, `0`, `no` |
+
+Case-insensitive. Any other value throws an error.
+
+## Schema-Only Configs
+
+If your config uses only Zod defaults (no environment variables), omit the `load` function:
+
+```typescript
+export const appConfig = defineConfig({
+  namespace: 'app',
+  schema: z.object({
+    name: z.string().default('neststack-demo'),
+    port: z.number().default(3000),
+    environment: z.enum(['development', 'staging', 'production']).default('development'),
+    debug: z.boolean().default(true),
+  }),
+});
+```
+
+All values come from `.default()` — no environment variables needed.
+
+## Secret Keys
+
+Mark sensitive values as secrets so they are masked in logs and `printSafe()` output:
+
+```typescript
+export const databaseConfig = defineConfig({
+  namespace: 'database',
+  schema: z.object({
+    host: z.string(),
+    password: z.string(),
+    apiKey: z.string(),
+  }),
+  load: ({ env }) => ({
+    host: env.getString('DB_HOST'),
+    password: env.getString('DB_PASSWORD'),
+    apiKey: env.getString('API_KEY'),
+  }),
+  secretKeys: ['password', 'apiKey'],
+});
+```
+
+When you call `printSafe()`, these keys are replaced with `********`:
+
+```json
+{
+  "database": {
+    "host": "localhost",
+    "password": "********",
+    "apiKey": "********"
+  }
+}
+```

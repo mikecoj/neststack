@@ -1,6 +1,6 @@
 # Development Guide
 
-This guide walks you through setting up a development environment for the NestX monorepo. It covers both local setup and the Docker-based dev container, explains how the tooling works, and shows how to run, test, and debug the code.
+This guide walks you through setting up a development environment for the NestStack monorepo. It covers both local setup and the Docker-based dev container, explains how the tooling works, and shows how to run, test, and debug the code.
 
 ---
 
@@ -78,9 +78,9 @@ The dev environment uses these default credentials (defined in `.devcontainer/.e
 
 | Variable            | Value              |
 | ------------------- | ------------------ |
-| `POSTGRES_USER`     | `nestx`            |
-| `POSTGRES_PASSWORD` | `nestx_dev_secret` |
-| `POSTGRES_DB`       | `nestx_demo`       |
+| `POSTGRES_USER`     | `neststack`            |
+| `POSTGRES_PASSWORD` | `neststack_dev_secret` |
+| `POSTGRES_DB`       | `neststack_demo`       |
 | `REDIS_PASSWORD`    | `redis_dev_secret` |
 
 These are for local development only. Never use these in production.
@@ -113,8 +113,8 @@ pnpm --version   # Should show 10.x
 ### 3. Clone and install
 
 ```bash
-git clone https://github.com/your-org/nestx-advanced-packages.git
-cd nestx-advanced-packages
+git clone https://github.com/your-org/neststack.git
+cd neststack
 pnpm install
 ```
 
@@ -122,7 +122,7 @@ pnpm install
 
 ```bash
 pnpm build   # Should complete without errors
-pnpm test    # All tests should pass (109 tests for advanced-config)
+pnpm test    # All tests should pass (109 tests for config)
 ```
 
 ### 5. (Optional) Install PostgreSQL and Redis
@@ -168,7 +168,7 @@ If you're not using the dev container, install these extensions manually from th
 NX Console is a visual way to run NX tasks. After installing the extension:
 
 1. Open the NX Console panel from the sidebar (the NX icon)
-2. You'll see a list of all projects (`advanced-config`, `demo`)
+2. You'll see a list of all projects (`config`, `demo`)
 3. Click on a project to see its targets (`build`, `test`, `serve`)
 4. Click a target to run it
 
@@ -186,7 +186,7 @@ NX manages the monorepo. Here's what you need to know:
 
 2. **Targets** are tasks a project can run: `build`, `test`, `serve`, `typecheck`. They're defined in `project.json` or inferred by NX plugins.
 
-3. **The dependency graph** tracks which projects depend on others. Since `demo` imports `@nestx/advanced-config`, NX knows to build `advanced-config` before `demo`.
+3. **The dependency graph** tracks which projects depend on others. Since `demo` imports `@neststack/config`, NX knows to build `config` before `demo`.
 
 4. **Caching** saves build/test results. If nothing changed, NX replays the cached result instead of re-running the task. This makes repeated builds nearly instant.
 
@@ -195,8 +195,8 @@ NX manages the monorepo. Here's what you need to know:
 ```bash
 # Run a target for a specific project
 pnpm nx <target> <project>
-pnpm nx build advanced-config
-pnpm nx test advanced-config
+pnpm nx build config
+pnpm nx test config
 pnpm nx serve demo
 
 # Run a target for all projects
@@ -211,7 +211,7 @@ pnpm nx affected -t build
 pnpm nx graph
 
 # See details about a project
-pnpm nx show project advanced-config
+pnpm nx show project config
 ```
 
 ### How NX plugins work
@@ -235,7 +235,7 @@ Packages live in the `packages/` directory. Each is a publishable NPM library.
 ### Package structure
 
 ```
-packages/advanced-config/
+packages/config/
   src/
     index.ts            Public API (barrel file -- re-exports everything users need)
     lib/
@@ -256,20 +256,20 @@ packages/advanced-config/
 ### Building a package
 
 ```bash
-pnpm nx build advanced-config
+pnpm nx build config
 ```
 
-Output goes to `dist/packages/advanced-config/`. The build uses `@nx/js:tsc` (TypeScript compiler) and produces both JavaScript and declaration (`.d.ts`) files.
+Output goes to `dist/packages/config/`. The build uses `@nx/js:tsc` (TypeScript compiler) and produces both JavaScript and declaration (`.d.ts`) files.
 
 ### Testing a package
 
 ```bash
-pnpm nx test advanced-config          # Run once
-pnpm nx test advanced-config --watch  # Watch mode
-pnpm nx test advanced-config --coverage  # With coverage report
+pnpm nx test config          # Run once
+pnpm nx test config --watch  # Watch mode
+pnpm nx test config --coverage  # With coverage report
 ```
 
-Tests use [Vitest](https://vitest.dev/) and are configured in `vitest.config.ts`. The `@nestx/advanced-config` package requires 100% code coverage on all metrics (lines, branches, functions, statements).
+Tests use [Vitest](https://vitest.dev/) and are configured in `vitest.config.ts`. The `@neststack/config` package requires 100% code coverage on all metrics (lines, branches, functions, statements).
 
 ### Adding a new package
 
@@ -286,8 +286,8 @@ Then update `tsconfig.base.json` to add a path alias:
 ```json
 {
   "paths": {
-    "@nestx/advanced-config": ["packages/advanced-config/src/index.ts"],
-    "@nestx/my-new-package": ["packages/my-new-package/src/index.ts"]
+    "@neststack/config": ["packages/config/src/index.ts"],
+    "@neststack/my-new-package": ["packages/my-new-package/src/index.ts"]
   }
 }
 ```
@@ -352,16 +352,16 @@ src/lib/config-store.spec.ts  # Test file
 pnpm test
 
 # Tests for a specific package
-pnpm nx test advanced-config
+pnpm nx test config
 
 # Watch mode (re-runs when files change)
-pnpm nx test advanced-config --watch
+pnpm nx test config --watch
 
 # With coverage report
-pnpm nx test advanced-config --coverage
+pnpm nx test config --coverage
 
 # Run a specific test file
-pnpm nx test advanced-config -- --testPathPattern=config-store
+pnpm nx test config -- --testPathPattern=config-store
 ```
 
 ### Writing tests
@@ -370,19 +370,19 @@ Tests use Vitest's `describe`, `it`, `expect` pattern. Here's a minimal example:
 
 ```typescript
 import { describe, it, expect, beforeEach } from 'vitest';
-import { AdvancedConfigModule, ConfigService } from '@nestx/advanced-config';
+import { NestStackConfigModule, ConfigService } from '@neststack/config';
 import { Test } from '@nestjs/testing';
 import { z } from 'zod';
 
 describe('MyFeature', () => {
   beforeEach(() => {
-    AdvancedConfigModule.reset();
+    NestStackConfigModule.reset();
   });
 
   it('should read config values', async () => {
     const module = await Test.createTestingModule({
       imports: [
-        AdvancedConfigModule.forRoot({
+        NestStackConfigModule.forRoot({
           configs: [
             {
               namespace: 'test',
@@ -402,17 +402,17 @@ describe('MyFeature', () => {
 
 Key testing patterns:
 
-1. **Always call `AdvancedConfigModule.reset()`** in `beforeEach` to clear the static store.
+1. **Always call `NestStackConfigModule.reset()`** in `beforeEach` to clear the static store.
 2. **Use `envSource`** to inject fake environment variables instead of modifying `process.env`.
 3. **Use `overrides`** to test specific config scenarios.
 
 ### Coverage thresholds
 
-The `@nestx/advanced-config` package enforces 100% coverage. If you add code and tests don't cover it, the test run will fail. Check the coverage report to find uncovered lines:
+The `@neststack/config` package enforces 100% coverage. If you add code and tests don't cover it, the test run will fail. Check the coverage report to find uncovered lines:
 
 ```bash
-pnpm nx test advanced-config --coverage
-# Opens a report in coverage/packages/advanced-config/
+pnpm nx test config --coverage
+# Opens a report in coverage/packages/config/
 ```
 
 ---
@@ -430,7 +430,7 @@ This is equivalent to `pnpm nx run-many -t build`. NX determines the correct bui
 ### Build a single project
 
 ```bash
-pnpm nx build advanced-config
+pnpm nx build config
 pnpm nx build demo
 ```
 
@@ -438,7 +438,7 @@ pnpm nx build demo
 
 | Project           | Output Directory                 | Contents                                |
 | ----------------- | -------------------------------- | --------------------------------------- |
-| `advanced-config` | `dist/packages/advanced-config/` | `.js` files + `.d.ts` type declarations |
+| `config` | `dist/packages/config/` | `.js` files + `.d.ts` type declarations |
 | `demo`            | `dist/apps/demo/`                | Bundled application (single `main.js`)  |
 
 ### Clean build cache
@@ -487,7 +487,7 @@ The demo app prints its full configuration (with secrets masked) at startup. Loo
 For more verbose NX output:
 
 ```bash
-NX_VERBOSE_LOGGING=true pnpm nx build advanced-config
+NX_VERBOSE_LOGGING=true pnpm nx build config
 ```
 
 ---
@@ -500,9 +500,9 @@ NX_VERBOSE_LOGGING=true pnpm nx build advanced-config
 | ------------------ | ------------------ | -------------------- |
 | `DB_HOST`          | `db`               | PostgreSQL host      |
 | `DB_PORT`          | `5432`             | PostgreSQL port      |
-| `DB_NAME`          | `nestx_demo`       | Database name        |
-| `DB_USER`          | `nestx`            | Database user        |
-| `DB_PASSWORD`      | `nestx_dev_secret` | Database password    |
+| `DB_NAME`          | `neststack_demo`       | Database name        |
+| `DB_USER`          | `neststack`            | Database user        |
+| `DB_PASSWORD`      | `neststack_dev_secret` | Database password    |
 | `DB_SSL`           | `false`            | Enable SSL           |
 | `DB_POOL_SIZE`     | `10`               | Connection pool size |
 | `REDIS_HOST`       | `redis`            | Redis host           |
@@ -536,14 +536,14 @@ pnpm config set store-dir "$env:LOCALAPPDATA\pnpm\store"
 pnpm install
 ```
 
-### Problem: `Cannot find module '@nestx/advanced-config'`
+### Problem: `Cannot find module '@neststack/config'`
 
 **Cause**: The package hasn't been built yet.
 
 **Fix**: Build first:
 
 ```bash
-pnpm nx build advanced-config
+pnpm nx build config
 ```
 
 Or make sure `tsconfig.base.json` has the correct path alias:
@@ -551,20 +551,20 @@ Or make sure `tsconfig.base.json` has the correct path alias:
 ```json
 {
   "paths": {
-    "@nestx/advanced-config": ["packages/advanced-config/src/index.ts"]
+    "@neststack/config": ["packages/config/src/index.ts"]
   }
 }
 ```
 
 ### Problem: "Configuration namespace X is already registered"
 
-**Cause**: `AdvancedConfigModule.reset()` wasn't called between tests.
+**Cause**: `NestStackConfigModule.reset()` wasn't called between tests.
 
 **Fix**: Add it to `beforeEach`:
 
 ```typescript
 beforeEach(() => {
-  AdvancedConfigModule.reset();
+  NestStackConfigModule.reset();
 });
 ```
 

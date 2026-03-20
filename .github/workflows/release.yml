@@ -83,7 +83,7 @@ jobs:
         if: ${{ !inputs.dry-run }}
         uses: anchore/sbom-action@57aae528053a48a3f6235f2d9461b05fbcb7366d # v0.23.1
         with:
-          path: packages/advanced-config
+          path: packages/config
           format: cyclonedx-json
           output-file: sbom.cyclonedx.json
 
@@ -91,4 +91,4 @@ jobs:
         if: ${{ !inputs.dry-run }}
         uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
         with:
-          subject-path: packages/advanced-config/dist/**
+          subject-path: packages/config/dist/**

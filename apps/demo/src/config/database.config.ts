@@ -1,4 +1,4 @@
-import { defineConfig } from '@nestx/advanced-config';
+import { defineConfig } from '@neststack/config';
 import { z } from 'zod';
 
 export const databaseConfig = defineConfig({
@@ -15,8 +15,8 @@ export const databaseConfig = defineConfig({
   load: ({ env }) => ({
     host: env.getString('DB_HOST', 'db'),
     port: env.getNumber('DB_PORT', 5432),
-    name: env.getString('DB_NAME', 'nestx_demo'),
-    user: env.getString('DB_USER', 'nestx'),
+    name: env.getString('DB_NAME', 'neststack_demo'),
+    user: env.getString('DB_USER', 'neststack'),
     password: env.getString('DB_PASSWORD'),
     ssl: env.getBoolean('DB_SSL', false),
     poolSize: env.getNumber('DB_POOL_SIZE', 10),

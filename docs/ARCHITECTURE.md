@@ -1,6 +1,6 @@
 # Architecture
 
-This document explains how the NestX monorepo is organized, how the `@nestx/advanced-config` package works internally, and the design decisions behind it. Read this if you want to understand _why_ things are the way they are, not just _how_ to use them.
+This document explains how the NestStack monorepo is organized, how the `@neststack/config` package works internally, and the design decisions behind it. Read this if you want to understand _why_ things are the way they are, not just _how_ to use them.
 
 ---
 
@@ -8,7 +8,7 @@ This document explains how the NestX monorepo is organized, how the `@nestx/adva
 
 - [Monorepo Layout](#monorepo-layout)
 - [Dependency Graph](#dependency-graph)
-- [Package: @nestx/advanced-config](#package-nestxadvanced-config)
+- [Package: @neststack/config](#package-neststackconfig)
   - [Module Lifecycle](#module-lifecycle)
   - [Data Flow](#data-flow)
   - [Internal Components](#internal-components)
@@ -24,12 +24,12 @@ This document explains how the NestX monorepo is organized, how the `@nestx/adva
 The repository follows the standard NX monorepo layout with two main directories:
 
 ```
-nestx-advanced-packages/
+neststack/
   packages/         Publishable NPM libraries
   apps/             Runnable applications (demos, services)
 ```
 
-**Why a monorepo?** All `@nestx/*` packages share the same NestJS version, TypeScript config, and testing infrastructure. A monorepo lets us:
+**Why a monorepo?** All `@neststack/*` packages share the same NestJS version, TypeScript config, and testing infrastructure. A monorepo lets us:
 
 - Keep package versions in sync
 - Share build and test configuration
@@ -64,7 +64,7 @@ Each layer extends the one above it. A package's `tsconfig.json` extends `tsconf
                           | imports
                           v
                   +-------+--------+
-                  | advanced-config | (library)
+                  | config | (library)
                   +-------+--------+
                           |
                           | peer dependencies
@@ -77,7 +77,7 @@ Each layer extends the one above it. A package's `tsconfig.json` extends `tsconf
               +-----+-----------+----+
 ```
 
-**Key design choice**: `@nestx/advanced-config` declares NestJS and Zod as **peer dependencies**, not direct dependencies. This means:
+**Key design choice**: `@neststack/config` declares NestJS and Zod as **peer dependencies**, not direct dependencies. This means:
 
 - The consuming application controls which version of NestJS it uses
 - There's only one copy of `@nestjs/core` in the final bundle (NestJS breaks with multiple copies)
@@ -85,18 +85,18 @@ Each layer extends the one above it. A package's `tsconfig.json` extends `tsconf
 
 ---
 
-## Package: @nestx/advanced-config
+## Package: @neststack/config
 
 ### Module Lifecycle
 
-Here's what happens when your NestJS app starts and `AdvancedConfigModule.forRoot()` is called:
+Here's what happens when your NestJS app starts and `NestStackConfigModule.forRoot()` is called:
 
 ```
 1. App starts
    |
 2. NestJS processes module imports
    |
-3. AdvancedConfigModule.forRoot(options) is called
+3. NestStackConfigModule.forRoot(options) is called
    |
 4. For each config definition:
    |   a. Create EnvSource from options.envSource (or process.env)
@@ -191,7 +191,7 @@ Each `NamespaceEntry` contains:
 
 **Why deep freeze?** Configuration should never change after startup. `Object.freeze()` (applied recursively) makes all config properties read-only. Accidental mutation throws a `TypeError` instead of silently corrupting state.
 
-#### AdvancedConfigModule (`advanced-config.module.ts`)
+#### NestStackConfigModule (`neststack-config.module.ts`)
 
 The NestJS dynamic module. It has three static methods:
 
@@ -290,7 +290,7 @@ AppModule (forRoot)
         +-- GET /showcase/overrides       explain() for source tracing
 ```
 
-The demo uses `isGlobal: true` in `forRoot()`, making `ConfigService` available in all modules without explicitly importing `AdvancedConfigModule`.
+The demo uses `isGlobal: true` in `forRoot()`, making `ConfigService` available in all modules without explicitly importing `NestStackConfigModule`.
 
 ---
 
