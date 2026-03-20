@@ -38,7 +38,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Derive NX SHAs
-        uses: nrwl/nx-set-shas@15514ee4353489ef5a1644bcdae44f0ae2ea45f3 # v4.4.0
+        uses: nrwl/nx-set-shas@3e9ad7370203c1e93d109be57f3b72eb0eb511b1 # v4.4.0
 
       - name: Lint affected
         run: pnpm nx affected -t lint
