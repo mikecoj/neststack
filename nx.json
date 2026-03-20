@@ -87,21 +87,19 @@
   "release": {
     "projects": ["packages/*"],
     "projectsRelationship": "independent",
+    "git": {
+      "commitMessage": "chore(release): publish {version} [skip ci]"
+    },
     "version": {
       "preVersionCommand": "pnpm nx run-many -t build",
       "conventionalCommits": true,
       "preserveLocalDependencyProtocols": true,
       "manifestRootsToUpdate": ["{projectRoot}"],
-      "fallbackCurrentVersionResolver": "disk",
-      "git": {
-        "commitMessage": "chore(release): publish {version} [skip ci]"
-      }
+      "fallbackCurrentVersionResolver": "disk"
     },
     "changelog": {
+      "automaticFromRef": true,
       "workspaceChangelog": false,
-      "git": {
-        "commitMessage": "chore(release): publish {version} [skip ci]"
-      },
       "projectChangelogs": {
         "entryWhenNoChanges": false,
         "renderOptions": {
