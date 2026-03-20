@@ -51,25 +51,25 @@ jobs:
 
       - name: Version (dry run)
         if: inputs.dry-run
-        run: pnpm nx release version --dry-run --yes
+        run: pnpm nx release version --dry-run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Version
         if: ${{ !inputs.dry-run }}
-        run: pnpm nx release version --yes
+        run: pnpm nx release version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Changelog (dry run)
         if: inputs.dry-run
-        run: pnpm nx release changelog --dry-run --yes
+        run: pnpm nx release changelog --dry-run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Changelog
         if: ${{ !inputs.dry-run }}
-        run: pnpm nx release changelog --yes
+        run: pnpm nx release changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
