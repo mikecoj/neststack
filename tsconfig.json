@@ -1,4 +1,14 @@
 {
   "extends": "./tsconfig.base.json",
-  "references": []
+  "references": [
+    {
+      "path": "./packages/advanced-config"
+    },
+    {
+      "path": "./apps/demo-e2e"
+    },
+    {
+      "path": "./apps/demo"
+    }
+  ]
 }

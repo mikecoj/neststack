@@ -15,6 +15,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "style": {
+        "useImportType": "off"
+      },
       "suspicious": {
         "noConsole": "warn",
         "noExplicitAny": "warn"
@@ -67,6 +70,6 @@
     }
   ],
   "files": {
-    "includes": ["**", "!.github", "!scripts"]
+    "includes": ["**", "!.github", "!.opencode", "!scripts", "!**/next-env.d.ts"]
   }
 }
