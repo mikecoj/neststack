@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for contributing to NestX Advanced Packages. This guide covers everything you need to know to submit quality contributions.
+Thank you for contributing to NestStack Advanced Packages. This guide covers everything you need to know to submit quality contributions.
 
 ---
 
@@ -106,7 +106,7 @@ Organize imports in this order, separated by blank lines:
 
 1. Node.js built-ins (`import { readFile } from 'fs'`)
 2. External packages (`import { Injectable } from '@nestjs/common'`)
-3. Internal packages (`import { ConfigService } from '@nestx/advanced-config'`)
+3. Internal packages (`import { ConfigService } from '@neststack/config'`)
 4. Relative imports (`import { deepFreeze } from './utils'`)
 
 ### Comments
@@ -155,7 +155,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/) w
 
 The scope is the package or area affected:
 
-- `advanced-config` -- Changes to the config package
+- `config` -- Changes to the config package
 - `demo` -- Changes to the demo app
 - `devcontainer` -- Changes to dev container config
 - `docs` -- Documentation changes
@@ -164,14 +164,14 @@ The scope is the package or area affected:
 ### Examples
 
 ```
-feat(advanced-config): :sparkles: add forRootAsync support with useClass
-fix(advanced-config): :bug: fix envSource not shared between forRoot and forFeature
-docs(advanced-config): :memo: add real-world use cases to README
-test(advanced-config): :white_check_mark: add coverage for useExisting branch
+feat(config): :sparkles: add forRootAsync support with useClass
+fix(config): :bug: fix envSource not shared between forRoot and forFeature
+docs(config): :memo: add real-world use cases to README
+test(config): :white_check_mark: add coverage for useExisting branch
 chore(workspace): :wrench: configure pnpm store directory for Windows
 feat(demo): :sparkles: add showcase controller with all config endpoints
 feat(devcontainer): :lock: add hardened compose.yaml with banking security standards
-refactor(advanced-config): :recycle: extract normalizeConfig helper
+refactor(config): :recycle: extract normalizeConfig helper
 ```
 
 ---
@@ -223,20 +223,20 @@ describe('ConfigStore', () => {
 
 ### Testing NestJS modules
 
-When testing the `AdvancedConfigModule`:
+When testing the `NestStackConfigModule`:
 
 ```typescript
 import { Test } from '@nestjs/testing';
-import { AdvancedConfigModule, ConfigService } from '@nestx/advanced-config';
+import { NestStackConfigModule, ConfigService } from '@neststack/config';
 
 beforeEach(() => {
-  AdvancedConfigModule.reset(); // REQUIRED: clear static state
+  NestStackConfigModule.reset(); // REQUIRED: clear static state
 });
 
 it('should provide ConfigService', async () => {
   const module = await Test.createTestingModule({
     imports: [
-      AdvancedConfigModule.forRoot({
+      NestStackConfigModule.forRoot({
         configs: [myConfig],
         envSource: { MY_VAR: 'test-value' }, // Inject fake env vars
       }),
@@ -250,7 +250,7 @@ it('should provide ConfigService', async () => {
 
 ### Coverage requirements
 
-`@nestx/advanced-config` requires **100% code coverage** on:
+`@neststack/config` requires **100% code coverage** on:
 
 - Lines
 - Branches
@@ -260,7 +260,7 @@ it('should provide ConfigService', async () => {
 If you add code that isn't covered by tests, the CI will fail. Run coverage locally to check:
 
 ```bash
-pnpm nx test advanced-config --coverage
+pnpm nx test config --coverage
 ```
 
 The coverage report will tell you which lines are uncovered.
@@ -318,10 +318,10 @@ Include:
 
 ```bash
 # NestJS library (with module, service scaffolding)
-pnpm nx g @nx/nest:library packages/my-package --publishable --importPath=@nestx/my-package
+pnpm nx g @nx/nest:library packages/my-package --publishable --importPath=@neststack/my-package
 
 # Plain TypeScript library
-pnpm nx g @nx/js:library packages/my-package --publishable --importPath=@nestx/my-package
+pnpm nx g @nx/js:library packages/my-package --publishable --importPath=@neststack/my-package
 ```
 
 ### 2. Update path aliases
@@ -331,8 +331,8 @@ Add the new package to `tsconfig.base.json`:
 ```json
 {
   "paths": {
-    "@nestx/advanced-config": ["packages/advanced-config/src/index.ts"],
-    "@nestx/my-package": ["packages/my-package/src/index.ts"]
+    "@neststack/config": ["packages/config/src/index.ts"],
+    "@neststack/my-package": ["packages/my-package/src/index.ts"]
   }
 }
 ```
@@ -372,7 +372,7 @@ Only export what consumers need. Internal implementation details should not be e
 
 ### 5. Write documentation
 
-Create a `README.md` in the package root. Follow the same structure as the [`@nestx/advanced-config` README](../packages/advanced-config/README.md):
+Create a `README.md` in the package root. Follow the same structure as the [`@neststack/config` README](../packages/config/README.md):
 
 1. One-line description
 2. Features table
@@ -390,8 +390,8 @@ Update the root `README.md` packages table:
 ```markdown
 | Package                                               | Version | Description |
 | ----------------------------------------------------- | ------- | ----------- |
-| [`@nestx/advanced-config`](packages/advanced-config/) | 0.0.1   | ...         |
-| [`@nestx/my-package`](packages/my-package/)           | 0.0.1   | ...         |
+| [`@neststack/config`](packages/config/) | 0.0.1   | ...         |
+| [`@neststack/my-package`](packages/my-package/)           | 0.0.1   | ...         |
 ```
 
 ---
