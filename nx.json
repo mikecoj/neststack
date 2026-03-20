@@ -4,19 +4,14 @@
     "applyChanges": true
   },
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/vitest.config.ts"
     ],
-    "sharedGlobals": [
-      "{workspaceRoot}/tsconfig.base.json"
-    ]
+    "sharedGlobals": ["{workspaceRoot}/tsconfig.base.json"]
   },
   "targetDefaults": {
     "lint": {
@@ -25,9 +20,7 @@
         "default",
         "{workspaceRoot}/biome.json",
         {
-          "externalDependencies": [
-            "@biomejs/biome"
-          ]
+          "externalDependencies": ["@biomejs/biome"]
         }
       ]
     },
@@ -37,9 +30,7 @@
         "default",
         "{workspaceRoot}/biome.json",
         {
-          "externalDependencies": [
-            "@biomejs/biome"
-          ]
+          "externalDependencies": ["@biomejs/biome"]
         }
       ]
     },
@@ -49,27 +40,18 @@
         "default",
         "{workspaceRoot}/biome.json",
         {
-          "externalDependencies": [
-            "@biomejs/biome"
-          ]
+          "externalDependencies": ["@biomejs/biome"]
         }
       ]
     },
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "production",
-        "^production"
-      ],
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"],
       "cache": true
     },
     "typecheck": {
       "cache": true,
-      "dependsOn": [
-        "^typecheck"
-      ]
+      "dependsOn": ["^typecheck"]
     }
   },
   "plugins": [
@@ -91,9 +73,7 @@
     },
     {
       "plugin": "@nx/webpack/plugin",
-      "include": [
-        "apps/demo/**/*"
-      ],
+      "include": ["apps/demo/**/*"],
       "options": {
         "buildTargetName": "build",
         "serveTargetName": "serve",
@@ -105,9 +85,7 @@
     }
   ],
   "release": {
-    "projects": [
-      "packages/*"
-    ],
+    "projects": ["packages/*"],
     "projectsRelationship": "independent",
     "git": {
       "commitMessage": "chore(release): publish {version} [skip ci]"
@@ -116,9 +94,7 @@
       "preVersionCommand": "pnpm nx run-many -t build",
       "conventionalCommits": true,
       "preserveLocalDependencyProtocols": true,
-      "manifestRootsToUpdate": [
-        "{projectRoot}"
-      ],
+      "manifestRootsToUpdate": ["{projectRoot}"],
       "fallbackCurrentVersionResolver": "disk"
     },
     "changelog": {
