@@ -13,10 +13,10 @@ export const metadata: Metadata = {
   },
   description:
     'Enterprise-grade NestJS packages for type-safe configuration, secret management, and more.',
-  metadataBase: new URL('https://mikecoj.github.io/neststack-advanced-packages'),
+  metadataBase: new URL('https://mikecoj.github.io/neststack'),
 };
 
-const REPO_BASE = 'https://github.com/mikecoj/neststack-advanced-packages';
+const REPO_BASE = 'https://github.com/mikecoj/neststack';
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const pageMap = await getPageMap();
