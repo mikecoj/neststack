@@ -1,5 +1,7 @@
-import { Controller, Get, Inject, Param } from '@nestjs/common';
-import { CONFIG_STORE, type ConfigService, type ConfigStore } from '@nestx/advanced-config';
+import { BadRequestException, Controller, Get, Inject, Param } from '@nestjs/common';
+import { CONFIG_STORE, ConfigService, type ConfigStore } from '@nestx/advanced-config';
+
+const VALID_PATH_PATTERN = /^[a-zA-Z0-9._-]+$/;
 
 @Controller('showcase')
 export class ShowcaseController {
@@ -8,16 +10,25 @@ export class ShowcaseController {
     @Inject(CONFIG_STORE) private readonly store: ConfigStore,
   ) {}
 
+  private validatePath(path: string): void {
+    if (!VALID_PATH_PATTERN.test(path)) {
+      throw new BadRequestException('Invalid configuration path');
+    }
+  }
+
   @Get('get/:path')
   getValue(@Param('path') path: string) {
+    this.validatePath(path);
+    const explanation = this.config.explain(path);
     return {
       path,
-      value: this.config.get(path),
+      value: explanation.isSecret ? '********' : explanation.value,
     };
   }
 
   @Get('namespace/:name')
   getNamespace(@Param('name') name: string) {
+    this.validatePath(name);
     return {
       namespace: name,
       config: this.config.namespace(name),
@@ -26,6 +37,7 @@ export class ShowcaseController {
 
   @Get('explain/:path')
   explain(@Param('path') path: string) {
+    this.validatePath(path);
     return this.config.explain(path);
   }
 
@@ -36,7 +48,7 @@ export class ShowcaseController {
 
   @Get('all')
   getAll() {
-    return this.store.getAll();
+    return this.store.getSafeAll();
   }
 
   @Get('overrides')

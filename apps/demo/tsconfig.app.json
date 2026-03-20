@@ -7,7 +7,7 @@
     "types": ["node"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "es2021",
+    "target": "es2023",
     "moduleResolution": "node"
   },
   "include": ["src/**/*.ts"],
