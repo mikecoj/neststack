@@ -91,7 +91,7 @@
       "commitMessage": "chore(release): publish {version} [skip ci]"
     },
     "version": {
-      "preVersionCommand": "pnpm nx run-many -t build",
+      "preVersionCommand": "pnpm nx run-many -t build --projects=packages/*",
       "conventionalCommits": true,
       "preserveLocalDependencyProtocols": true,
       "manifestRootsToUpdate": ["{projectRoot}"],
