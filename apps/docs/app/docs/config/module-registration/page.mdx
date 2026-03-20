@@ -1,6 +1,6 @@
 # Module Registration
 
-`AdvancedConfigModule` provides three registration methods following standard NestJS dynamic module patterns.
+`NestStackConfigModule` provides three registration methods following standard NestJS dynamic module patterns.
 
 ## forRoot()
 
@@ -8,14 +8,14 @@ Use `forRoot()` in your root `AppModule` to register configuration globally.
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { AdvancedConfigModule } from '@nestx/advanced-config';
+import { NestStackConfigModule } from '@neststack/config';
 import { databaseConfig } from './config/database.config';
 import { redisConfig } from './config/redis.config';
 import { appConfig } from './config/app.config';
 
 @Module({
   imports: [
-    AdvancedConfigModule.forRoot({
+    NestStackConfigModule.forRoot({
       configs: [databaseConfig, redisConfig, appConfig],
       isGlobal: true,
     }),
@@ -38,7 +38,7 @@ export class AppModule {}
 By default, values are read from `process.env`. You can provide a custom environment for testing:
 
 ```typescript
-AdvancedConfigModule.forRoot({
+NestStackConfigModule.forRoot({
   configs: [databaseConfig],
   envSource: {
     DB_HOST: 'test-host',
@@ -53,7 +53,7 @@ AdvancedConfigModule.forRoot({
 Override specific values without changing environment variables or loader functions:
 
 ```typescript
-AdvancedConfigModule.forRoot({
+NestStackConfigModule.forRoot({
   configs: [databaseConfig],
   overrides: {
     database: { poolSize: 50, ssl: true },
@@ -72,7 +72,7 @@ Use `forRootAsync()` when configuration options depend on async operations — f
 ```typescript
 @Module({
   imports: [
-    AdvancedConfigModule.forRootAsync({
+    NestStackConfigModule.forRootAsync({
       imports: [VaultModule],
       useFactory: async (vault: VaultService) => ({
         configs: [databaseConfig],
@@ -92,8 +92,8 @@ export class AppModule {}
 
 ```typescript
 @Injectable()
-class ConfigOptionsService implements AdvancedConfigOptionsFactory {
-  async createAdvancedConfigOptions(): Promise<AdvancedConfigModuleOptions> {
+class ConfigOptionsService implements NestStackConfigOptionsFactory {
+  async createNestStackConfigOptions(): Promise<NestStackConfigModuleOptions> {
     return {
       configs: [databaseConfig, redisConfig],
     };
@@ -102,7 +102,7 @@ class ConfigOptionsService implements AdvancedConfigOptionsFactory {
 
 @Module({
   imports: [
-    AdvancedConfigModule.forRootAsync({
+    NestStackConfigModule.forRootAsync({
       useClass: ConfigOptionsService,
     }),
   ],
@@ -115,7 +115,7 @@ export class AppModule {}
 ```typescript
 @Module({
   imports: [
-    AdvancedConfigModule.forRootAsync({
+    NestStackConfigModule.forRootAsync({
       imports: [SharedModule],
       useExisting: ExistingConfigFactory,
     }),
@@ -134,7 +134,7 @@ Use `forFeature()` in feature modules to register additional configuration names
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { AdvancedConfigModule, defineConfig } from '@nestx/advanced-config';
+import { NestStackConfigModule, defineConfig } from '@neststack/config';
 import { z } from 'zod';
 
 const healthConfig = defineConfig({
@@ -146,7 +146,7 @@ const healthConfig = defineConfig({
 });
 
 @Module({
-  imports: [AdvancedConfigModule.forFeature(healthConfig)],
+  imports: [NestStackConfigModule.forFeature(healthConfig)],
 })
 export class HealthModule {}
 ```
@@ -158,7 +158,7 @@ You can also pass plain options directly — `forFeature()` will call `defineCon
 ```typescript
 @Module({
   imports: [
-    AdvancedConfigModule.forFeature({
+    NestStackConfigModule.forFeature({
       namespace: 'health',
       schema: z.object({
         intervalMs: z.number().default(30000),
@@ -175,7 +175,7 @@ export class HealthModule {}
 Register multiple namespaces in a single `forFeature()` call:
 
 ```typescript
-AdvancedConfigModule.forFeature(paymentsConfig, notificationsConfig);
+NestStackConfigModule.forFeature(paymentsConfig, notificationsConfig);
 ```
 
 ### How It Works

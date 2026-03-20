@@ -10,7 +10,7 @@ Retrieve a value by dot-path. Returns the exact type inferred from your Zod sche
 
 ```typescript
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestx/advanced-config';
+import { ConfigService } from '@neststack/config';
 
 @Injectable()
 export class DatabaseService {
@@ -104,7 +104,7 @@ For advanced use cases, you can inject the `ConfigStore` directly:
 
 ```typescript
 import { Inject } from '@nestjs/common';
-import { ConfigStore, CONFIG_STORE } from '@nestx/advanced-config';
+import { ConfigStore, CONFIG_STORE } from '@neststack/config';
 
 @Injectable()
 export class AdminService {
@@ -150,7 +150,7 @@ async function bootstrap() {
 
 ### In Feature Modules
 
-Feature modules access the global `ConfigService` without importing `AdvancedConfigModule` (when `isGlobal: true`):
+Feature modules access the global `ConfigService` without importing `NestStackConfigModule` (when `isGlobal: true`):
 
 ```typescript
 @Injectable()

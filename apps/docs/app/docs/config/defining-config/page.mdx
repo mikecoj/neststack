@@ -1,11 +1,11 @@
 # Defining Configuration
 
-Configuration definitions are the foundation of `@nestx/advanced-config`. Each definition declares a namespace, a Zod schema, an optional loader function, and optional secret keys.
+Configuration definitions are the foundation of `@neststack/config`. Each definition declares a namespace, a Zod schema, an optional loader function, and optional secret keys.
 
 ## The `defineConfig()` Function
 
 ```typescript
-import { defineConfig } from '@nestx/advanced-config';
+import { defineConfig } from '@neststack/config';
 import { z } from 'zod';
 
 export const appConfig = defineConfig({
@@ -115,7 +115,7 @@ If your config uses only Zod defaults (no environment variables), omit the `load
 export const appConfig = defineConfig({
   namespace: 'app',
   schema: z.object({
-    name: z.string().default('nestx-demo'),
+    name: z.string().default('neststack-demo'),
     port: z.number().default(3000),
     environment: z.enum(['development', 'staging', 'production']).default('development'),
     debug: z.boolean().default(true),

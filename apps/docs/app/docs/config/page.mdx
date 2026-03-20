@@ -1,26 +1,26 @@
-# @nestx/advanced-config
+# @neststack/config
 
 Enterprise-grade, type-safe configuration for NestJS. Define your configuration with Zod schemas, validate at startup, and access everything with full TypeScript inference — no runtime surprises.
 
 ## Installation
 
 ```bash
-npm install @nestx/advanced-config zod
+npm install @neststack/config zod
 ```
 
 ```bash
-pnpm add @nestx/advanced-config zod
+pnpm add @neststack/config zod
 ```
 
 ```bash
-yarn add @nestx/advanced-config zod
+yarn add @neststack/config zod
 ```
 
 **Requirements:** Node.js 22+, NestJS 11+, Zod 3.20+ or 4.x
 
 ## Why This Package?
 
-Configuration is the foundation of every application. Getting it wrong means silent failures, security leaks, and debugging sessions that last hours. `@nestx/advanced-config` eliminates these problems:
+Configuration is the foundation of every application. Getting it wrong means silent failures, security leaks, and debugging sessions that last hours. `@neststack/config` eliminates these problems:
 
 | Problem                   | How we solve it                                                  |
 | ------------------------- | ---------------------------------------------------------------- |
@@ -36,7 +36,7 @@ Configuration is the foundation of every application. Getting it wrong means sil
 ### 1. Define your configuration
 
 ```typescript
-import { defineConfig } from '@nestx/advanced-config';
+import { defineConfig } from '@neststack/config';
 import { z } from 'zod';
 
 export const databaseConfig = defineConfig({
@@ -61,12 +61,12 @@ export const databaseConfig = defineConfig({
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { AdvancedConfigModule } from '@nestx/advanced-config';
+import { NestStackConfigModule } from '@neststack/config';
 import { databaseConfig } from './config/database.config';
 
 @Module({
   imports: [
-    AdvancedConfigModule.forRoot({
+    NestStackConfigModule.forRoot({
       configs: [databaseConfig],
       isGlobal: true,
     }),
@@ -79,7 +79,7 @@ export class AppModule {}
 
 ```typescript
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestx/advanced-config';
+import { ConfigService } from '@neststack/config';
 
 @Injectable()
 export class DatabaseService {
@@ -113,11 +113,11 @@ config.printSafe();
 
 ## Core Concepts
 
-- **[Defining Configuration](/docs/advanced-config/defining-config)** — Zod schemas, loader functions, environment variables, secrets
-- **[Module Registration](/docs/advanced-config/module-registration)** — `forRoot()`, `forRootAsync()`, `forFeature()`
-- **[Runtime Usage](/docs/advanced-config/runtime-usage)** — `ConfigService` API: `get()`, `namespace()`, `explain()`, `printSafe()`
-- **[Security](/docs/advanced-config/security)** — Secret masking, immutability, fail-fast validation
-- **[Performance](/docs/advanced-config/performance)** — O(1) lookups, flat map architecture, freeze semantics
-- **[Type System](/docs/advanced-config/type-system)** — Recursive `Path` and `PathValue` types
-- **[Testing](/docs/advanced-config/testing)** — Patterns for unit and integration testing
-- **[API Reference](/docs/advanced-config/api-reference)** — Complete API surface
+- **[Defining Configuration](/docs/config/defining-config)** — Zod schemas, loader functions, environment variables, secrets
+- **[Module Registration](/docs/config/module-registration)** — `forRoot()`, `forRootAsync()`, `forFeature()`
+- **[Runtime Usage](/docs/config/runtime-usage)** — `ConfigService` API: `get()`, `namespace()`, `explain()`, `printSafe()`
+- **[Security](/docs/config/security)** — Secret masking, immutability, fail-fast validation
+- **[Performance](/docs/config/performance)** — O(1) lookups, flat map architecture, freeze semantics
+- **[Type System](/docs/config/type-system)** — Recursive `Path` and `PathValue` types
+- **[Testing](/docs/config/testing)** — Patterns for unit and integration testing
+- **[API Reference](/docs/config/api-reference)** — Complete API surface

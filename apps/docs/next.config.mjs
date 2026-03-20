@@ -6,7 +6,7 @@ const withNextra = nextra({
 
 export default withNextra({
   output: 'export',
-  basePath: '/nestx-advanced-packages',
+  basePath: '/neststack-advanced-packages',
   images: { unoptimized: true },
   reactStrictMode: true,
   turbopack: {

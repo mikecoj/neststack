@@ -1,5 +1,5 @@
 {
-  "name": "@nestx/docs",
+  "name": "@neststack/docs",
   "version": "0.0.0",
   "private": true,
   "scripts": {

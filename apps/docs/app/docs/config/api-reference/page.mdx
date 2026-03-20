@@ -1,6 +1,6 @@
 # API Reference
 
-Complete API surface of `@nestx/advanced-config`.
+Complete API surface of `@neststack/config`.
 
 ## Functions
 
@@ -31,14 +31,14 @@ function defineConfig<N extends string, S extends ZodSchema>(
 
 ## Classes
 
-### AdvancedConfigModule
+### NestStackConfigModule
 
 NestJS dynamic module for configuration management.
 
 #### forRoot(options)
 
 ```typescript
-static forRoot(options: AdvancedConfigModuleOptions): DynamicModule
+static forRoot(options: NestStackConfigModuleOptions): DynamicModule
 ```
 
 Registers configuration globally. Call once in the root `AppModule`.
@@ -53,7 +53,7 @@ Registers configuration globally. Call once in the root `AppModule`.
 #### forRootAsync(options)
 
 ```typescript
-static forRootAsync(options: AdvancedConfigModuleAsyncOptions): DynamicModule
+static forRootAsync(options: NestStackConfigModuleAsyncOptions): DynamicModule
 ```
 
 Async version of `forRoot()`. Supports `useFactory`, `useClass`, `useExisting`.
@@ -270,7 +270,7 @@ interface IEnvSource {
 | Token                     | Value                               | Provides               |
 | ------------------------- | ----------------------------------- | ---------------------- |
 | `CONFIG_STORE`            | `Symbol('CONFIG_STORE')`            | `ConfigStore` instance |
-| `ADVANCED_CONFIG_OPTIONS` | `Symbol('ADVANCED_CONFIG_OPTIONS')` | Module options         |
+| `NESTSTACK_CONFIG_OPTIONS` | `Symbol('NESTSTACK_CONFIG_OPTIONS')` | Module options         |
 
 ---
 

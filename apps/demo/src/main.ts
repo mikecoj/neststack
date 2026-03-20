@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestx/advanced-config';
+import { ConfigService } from '@neststack/config';
 import { AppModule } from './app/app.module';
 import type { AppConfig } from './config';
 

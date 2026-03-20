@@ -1,5 +1,5 @@
 import { BadRequestException, Controller, Get, Inject, Param } from '@nestjs/common';
-import { CONFIG_STORE, ConfigService, type ConfigStore } from '@nestx/advanced-config';
+import { CONFIG_STORE, ConfigService, type ConfigStore } from '@neststack/config';
 
 const VALID_PATH_PATTERN = /^[a-zA-Z0-9._-]+$/;
 

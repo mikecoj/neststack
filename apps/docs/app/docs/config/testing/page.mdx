@@ -1,6 +1,6 @@
 # Testing
 
-`@nestx/advanced-config` is designed to be easy to test. The key pattern: use `envSource` to inject fake environment variables and `AdvancedConfigModule.reset()` to clear state between tests.
+`@neststack/config` is designed to be easy to test. The key pattern: use `envSource` to inject fake environment variables and `NestStackConfigModule.reset()` to clear state between tests.
 
 ## Setup
 
@@ -9,7 +9,7 @@ Tests use [Vitest](https://vitest.dev/) with the `@nestjs/testing` module:
 ```typescript
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Test } from '@nestjs/testing';
-import { AdvancedConfigModule, ConfigService, defineConfig } from '@nestx/advanced-config';
+import { NestStackConfigModule, ConfigService, defineConfig } from '@neststack/config';
 import { z } from 'zod';
 ```
 
@@ -19,7 +19,7 @@ The `ConfigStore` is a static singleton. You **must** reset it before each test 
 
 ```typescript
 beforeEach(() => {
-  AdvancedConfigModule.reset();
+  NestStackConfigModule.reset();
 });
 ```
 
@@ -45,7 +45,7 @@ const testConfig = defineConfig({
 it('should read config from envSource', async () => {
   const module = await Test.createTestingModule({
     imports: [
-      AdvancedConfigModule.forRoot({
+      NestStackConfigModule.forRoot({
         configs: [testConfig],
         envSource: {
           DB_HOST: 'test-host',
@@ -69,7 +69,7 @@ Use `overrides` to test specific scenarios without changing environment variable
 it('should apply overrides', async () => {
   const module = await Test.createTestingModule({
     imports: [
-      AdvancedConfigModule.forRoot({
+      NestStackConfigModule.forRoot({
         configs: [testConfig],
         envSource: { DB_HOST: 'original' },
         overrides: {
@@ -93,7 +93,7 @@ it('should throw on invalid config', async () => {
   await expect(
     Test.createTestingModule({
       imports: [
-        AdvancedConfigModule.forRoot({
+        NestStackConfigModule.forRoot({
           configs: [testConfig],
           envSource: {}, // DB_HOST is required
         }),
@@ -114,8 +114,8 @@ it('should register feature config', async () => {
 
   const module = await Test.createTestingModule({
     imports: [
-      AdvancedConfigModule.forRoot({ configs: [] }),
-      AdvancedConfigModule.forFeature(featureConfig),
+      NestStackConfigModule.forRoot({ configs: [] }),
+      NestStackConfigModule.forFeature(featureConfig),
     ],
   }).compile();
 
@@ -130,7 +130,7 @@ it('should register feature config', async () => {
 it('should explain value sources', async () => {
   const module = await Test.createTestingModule({
     imports: [
-      AdvancedConfigModule.forRoot({
+      NestStackConfigModule.forRoot({
         configs: [testConfig],
         envSource: { DB_HOST: 'loaded-host' },
       }),
@@ -148,10 +148,10 @@ it('should explain value sources', async () => {
 
 ## Coverage Requirements
 
-The `@nestx/advanced-config` package enforces **100% code coverage** on lines, branches, functions, and statements. When adding new features, ensure all code paths are tested:
+The `@neststack/config` package enforces **100% code coverage** on lines, branches, functions, and statements. When adding new features, ensure all code paths are tested:
 
 ```bash
-pnpm nx test advanced-config --coverage
+pnpm nx test config --coverage
 ```
 
 The coverage report shows exactly which lines are uncovered.

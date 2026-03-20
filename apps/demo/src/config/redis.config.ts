@@ -1,4 +1,4 @@
-import { defineConfig } from '@nestx/advanced-config';
+import { defineConfig } from '@neststack/config';
 import { z } from 'zod';
 
 export const redisConfig = defineConfig({

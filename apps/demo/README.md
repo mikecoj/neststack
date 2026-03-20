@@ -1,6 +1,6 @@
-# @nestx/advanced-config Demo Application
+# @neststack/config Demo Application
 
-A NestJS application that exercises every feature of the `@nestx/advanced-config` module through HTTP endpoints.
+A NestJS application that exercises every feature of the `@neststack/config` module through HTTP endpoints.
 
 ## Features Demonstrated
 
@@ -46,7 +46,7 @@ pnpm nx serve demo
 
 ```bash
 # From the repository root
-export DB_HOST=localhost DB_PASSWORD=nestx_dev_secret REDIS_PASSWORD=redis_dev_secret
+export DB_HOST=localhost DB_PASSWORD=neststack_dev_secret REDIS_PASSWORD=redis_dev_secret
 pnpm nx serve demo
 ```
 
@@ -139,7 +139,7 @@ Expected output:
 {
   "namespace": "app",
   "config": {
-    "name": "nestx-demo",
+    "name": "neststack-demo",
     "port": 3000,
     "environment": "development",
     "debug": true
@@ -164,7 +164,7 @@ Expected output (for a secret key):
   "path": "database.password",
   "namespace": "database",
   "key": "password",
-  "value": "nestx_dev_secret",
+  "value": "neststack_dev_secret",
   "source": "loader",
   "isSecret": true
 }
@@ -185,8 +185,8 @@ Expected output:
   "database": {
     "host": "db",
     "port": 5432,
-    "name": "nestx_demo",
-    "user": "nestx",
+    "name": "neststack_demo",
+    "user": "neststack",
     "password": "********",
     "ssl": false,
     "poolSize": 10
@@ -198,7 +198,7 @@ Expected output:
     "db": 0
   },
   "app": {
-    "name": "nestx-demo",
+    "name": "neststack-demo",
     "port": 3000,
     "environment": "development",
     "debug": true
@@ -266,8 +266,8 @@ Expected output:
 | ------------------ | ------------ | ------------------------------------ |
 | `DB_HOST`          | `db`         | PostgreSQL host                      |
 | `DB_PORT`          | `5432`       | PostgreSQL port                      |
-| `DB_NAME`          | `nestx_demo` | Database name                        |
-| `DB_USER`          | `nestx`      | Database user                        |
+| `DB_NAME`          | `neststack_demo` | Database name                        |
+| `DB_USER`          | `neststack`      | Database user                        |
 | `DB_PASSWORD`      | -            | Database password (required in prod) |
 | `DB_SSL`           | `false`      | Enable SSL for database connection   |
 | `DB_POOL_SIZE`     | `10`         | Connection pool size                 |
@@ -294,14 +294,14 @@ src/
       health.module.ts                forFeature with inline plain options
       health.controller.ts            GET /health, GET /health/explain
     showcase/
-      showcase.module.ts              Imports AdvancedConfigModule (global)
+      showcase.module.ts              Imports NestStackConfigModule (global)
       showcase.controller.ts          All demo endpoints
 ```
 
 ## Further Reading
 
 - [Repository README](../../README.md) -- Monorepo overview and getting started
-- [@nestx/advanced-config Documentation](../../packages/advanced-config/README.md) -- Full package API reference
+- [@neststack/config Documentation](../../packages/config/README.md) -- Full package API reference
 - [Development Guide](../../docs/DEVELOPMENT.md) -- Setting up your environment
 - [Architecture](../../docs/ARCHITECTURE.md) -- How the code is organized and design decisions
 - [Contributing](../../docs/CONTRIBUTING.md) -- Code style, commit conventions, PR process
