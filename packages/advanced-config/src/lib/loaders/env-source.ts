@@ -19,7 +19,9 @@ export class EnvSource implements IEnvSource {
     if (raw !== undefined && raw !== '') {
       const parsed = Number(raw);
       if (Number.isNaN(parsed)) {
-        throw new Error(`Environment variable ${key} must be a valid number, received: "${raw}"`);
+        throw new TypeError(
+          `Environment variable ${key} must be a valid number, received non-numeric value (length: ${raw.length})`,
+        );
       }
       return parsed;
     }
@@ -52,7 +54,9 @@ export class EnvSource implements IEnvSource {
     }
     const parsed = Number(raw);
     if (Number.isNaN(parsed)) {
-      throw new Error(`Environment variable ${key} must be a valid number, received: "${raw}"`);
+      throw new TypeError(
+        `Environment variable ${key} must be a valid number, received non-numeric value (length: ${raw.length})`,
+      );
     }
     return parsed;
   }
@@ -73,8 +77,8 @@ export class EnvSource implements IEnvSource {
     if (lower === 'false' || lower === '0' || lower === 'no') {
       return false;
     }
-    throw new Error(
-      `Environment variable ${key} must be a boolean (true/false/1/0/yes/no), received: "${raw}"`,
+    throw new TypeError(
+      `Environment variable ${key} must be a boolean (true/false/1/0/yes/no), received non-boolean value (length: ${raw.length})`,
     );
   }
 }

@@ -52,7 +52,7 @@ describe('EnvSource', () => {
     it('should throw for non-numeric values', () => {
       const env = new EnvSource({ BAD: 'not-a-number' });
       expect(() => env.getNumber('BAD')).toThrow(
-        'Environment variable BAD must be a valid number, received: "not-a-number"',
+        'Environment variable BAD must be a valid number, received non-numeric value (length: 12)',
       );
     });
 
@@ -94,7 +94,7 @@ describe('EnvSource', () => {
     it('should throw for invalid boolean values', () => {
       const env = new EnvSource({ BAD: 'maybe' });
       expect(() => env.getBoolean('BAD')).toThrow(
-        'Environment variable BAD must be a boolean (true/false/1/0/yes/no), received: "maybe"',
+        'Environment variable BAD must be a boolean (true/false/1/0/yes/no), received non-boolean value (length: 5)',
       );
     });
 
@@ -147,7 +147,7 @@ describe('EnvSource', () => {
     it('should throw for non-numeric values', () => {
       const env = new EnvSource({ BAD: 'abc' });
       expect(() => env.getOptionalNumber('BAD')).toThrow(
-        'Environment variable BAD must be a valid number, received: "abc"',
+        'Environment variable BAD must be a valid number, received non-numeric value (length: 3)',
       );
     });
   });
@@ -171,7 +171,7 @@ describe('EnvSource', () => {
     it('should throw for invalid boolean values', () => {
       const env = new EnvSource({ BAD: 'invalid' });
       expect(() => env.getOptionalBoolean('BAD')).toThrow(
-        'Environment variable BAD must be a boolean (true/false/1/0/yes/no), received: "invalid"',
+        'Environment variable BAD must be a boolean (true/false/1/0/yes/no), received non-boolean value (length: 7)',
       );
     });
   });
