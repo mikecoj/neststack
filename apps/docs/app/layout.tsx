@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   description:
     'Enterprise-grade NestJS packages for type-safe configuration, secret management, and more.',
   metadataBase: new URL('https://mikecoj.github.io/neststack'),
+  icons: {
+    icon: '/neststack/icon.svg',
+  },
 };
 
 const REPO_BASE = 'https://github.com/mikecoj/neststack';
@@ -22,7 +25,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const pageMap = await getPageMap();
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>
-      <Head faviconGlyph="N" />
+      <Head />
       <body>
         <Layout
           pageMap={pageMap}

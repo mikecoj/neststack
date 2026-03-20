@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="copper" x1="84" y1="56" x2="420" y2="456" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f0a870"/>
+      <stop offset="0.52" stop-color="#d17842"/>
+      <stop offset="1" stop-color="#a85a1e"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#131b29"/>
+      <stop offset="1" stop-color="#0c1119"/>
+    </linearGradient>
+  </defs>
+
+  <!-- App tile background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+
+  <!-- Nest: two nested frames (minimal depth) -->
+  <g stroke="url(#copper)" fill="none" stroke-linejoin="miter">
+    <rect x="108" y="104" width="248" height="176" stroke-width="11" opacity="0.24"/>
+    <rect x="140" y="144" width="248" height="176" stroke-width="11"/>
+  </g>
+
+  <!-- N: clean monogram in the active frame -->
+  <path
+    d="M208 176H236L300 264V176H328V296H300L236 208V296H208V176Z"
+    fill="url(#copper)"
+  />
+
+  <!-- Stack: single base layer cue -->
+  <rect x="198" y="350" width="132" height="10" fill="url(#copper)" opacity="0.32"/>
+</svg>
