@@ -24,7 +24,7 @@ This document explains how the NestStack monorepo is organized, how the `@nestst
 The repository follows the standard NX monorepo layout with two main directories:
 
 ```
-neststack-advanced-packages/
+neststack/
   packages/         Publishable NPM libraries
   apps/             Runnable applications (demos, services)
 ```

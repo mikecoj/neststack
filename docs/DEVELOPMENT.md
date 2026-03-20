@@ -113,8 +113,8 @@ pnpm --version   # Should show 10.x
 ### 3. Clone and install
 
 ```bash
-git clone https://github.com/your-org/neststack-advanced-packages.git
-cd neststack-advanced-packages
+git clone https://github.com/your-org/neststack.git
+cd neststack
 pnpm install
 ```
 
