@@ -7,13 +7,13 @@
 | Latest   | Yes       |
 | < Latest | No        |
 
-Only the latest released version of each `@nestx/*` package receives security updates. We recommend always upgrading to the latest version.
+Only the latest released version of each `@neststack/*` package receives security updates. We recommend always upgrading to the latest version.
 
 ## Reporting a Vulnerability
 
 **Do not open a public GitHub issue for security vulnerabilities.**
 
-If you discover a security vulnerability in any `@nestx/*` package, please report it responsibly:
+If you discover a security vulnerability in any `@neststack/*` package, please report it responsibly:
 
 1. **GitHub Security Advisories (preferred)**: Use the [Security tab](../../security/advisories/new) to create a private security advisory.
 

@@ -24,7 +24,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nestx/advanced-config": ["packages/advanced-config/src/index.ts"]
+      "@neststack/config": ["packages/config/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
