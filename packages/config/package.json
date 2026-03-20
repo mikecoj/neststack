@@ -1,6 +1,6 @@
 {
   "name": "@neststack/config",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Enterprise-grade, type-safe dynamic configuration module for NestJS with Zod validation, secret masking, and O(1) lookups",
   "license": "MIT",
   "author": "Mike Cojocari",
