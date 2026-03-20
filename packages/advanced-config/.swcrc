@@ -1,4 +1,5 @@
 {
+  "$schema": "https://swc.rs/schema.json",
   "jsc": {
     "target": "es2023",
     "parser": {
@@ -11,16 +12,27 @@
     },
     "keepClassNames": true,
     "externalHelpers": false,
-    "loose": true
+    "loose": true,
+    "minify": {
+      "compress": {
+        "unused": true,
+        "dead_code": true,
+        "drop_debugger": true,
+        "passes": 2
+      },
+      "mangle": {
+        "keepClassNames": true
+      },
+      "format": {
+        "comments": false
+      }
+    }
   },
   "module": {
     "type": "commonjs"
   },
+  "minify": true,
   "sourceMaps": true,
-  "exclude": [
-    "jest.config.ts",
-    "jest.config.cts",
-    ".*\\.spec.tsx?$",
-    ".*\\.test.tsx?$"
-  ]
+  "inlineSourcesContent": true,
+  "exclude": ["vitest.config.ts", ".*\\.spec.tsx?$", ".*\\.test.tsx?$"]
 }

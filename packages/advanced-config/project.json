@@ -3,13 +3,6 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/advanced-config/src",
   "projectType": "library",
-  "release": {
-    "version": {
-      "manifestRootsToUpdate": ["dist/{projectRoot}"],
-      "currentVersionResolver": "git-tag",
-      "fallbackCurrentVersionResolver": "disk"
-    }
-  },
   "tags": [],
   "targets": {
     "lint": {
@@ -28,14 +21,8 @@
         "stripLeadingPaths": true,
         "outputPath": "packages/advanced-config/dist",
         "tsConfig": "packages/advanced-config/tsconfig.lib.json",
-        "packageJson": "packages/advanced-config/package.json",
         "main": "packages/advanced-config/src/index.ts",
         "assets": ["packages/advanced-config/*.md"]
-      }
-    },
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "{projectRoot}/dist"
       }
     }
   }
