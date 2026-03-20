@@ -27,7 +27,11 @@
     "secret-masking",
     "validation"
   ],
-  "files": ["dist", "*.md", "LICENSE"],
+  "files": [
+    "dist",
+    "*.md",
+    "LICENSE"
+  ],
   "publishConfig": {
     "access": "public",
     "provenance": true
