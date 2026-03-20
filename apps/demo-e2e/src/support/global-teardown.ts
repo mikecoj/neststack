@@ -1,9 +1,5 @@
-import { killPort } from '@nx/node/utils';
-
-module.exports = async () => {
-  // Put clean up logic here (e.g. stopping services, docker-compose, etc.).
-  // Hint: `globalThis` is shared between setup and teardown.
-  const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-  await killPort(port);
-  console.log((globalThis as Record<string, unknown>).__TEARDOWN_MESSAGE__);
-};
+// Teardown is handled by global-setup.ts export function
+// This file is kept for compatibility but is no longer used.
+export default async function () {
+  // noop — teardown is handled by Vitest globalSetup teardown export
+}

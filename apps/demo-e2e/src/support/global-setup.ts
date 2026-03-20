@@ -1,13 +1,68 @@
-import { waitForPortOpen } from '@nx/node/utils';
+import { type ChildProcess, execSync, spawn } from 'node:child_process';
 
-module.exports = async () => {
-  // Start services that that the app needs to run (e.g. database, docker-compose, etc.).
-  console.log('\nSetting up...\n');
+let serverProcess: ChildProcess | undefined;
 
+async function waitForServer(url: string, timeoutMs = 60_000): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return;
+    } catch {
+      // server not ready yet
+    }
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  throw new Error(`Server at ${url} did not start within ${timeoutMs}ms`);
+}
+
+export async function setup() {
   const host = process.env.HOST ?? 'localhost';
-  const port = process.env.PORT ? Number(process.env.PORT) : 3000;
-  await waitForPortOpen(port, { host });
+  const port = process.env.PORT ?? '3000';
+  const baseUrl = `http://${host}:${port}`;
 
-  // Hint: Use `globalThis` to pass variables to global teardown.
-  (globalThis as Record<string, unknown>).__TEARDOWN_MESSAGE__ = '\nTearing down...\n';
-};
+  // Build the demo app first
+  execSync('pnpm nx build demo --skip-nx-cache', {
+    stdio: 'inherit',
+    cwd: process.env.NX_WORKSPACE_ROOT ?? process.cwd(),
+    env: { ...process.env, DB_PASSWORD: 'test-secret', REDIS_PASSWORD: 'redis-secret' },
+  });
+
+  // Start the built app
+  serverProcess = spawn('node', ['dist/apps/demo/main.js'], {
+    cwd: process.env.NX_WORKSPACE_ROOT ?? process.cwd(),
+    stdio: 'pipe',
+    env: {
+      ...process.env,
+      PORT: port,
+      NODE_ENV: 'test',
+      DB_HOST: 'localhost',
+      DB_PORT: '5432',
+      DB_NAME: 'nestx_test',
+      DB_USER: 'nestx',
+      DB_PASSWORD: 'test-secret',
+      REDIS_HOST: 'localhost',
+      REDIS_PORT: '6379',
+      REDIS_PASSWORD: 'redis-secret',
+    },
+  });
+
+  serverProcess.stdout?.on('data', (data: Buffer) => {
+    process.stdout.write(`[demo] ${data.toString()}`);
+  });
+  serverProcess.stderr?.on('data', (data: Buffer) => {
+    process.stderr.write(`[demo:err] ${data.toString()}`);
+  });
+
+  await waitForServer(`${baseUrl}/health`);
+}
+
+export async function teardown() {
+  if (serverProcess) {
+    serverProcess.kill('SIGTERM');
+    await new Promise((r) => setTimeout(r, 1000));
+    if (!serverProcess.killed) {
+      serverProcess.kill('SIGKILL');
+    }
+  }
+}

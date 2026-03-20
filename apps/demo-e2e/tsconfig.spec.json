@@ -3,9 +3,9 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "declaration": true,
-    "module": "commonjs",
-    "types": ["jest", "node"],
-    "noPropertyAccessFromIndexSignature": false
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"]
   },
-  "include": ["jest.config.cts", "jest.config.ts", "src/**/*.ts"]
+  "include": ["src/**/*.ts"]
 }

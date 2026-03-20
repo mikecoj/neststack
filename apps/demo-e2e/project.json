@@ -16,7 +16,7 @@
     "e2e": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "start-server-and-test 'nx serve demo' http://localhost:3000 'npx jest -c apps/demo-e2e/jest.config.cts --runInBand'",
+        "command": "vitest run --config apps/demo-e2e/vitest.config.ts",
         "cwd": "{workspaceRoot}"
       },
       "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
