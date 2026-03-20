@@ -2,11 +2,11 @@ import { Inject, Injectable, Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { NestStackConfigModule } from './neststack-config.module';
 import { ConfigService } from './config.service';
 import type { ConfigStore } from './config-store';
 import { CONFIG_STORE } from './constants';
 import { defineConfig } from './define-config';
+import { NestStackConfigModule } from './neststack-config.module';
 
 const databaseConfig = defineConfig({
   namespace: 'database',
