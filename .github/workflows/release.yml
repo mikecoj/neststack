@@ -51,7 +51,7 @@ jobs:
 
       - name: Version (dry run)
         if: inputs.dry-run
-        run: pnpm nx release version --dry-run
+        run: pnpm nx release version --dry-run --yes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -63,7 +63,7 @@ jobs:
 
       - name: Changelog (dry run)
         if: inputs.dry-run
-        run: pnpm nx release changelog --dry-run
+        run: pnpm nx release changelog --dry-run --yes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
