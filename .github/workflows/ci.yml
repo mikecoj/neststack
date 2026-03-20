@@ -65,3 +65,6 @@ jobs:
           name: coverage-reports
           path: packages/config/coverage/
           retention-days: 14
+
+      - run: npx nx fix-ci
+        if: always()
