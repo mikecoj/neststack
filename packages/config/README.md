@@ -1,4 +1,4 @@
-# @nestx/advanced-config
+# @neststack/config
 
 Enterprise-grade, type-safe dynamic configuration module for NestJS. Designed for banking, financial services, and mission-critical applications requiring strict validation, secret management, runtime immutability, and auditable configuration provenance.
 
@@ -75,7 +75,7 @@ Enterprise-grade, type-safe dynamic configuration module for NestJS. Designed fo
 ## Installation
 
 ```bash
-pnpm add @nestx/advanced-config zod
+pnpm add @neststack/config zod
 ```
 
 ### Peer Dependencies
@@ -98,7 +98,7 @@ pnpm add @nestjs/common @nestjs/core rxjs
 ## Architecture Overview
 
 ```
-                                AdvancedConfigModule
+                                NestStackConfigModule
                                ┌─────────────────────────────────┐
                                │                                 │
   forRoot(options) ──────────► │  ┌───────────┐   ┌───────────┐  │
@@ -147,7 +147,7 @@ pnpm add @nestjs/common @nestjs/core rxjs
 
 ```typescript
 // src/config/database.config.ts
-import { defineConfig } from '@nestx/advanced-config';
+import { defineConfig } from '@neststack/config';
 import { z } from 'zod';
 
 export const databaseConfig = defineConfig({
@@ -177,12 +177,12 @@ export const databaseConfig = defineConfig({
 ```typescript
 // src/app.module.ts
 import { Module } from '@nestjs/common';
-import { AdvancedConfigModule } from '@nestx/advanced-config';
+import { NestStackConfigModule } from '@neststack/config';
 import { databaseConfig } from './config/database.config';
 
 @Module({
   imports: [
-    AdvancedConfigModule.forRoot({
+    NestStackConfigModule.forRoot({
       configs: [databaseConfig],
     }),
   ],
@@ -195,7 +195,7 @@ export class AppModule {}
 ```typescript
 // src/database/database.service.ts
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestx/advanced-config';
+import { ConfigService } from '@neststack/config';
 
 @Injectable()
 export class DatabaseService {
@@ -219,7 +219,7 @@ export class DatabaseService {
 `defineConfig()` creates a frozen, immutable `ConfigDefinition` object. It validates the inputs at call time and freezes the result to prevent accidental mutation.
 
 ```typescript
-import { defineConfig } from '@nestx/advanced-config';
+import { defineConfig } from '@neststack/config';
 import { z } from 'zod';
 
 const config = defineConfig({
@@ -348,7 +348,7 @@ const config = defineConfig({
 Use `forRoot()` when all configuration can be resolved synchronously at startup. This is the most common pattern.
 
 ```typescript
-AdvancedConfigModule.forRoot({
+NestStackConfigModule.forRoot({
   configs: [databaseConfig, authConfig, cacheConfig],
   isGlobal: true, // default: true -- available to all modules
 });
@@ -366,7 +366,7 @@ AdvancedConfigModule.forRoot({
 **Multiple configs in a single forRoot:**
 
 ```typescript
-AdvancedConfigModule.forRoot({
+NestStackConfigModule.forRoot({
   configs: [databaseConfig, redisConfig, authConfig, loggingConfig],
 });
 ```
@@ -378,7 +378,7 @@ Use `forRootAsync()` when configuration depends on other providers (e.g., a secr
 **Using `useFactory`:**
 
 ```typescript
-AdvancedConfigModule.forRootAsync({
+NestStackConfigModule.forRootAsync({
   imports: [VaultModule],
   useFactory: (vault: VaultService) => ({
     configs: [databaseConfig, authConfig],
@@ -392,10 +392,10 @@ AdvancedConfigModule.forRootAsync({
 
 ```typescript
 @Injectable()
-class ConfigFactory implements AdvancedConfigOptionsFactory {
+class ConfigFactory implements NestStackConfigOptionsFactory {
   constructor(private readonly vault: VaultService) {}
 
-  async createAdvancedConfigOptions(): Promise<AdvancedConfigModuleOptions> {
+  async createNestStackConfigOptions(): Promise<NestStackConfigModuleOptions> {
     await this.vault.authenticate();
     return {
       configs: [databaseConfig],
@@ -403,7 +403,7 @@ class ConfigFactory implements AdvancedConfigOptionsFactory {
   }
 }
 
-AdvancedConfigModule.forRootAsync({
+NestStackConfigModule.forRootAsync({
   imports: [VaultModule],
   useClass: ConfigFactory,
 });
@@ -413,7 +413,7 @@ AdvancedConfigModule.forRootAsync({
 
 ```typescript
 // Reuses an already-registered factory provider
-AdvancedConfigModule.forRootAsync({
+NestStackConfigModule.forRootAsync({
   imports: [SharedModule],
   useExisting: ConfigFactory,
 });
@@ -430,7 +430,7 @@ Use `forFeature()` to register additional configuration namespaces from feature 
 ```typescript
 // payments/payments.module.ts
 @Module({
-  imports: [AdvancedConfigModule.forFeature(paymentsConfig)],
+  imports: [NestStackConfigModule.forFeature(paymentsConfig)],
 })
 export class PaymentsModule {}
 ```
@@ -440,7 +440,7 @@ export class PaymentsModule {}
 ```typescript
 @Module({
   imports: [
-    AdvancedConfigModule.forFeature({
+    NestStackConfigModule.forFeature({
       namespace: 'notifications',
       schema: z.object({
         emailFrom: z.string().email().default('noreply@example.com'),
@@ -456,7 +456,7 @@ export class NotificationsModule {}
 **Mixing both forms:**
 
 ```typescript
-AdvancedConfigModule.forFeature(paymentsConfig, {
+NestStackConfigModule.forFeature(paymentsConfig, {
   namespace: 'audit',
   schema: z.object({
     enabled: z.boolean().default(true),
@@ -468,7 +468,7 @@ AdvancedConfigModule.forFeature(paymentsConfig, {
 **With a loader:**
 
 ```typescript
-AdvancedConfigModule.forFeature({
+NestStackConfigModule.forFeature({
   namespace: 'redis',
   schema: z.object({
     url: z.string().url(),
@@ -494,7 +494,7 @@ AdvancedConfigModule.forFeature({
 
 ```typescript
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestx/advanced-config';
+import { ConfigService } from '@neststack/config';
 
 @Injectable()
 export class MyService {
@@ -730,7 +730,7 @@ Environment variable ENABLE_SSL must be a boolean (true/false/1/0/yes/no), recei
 Overrides let you replace specific values after loading but before validation. They are keyed by namespace.
 
 ```typescript
-AdvancedConfigModule.forRoot({
+NestStackConfigModule.forRoot({
   configs: [databaseConfig, cacheConfig],
   overrides: {
     database: {
@@ -948,7 +948,7 @@ Use the `envSource` and `overrides` options to inject test values without touchi
 ```typescript
 const module = await Test.createTestingModule({
   imports: [
-    AdvancedConfigModule.forRoot({
+    NestStackConfigModule.forRoot({
       configs: [databaseConfig],
       envSource: {
         DB_HOST: 'localhost',
@@ -977,13 +977,13 @@ Test the full NestJS module bootstrap with `Test.createTestingModule`:
 
 ```typescript
 import { Test } from '@nestjs/testing';
-import { AdvancedConfigModule, ConfigService } from '@nestx/advanced-config';
+import { NestStackConfigModule, ConfigService } from '@neststack/config';
 
 describe('AppModule integration', () => {
   it('should bootstrap with valid configuration', async () => {
     const module = await Test.createTestingModule({
       imports: [
-        AdvancedConfigModule.forRoot({
+        NestStackConfigModule.forRoot({
           configs: [databaseConfig, authConfig],
           envSource: {
             DB_HOST: 'localhost',
@@ -1003,7 +1003,7 @@ describe('AppModule integration', () => {
 
   it('should fail fast with invalid configuration', () => {
     expect(() =>
-      AdvancedConfigModule.forRoot({
+      NestStackConfigModule.forRoot({
         configs: [databaseConfig],
         envSource: { DB_HOST: '', DB_NAME: '', DB_PASSWORD: '' },
       }),
@@ -1014,13 +1014,13 @@ describe('AppModule integration', () => {
 
 ### Resetting State Between Tests
 
-`AdvancedConfigModule.reset()` clears the internal store between test runs. Call it in `beforeEach`:
+`NestStackConfigModule.reset()` clears the internal store between test runs. Call it in `beforeEach`:
 
 ```typescript
-import { AdvancedConfigModule } from '@nestx/advanced-config';
+import { NestStackConfigModule } from '@neststack/config';
 
 beforeEach(() => {
-  AdvancedConfigModule.reset();
+  NestStackConfigModule.reset();
 });
 ```
 
@@ -1072,7 +1072,7 @@ export const auditDbConfig = defineConfig({
 // app.module.ts
 @Module({
   imports: [
-    AdvancedConfigModule.forRoot({
+    NestStackConfigModule.forRoot({
       configs: [primaryDbConfig, auditDbConfig],
     }),
   ],
@@ -1086,7 +1086,7 @@ export class AppModule {}
 // Feature flags registered inline without defineConfig()
 @Module({
   imports: [
-    AdvancedConfigModule.forFeature({
+    NestStackConfigModule.forFeature({
       namespace: 'features',
       schema: z.object({
         instantPayments: z.boolean().default(false),
@@ -1129,10 +1129,10 @@ export class PaymentService {
 
 ```typescript
 @Injectable()
-class VaultConfigFactory implements AdvancedConfigOptionsFactory {
+class VaultConfigFactory implements NestStackConfigOptionsFactory {
   constructor(private readonly vault: VaultService) {}
 
-  async createAdvancedConfigOptions(): Promise<AdvancedConfigModuleOptions> {
+  async createNestStackConfigOptions(): Promise<NestStackConfigModuleOptions> {
     const dbPassword = await this.vault.readSecret('database/password');
     const apiKey = await this.vault.readSecret('payments/api-key');
 
@@ -1165,7 +1165,7 @@ class VaultConfigFactory implements AdvancedConfigOptionsFactory {
 
 @Module({
   imports: [
-    AdvancedConfigModule.forRootAsync({
+    NestStackConfigModule.forRootAsync({
       imports: [VaultModule],
       useClass: VaultConfigFactory,
     }),
@@ -1182,12 +1182,12 @@ export class AppModule {}
 
 | Export                    | Kind     | Description                                                       |
 | ------------------------- | -------- | ----------------------------------------------------------------- |
-| `AdvancedConfigModule`    | Class    | Dynamic module with `forRoot()`, `forRootAsync()`, `forFeature()` |
+| `NestStackConfigModule`    | Class    | Dynamic module with `forRoot()`, `forRootAsync()`, `forFeature()` |
 | `ConfigService<T>`        | Class    | Injectable service for accessing configuration                    |
 | `ConfigStore`             | Class    | Internal store (also injectable via `CONFIG_STORE` token)         |
 | `defineConfig(options)`   | Function | Creates a frozen `ConfigDefinition`                               |
 | `EnvSource`               | Class    | Typed `process.env` wrapper implementing `IEnvSource`             |
-| `ADVANCED_CONFIG_OPTIONS` | Symbol   | Injection token for module options                                |
+| `NESTSTACK_CONFIG_OPTIONS` | Symbol   | Injection token for module options                                |
 | `CONFIG_STORE`            | Symbol   | Injection token for the config store                              |
 
 ### Type Exports
@@ -1203,9 +1203,9 @@ export class AppModule {}
 | `ConfigDefinition`                 | Interface | Frozen output of `defineConfig()`                      |
 | `ConfigDefinitionInput`            | Type      | Union of `ConfigDefinition \| ConfigDefinitionOptions` |
 | `ConfigExplanation`                | Interface | Return type of `explain()`                             |
-| `AdvancedConfigModuleOptions`      | Interface | Options for `forRoot()`                                |
-| `AdvancedConfigModuleAsyncOptions` | Interface | Options for `forRootAsync()`                           |
-| `AdvancedConfigOptionsFactory`     | Interface | Factory interface for `useClass` / `useExisting`       |
+| `NestStackConfigModuleOptions`      | Interface | Options for `forRoot()`                                |
+| `NestStackConfigModuleAsyncOptions` | Interface | Options for `forRootAsync()`                           |
+| `NestStackConfigOptionsFactory`     | Interface | Factory interface for `useClass` / `useExisting`       |
 | `Path<T>`                          | Type      | Union of valid dot-notation paths for `T`              |
 | `PathValue<T, P>`                  | Type      | Value type at path `P` in `T`                          |
 
@@ -1294,7 +1294,7 @@ schema: z.object({
 
 ```typescript
 // Good: deterministic, explicit
-AdvancedConfigModule.forRoot({
+NestStackConfigModule.forRoot({
   configs: [databaseConfig],
   envSource: { DB_HOST: 'localhost', DB_PASSWORD: 'test' },
   overrides: { database: { poolSize: 1 } },
@@ -1323,24 +1323,24 @@ Keep root-level config minimal. Let feature modules own their configuration:
 
 ```typescript
 // app.module.ts -- only core infrastructure config
-AdvancedConfigModule.forRoot({
+NestStackConfigModule.forRoot({
   configs: [databaseConfig, loggingConfig],
 });
 
 // payments/payments.module.ts -- owns its own config
-AdvancedConfigModule.forFeature(paymentsConfig);
+NestStackConfigModule.forFeature(paymentsConfig);
 
 // notifications/notifications.module.ts
-AdvancedConfigModule.forFeature(notificationsConfig);
+NestStackConfigModule.forFeature(notificationsConfig);
 ```
 
 ### 8. Reset between tests
 
-Always call `AdvancedConfigModule.reset()` in `beforeEach` to avoid state leakage:
+Always call `NestStackConfigModule.reset()` in `beforeEach` to avoid state leakage:
 
 ```typescript
 beforeEach(() => {
-  AdvancedConfigModule.reset();
+  NestStackConfigModule.reset();
 });
 ```
 

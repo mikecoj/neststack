@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { AdvancedConfigModule } from './advanced-config.module';
+import { NestStackConfigModule } from './neststack-config.module';
 import { ConfigService } from './config.service';
 import type { ConfigStore } from './config-store';
 import { CONFIG_STORE } from './constants';
 import { defineConfig } from './define-config';
-import type { AdvancedConfigModuleOptions, AdvancedConfigOptionsFactory } from './interfaces';
+import type { NestStackConfigModuleOptions, NestStackConfigOptionsFactory } from './interfaces';
 
 const dbConfig = defineConfig({
   namespace: 'database',
@@ -21,16 +21,16 @@ const dbConfig = defineConfig({
   }),
 });
 
-describe('AdvancedConfigModule', () => {
+describe('NestStackConfigModule', () => {
   beforeEach(() => {
-    AdvancedConfigModule.reset();
+    NestStackConfigModule.reset();
   });
 
   describe('forRoot', () => {
     it('should register configs and provide ConfigService', async () => {
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRoot({
+          NestStackConfigModule.forRoot({
             configs: [dbConfig],
             envSource: { DB_URL: 'postgres://localhost' },
             isGlobal: true,
@@ -47,7 +47,7 @@ describe('AdvancedConfigModule', () => {
     it('should apply overrides', async () => {
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRoot({
+          NestStackConfigModule.forRoot({
             configs: [dbConfig],
             envSource: { DB_URL: 'postgres://prod' },
             overrides: { database: { url: 'postgres://test' } },
@@ -67,7 +67,7 @@ describe('AdvancedConfigModule', () => {
 
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRoot({
+          NestStackConfigModule.forRoot({
             configs: [simpleConfig],
             envSource: {},
           }),
@@ -91,7 +91,7 @@ describe('AdvancedConfigModule', () => {
 
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRoot({
+          NestStackConfigModule.forRoot({
             configs: [dbConfig, authConfig],
             envSource: {
               DB_URL: 'postgres://localhost',
@@ -111,7 +111,7 @@ describe('AdvancedConfigModule', () => {
     it('should support useFactory', async () => {
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRootAsync({
+          NestStackConfigModule.forRootAsync({
             useFactory: () => ({
               configs: [dbConfig],
               envSource: { DB_URL: 'postgres://async' },
@@ -126,8 +126,8 @@ describe('AdvancedConfigModule', () => {
 
     it('should support useClass', async () => {
       @Injectable()
-      class TestConfigFactory implements AdvancedConfigOptionsFactory {
-        createAdvancedConfigOptions(): AdvancedConfigModuleOptions {
+      class TestConfigFactory implements NestStackConfigOptionsFactory {
+        createNestStackConfigOptions(): NestStackConfigModuleOptions {
           return {
             configs: [dbConfig],
             envSource: { DB_URL: 'postgres://from-class' },
@@ -137,7 +137,7 @@ describe('AdvancedConfigModule', () => {
 
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRootAsync({
+          NestStackConfigModule.forRootAsync({
             useClass: TestConfigFactory,
           }),
         ],
@@ -149,8 +149,8 @@ describe('AdvancedConfigModule', () => {
 
     it('should support useExisting', async () => {
       @Injectable()
-      class ExistingConfigFactory implements AdvancedConfigOptionsFactory {
-        createAdvancedConfigOptions(): AdvancedConfigModuleOptions {
+      class ExistingConfigFactory implements NestStackConfigOptionsFactory {
+        createNestStackConfigOptions(): NestStackConfigModuleOptions {
           return {
             configs: [dbConfig],
             envSource: { DB_URL: 'postgres://from-existing' },
@@ -168,7 +168,7 @@ describe('AdvancedConfigModule', () => {
 
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRootAsync({
+          NestStackConfigModule.forRootAsync({
             imports: [FactoryModule],
             useExisting: ExistingConfigFactory,
           }),
@@ -180,7 +180,7 @@ describe('AdvancedConfigModule', () => {
     });
 
     it('should throw when no factory method is provided', () => {
-      expect(() => AdvancedConfigModule.forRootAsync({} as any)).toThrow(
+      expect(() => NestStackConfigModule.forRootAsync({} as any)).toThrow(
         'requires useFactory, useClass, or useExisting',
       );
     });
@@ -195,11 +195,11 @@ describe('AdvancedConfigModule', () => {
 
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRoot({
+          NestStackConfigModule.forRoot({
             configs: [dbConfig],
             envSource: { DB_URL: 'postgres://localhost' },
           }),
-          AdvancedConfigModule.forFeature(featureConfig),
+          NestStackConfigModule.forFeature(featureConfig),
         ],
       }).compile();
 
@@ -210,11 +210,11 @@ describe('AdvancedConfigModule', () => {
     it('should accept plain options without calling defineConfig first', async () => {
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRoot({
+          NestStackConfigModule.forRoot({
             configs: [dbConfig],
             envSource: { DB_URL: 'postgres://localhost' },
           }),
-          AdvancedConfigModule.forFeature({
+          NestStackConfigModule.forFeature({
             namespace: 'cache',
             schema: z.object({
               ttl: z.number().default(3600),
@@ -232,7 +232,7 @@ describe('AdvancedConfigModule', () => {
     it('should accept plain options with loader and secretKeys', async () => {
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRoot({
+          NestStackConfigModule.forRoot({
             configs: [dbConfig],
             envSource: {
               DB_URL: 'postgres://localhost',
@@ -240,7 +240,7 @@ describe('AdvancedConfigModule', () => {
               REDIS_PASSWORD: 'secret',
             },
           }),
-          AdvancedConfigModule.forFeature(
+          NestStackConfigModule.forFeature(
             defineConfig({
               namespace: 'redis',
               schema: z.object({ url: z.string(), password: z.string() }),
@@ -267,11 +267,11 @@ describe('AdvancedConfigModule', () => {
 
       const module = await Test.createTestingModule({
         imports: [
-          AdvancedConfigModule.forRoot({
+          NestStackConfigModule.forRoot({
             configs: [dbConfig],
             envSource: { DB_URL: 'postgres://localhost' },
           }),
-          AdvancedConfigModule.forFeature(featureConfig, {
+          NestStackConfigModule.forFeature(featureConfig, {
             namespace: 'flags',
             schema: z.object({ darkMode: z.boolean().default(false) }),
           }),
@@ -291,10 +291,10 @@ describe('AdvancedConfigModule', () => {
 
       await expect(
         Test.createTestingModule({
-          imports: [AdvancedConfigModule.forFeature(featureConfig)],
+          imports: [NestStackConfigModule.forFeature(featureConfig)],
         }).compile(),
       ).rejects.toThrow(
-        'AdvancedConfigModule.forFeature() called before forRoot(). Register forRoot() first.',
+        'NestStackConfigModule.forFeature() called before forRoot(). Register forRoot() first.',
       );
     });
   });

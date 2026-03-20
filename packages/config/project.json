@@ -1,7 +1,7 @@
 {
-  "name": "advanced-config",
+  "name": "config",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/advanced-config/src",
+  "sourceRoot": "packages/config/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -19,10 +19,10 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "stripLeadingPaths": true,
-        "outputPath": "packages/advanced-config/dist",
-        "tsConfig": "packages/advanced-config/tsconfig.lib.json",
-        "main": "packages/advanced-config/src/index.ts",
-        "assets": ["packages/advanced-config/*.md"]
+        "outputPath": "packages/config/dist",
+        "tsConfig": "packages/config/tsconfig.lib.json",
+        "main": "packages/config/src/index.ts",
+        "assets": ["packages/config/*.md"]
       }
     }
   }

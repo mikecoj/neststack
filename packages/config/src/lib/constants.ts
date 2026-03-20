@@ -1,0 +1,2 @@
+export const NESTSTACK_CONFIG_OPTIONS = Symbol('NESTSTACK_CONFIG_OPTIONS');
+export const CONFIG_STORE = Symbol('CONFIG_STORE');

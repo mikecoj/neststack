@@ -1,57 +1,57 @@
 import { type DynamicModule, Module, type Provider } from '@nestjs/common';
 import { ConfigService } from './config.service';
 import { ConfigStore } from './config-store';
-import { ADVANCED_CONFIG_OPTIONS, CONFIG_STORE } from './constants';
+import { CONFIG_STORE, NESTSTACK_CONFIG_OPTIONS } from './constants';
 import { defineConfig } from './define-config';
 import type {
-  AdvancedConfigModuleAsyncOptions,
-  AdvancedConfigModuleOptions,
-  AdvancedConfigOptionsFactory,
   ConfigDefinition,
   ConfigDefinitionInput,
+  NestStackConfigModuleAsyncOptions,
+  NestStackConfigModuleOptions,
+  NestStackConfigOptionsFactory,
 } from './interfaces';
 import { EnvSource } from './loaders';
 
 @Module({})
 // biome-ignore lint/complexity/noStaticOnlyClass: NestJS @Module() requires a class; static members are the DynamicModule factory pattern
-export class AdvancedConfigModule {
+export class NestStackConfigModule {
   private static readonly globalStore = new ConfigStore();
   private static envSourceInstance: EnvSource = new EnvSource();
   private static initialized = false;
 
-  static forRoot(options: AdvancedConfigModuleOptions): DynamicModule {
-    AdvancedConfigModule.processConfigs(options);
+  static forRoot(options: NestStackConfigModuleOptions): DynamicModule {
+    NestStackConfigModule.processConfigs(options);
 
     return {
-      module: AdvancedConfigModule,
+      module: NestStackConfigModule,
       global: options.isGlobal ?? true,
       providers: [
-        { provide: ADVANCED_CONFIG_OPTIONS, useValue: options },
-        { provide: CONFIG_STORE, useValue: AdvancedConfigModule.globalStore },
+        { provide: NESTSTACK_CONFIG_OPTIONS, useValue: options },
+        { provide: CONFIG_STORE, useValue: NestStackConfigModule.globalStore },
         ConfigService,
       ],
       exports: [ConfigService, CONFIG_STORE],
     };
   }
 
-  static forRootAsync(options: AdvancedConfigModuleAsyncOptions): DynamicModule {
-    const asyncProviders = AdvancedConfigModule.createAsyncProviders(options);
+  static forRootAsync(options: NestStackConfigModuleAsyncOptions): DynamicModule {
+    const asyncProviders = NestStackConfigModule.createAsyncProviders(options);
 
     return {
-      module: AdvancedConfigModule,
+      module: NestStackConfigModule,
       global: options.isGlobal ?? true,
       imports: options.imports ?? [],
       providers: [
         ...asyncProviders,
-        { provide: CONFIG_STORE, useValue: AdvancedConfigModule.globalStore },
+        { provide: CONFIG_STORE, useValue: NestStackConfigModule.globalStore },
         ConfigService,
         {
-          provide: 'ADVANCED_CONFIG_INIT',
-          useFactory: (moduleOptions: AdvancedConfigModuleOptions) => {
-            AdvancedConfigModule.processConfigs(moduleOptions);
+          provide: 'NESTSTACK_CONFIG_INIT',
+          useFactory: (moduleOptions: NestStackConfigModuleOptions) => {
+            NestStackConfigModule.processConfigs(moduleOptions);
             return true;
           },
-          inject: [ADVANCED_CONFIG_OPTIONS],
+          inject: [NESTSTACK_CONFIG_OPTIONS],
         },
       ],
       exports: [ConfigService, CONFIG_STORE],
@@ -59,31 +59,34 @@ export class AdvancedConfigModule {
   }
 
   static forFeature(...configs: ConfigDefinitionInput[]): DynamicModule {
-    const featureInitToken = Symbol('ADVANCED_CONFIG_FEATURE_INIT');
+    const featureInitToken = Symbol('NESTSTACK_CONFIG_FEATURE_INIT');
 
     return {
-      module: AdvancedConfigModule,
+      module: NestStackConfigModule,
       providers: [
         {
           provide: featureInitToken,
           useFactory: () => {
-            if (!AdvancedConfigModule.initialized) {
+            if (!NestStackConfigModule.initialized) {
               throw new Error(
-                'AdvancedConfigModule.forFeature() called before forRoot(). Register forRoot() first.',
+                'NestStackConfigModule.forFeature() called before forRoot(). Register forRoot() first.',
               );
             }
             for (const input of configs) {
-              const config = AdvancedConfigModule.normalizeConfig(input);
+              const config = NestStackConfigModule.normalizeConfig(input);
               const rawData = config.load
-                ? config.load({ env: AdvancedConfigModule.envSourceInstance })
+                ? config.load({ env: NestStackConfigModule.envSourceInstance })
                 : {};
-              AdvancedConfigModule.globalStore.register(config, rawData as Record<string, unknown>);
+              NestStackConfigModule.globalStore.register(
+                config,
+                rawData as Record<string, unknown>,
+              );
             }
           },
         },
         {
           provide: CONFIG_STORE,
-          useFactory: (_init: unknown) => AdvancedConfigModule.globalStore,
+          useFactory: (_init: unknown) => NestStackConfigModule.globalStore,
           inject: [featureInitToken],
         },
         ConfigService,
@@ -96,13 +99,13 @@ export class AdvancedConfigModule {
    * Resets internal state. Intended for testing only.
    */
   static reset(): void {
-    AdvancedConfigModule.globalStore.clear();
-    AdvancedConfigModule.envSourceInstance = new EnvSource();
-    AdvancedConfigModule.initialized = false;
+    NestStackConfigModule.globalStore.clear();
+    NestStackConfigModule.envSourceInstance = new EnvSource();
+    NestStackConfigModule.initialized = false;
   }
 
   private static normalizeConfig(input: ConfigDefinitionInput): ConfigDefinition {
-    if (AdvancedConfigModule.isConfigDefinition(input)) {
+    if (NestStackConfigModule.isConfigDefinition(input)) {
       return input;
     }
     return defineConfig(input);
@@ -112,16 +115,16 @@ export class AdvancedConfigModule {
     return Object.isFrozen(input) && 'secretKeys' in input && Array.isArray(input.secretKeys);
   }
 
-  private static processConfigs(options: AdvancedConfigModuleOptions): void {
-    AdvancedConfigModule.envSourceInstance = new EnvSource(options.envSource);
-    AdvancedConfigModule.initialized = true;
+  private static processConfigs(options: NestStackConfigModuleOptions): void {
+    NestStackConfigModule.envSourceInstance = new EnvSource(options.envSource);
+    NestStackConfigModule.initialized = true;
 
     for (const config of options.configs) {
       const rawData = config.load
-        ? config.load({ env: AdvancedConfigModule.envSourceInstance })
+        ? config.load({ env: NestStackConfigModule.envSourceInstance })
         : {};
       const overrides = options.overrides?.[config.namespace];
-      AdvancedConfigModule.globalStore.register(
+      NestStackConfigModule.globalStore.register(
         config,
         rawData as Record<string, unknown>,
         overrides,
@@ -129,11 +132,11 @@ export class AdvancedConfigModule {
     }
   }
 
-  private static createAsyncProviders(options: AdvancedConfigModuleAsyncOptions): Provider[] {
+  private static createAsyncProviders(options: NestStackConfigModuleAsyncOptions): Provider[] {
     if (options.useFactory) {
       return [
         {
-          provide: ADVANCED_CONFIG_OPTIONS,
+          provide: NESTSTACK_CONFIG_OPTIONS,
           useFactory: options.useFactory,
           inject: options.inject ?? [],
         },
@@ -147,9 +150,9 @@ export class AdvancedConfigModule {
           useClass: options.useClass,
         },
         {
-          provide: ADVANCED_CONFIG_OPTIONS,
-          useFactory: async (factory: AdvancedConfigOptionsFactory) =>
-            factory.createAdvancedConfigOptions(),
+          provide: NESTSTACK_CONFIG_OPTIONS,
+          useFactory: async (factory: NestStackConfigOptionsFactory) =>
+            factory.createNestStackConfigOptions(),
           inject: [options.useClass],
         },
       ];
@@ -158,16 +161,16 @@ export class AdvancedConfigModule {
     if (options.useExisting) {
       return [
         {
-          provide: ADVANCED_CONFIG_OPTIONS,
-          useFactory: async (factory: AdvancedConfigOptionsFactory) =>
-            factory.createAdvancedConfigOptions(),
+          provide: NESTSTACK_CONFIG_OPTIONS,
+          useFactory: async (factory: NestStackConfigOptionsFactory) =>
+            factory.createNestStackConfigOptions(),
           inject: [options.useExisting],
         },
       ];
     }
 
     throw new Error(
-      'AdvancedConfigModule.forRootAsync() requires useFactory, useClass, or useExisting',
+      'NestStackConfigModule.forRootAsync() requires useFactory, useClass, or useExisting',
     );
   }
 }

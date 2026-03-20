@@ -2,7 +2,7 @@ import { Inject, Injectable, Module } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { AdvancedConfigModule } from './advanced-config.module';
+import { NestStackConfigModule } from './neststack-config.module';
 import { ConfigService } from './config.service';
 import type { ConfigStore } from './config-store';
 import { CONFIG_STORE } from './constants';
@@ -41,7 +41,7 @@ const authConfig = defineConfig({
 
 describe('Integration Test', () => {
   beforeEach(() => {
-    AdvancedConfigModule.reset();
+    NestStackConfigModule.reset();
   });
 
   it('should work end-to-end with loaders, validation, and service injection', async () => {
@@ -66,7 +66,7 @@ describe('Integration Test', () => {
 
     const module = await Test.createTestingModule({
       imports: [
-        AdvancedConfigModule.forRoot({
+        NestStackConfigModule.forRoot({
           configs: [databaseConfig, authConfig],
           envSource: {
             DB_URL: 'postgres://localhost:5432/mydb',
@@ -113,7 +113,7 @@ describe('Integration Test', () => {
 
     const module = await Test.createTestingModule({
       imports: [
-        AdvancedConfigModule.forRoot({
+        NestStackConfigModule.forRoot({
           configs: [databaseConfig],
           envSource: {
             DB_URL: 'postgres://localhost:5432/mydb',
@@ -121,7 +121,7 @@ describe('Integration Test', () => {
             PAYMENTS_API_KEY: 'pk_test_123',
           },
         }),
-        AdvancedConfigModule.forFeature(paymentsConfig),
+        NestStackConfigModule.forFeature(paymentsConfig),
       ],
     }).compile();
 
@@ -138,7 +138,7 @@ describe('Integration Test', () => {
   it('should support testing overrides', async () => {
     const module = await Test.createTestingModule({
       imports: [
-        AdvancedConfigModule.forRoot({
+        NestStackConfigModule.forRoot({
           configs: [databaseConfig],
           envSource: {
             DB_URL: 'postgres://prod:5432/proddb',
@@ -161,7 +161,7 @@ describe('Integration Test', () => {
 
   it('should reject invalid configuration at bootstrap', () => {
     expect(() =>
-      AdvancedConfigModule.forRoot({
+      NestStackConfigModule.forRoot({
         configs: [databaseConfig],
         envSource: {
           DB_URL: 'not-a-valid-url',

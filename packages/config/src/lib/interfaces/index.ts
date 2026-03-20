@@ -8,9 +8,9 @@ export type {
 } from './config-definition.interface';
 export type { ConfigExplanation } from './config-explanation.interface';
 export type {
-  AdvancedConfigModuleAsyncOptions,
-  AdvancedConfigModuleOptions,
-  AdvancedConfigOptionsFactory,
+  NestStackConfigModuleAsyncOptions,
+  NestStackConfigModuleOptions,
+  NestStackConfigOptionsFactory,
 } from './config-module-options.interface';
 export type { IEnvSource } from './env-source.interface';
 export type { FileSource, LoadContext, SecretSource } from './load-context.interface';
