@@ -240,15 +240,17 @@ describe('AdvancedConfigModule', () => {
               REDIS_PASSWORD: 'secret',
             },
           }),
-          AdvancedConfigModule.forFeature({
-            namespace: 'redis',
-            schema: z.object({ url: z.string(), password: z.string() }),
-            load: ({ env }) => ({
-              url: env.getString('REDIS_URL'),
-              password: env.getString('REDIS_PASSWORD'),
+          AdvancedConfigModule.forFeature(
+            defineConfig({
+              namespace: 'redis',
+              schema: z.object({ url: z.string(), password: z.string() }),
+              load: ({ env }) => ({
+                url: env.getString('REDIS_URL'),
+                password: env.getString('REDIS_PASSWORD'),
+              }),
+              secretKeys: ['password'],
             }),
-            secretKeys: ['password'],
-          }),
+          ),
         ],
       }).compile();
 
@@ -279,6 +281,21 @@ describe('AdvancedConfigModule', () => {
       const service = module.get(ConfigService);
       expect(service.get('feature.enabled')).toBe(true);
       expect(service.get('flags.darkMode')).toBe(false);
+    });
+
+    it('should throw when called before forRoot', async () => {
+      const featureConfig = defineConfig({
+        namespace: 'feature',
+        schema: z.object({ enabled: z.boolean().default(true) }),
+      });
+
+      await expect(
+        Test.createTestingModule({
+          imports: [AdvancedConfigModule.forFeature(featureConfig)],
+        }).compile(),
+      ).rejects.toThrow(
+        'AdvancedConfigModule.forFeature() called before forRoot(). Register forRoot() first.',
+      );
     });
   });
 });

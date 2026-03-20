@@ -17,6 +17,7 @@ import { EnvSource } from './loaders';
 export class AdvancedConfigModule {
   private static readonly globalStore = new ConfigStore();
   private static envSourceInstance: EnvSource = new EnvSource();
+  private static initialized = false;
 
   static forRoot(options: AdvancedConfigModuleOptions): DynamicModule {
     AdvancedConfigModule.processConfigs(options);
@@ -58,18 +59,33 @@ export class AdvancedConfigModule {
   }
 
   static forFeature(...configs: ConfigDefinitionInput[]): DynamicModule {
-    for (const input of configs) {
-      const config = AdvancedConfigModule.normalizeConfig(input);
-      const rawData = config.load
-        ? config.load({ env: AdvancedConfigModule.envSourceInstance })
-        : {};
-      AdvancedConfigModule.globalStore.register(config, rawData as Record<string, unknown>);
-    }
+    const featureInitToken = Symbol('ADVANCED_CONFIG_FEATURE_INIT');
 
     return {
       module: AdvancedConfigModule,
       providers: [
-        { provide: CONFIG_STORE, useValue: AdvancedConfigModule.globalStore },
+        {
+          provide: featureInitToken,
+          useFactory: () => {
+            if (!AdvancedConfigModule.initialized) {
+              throw new Error(
+                'AdvancedConfigModule.forFeature() called before forRoot(). Register forRoot() first.',
+              );
+            }
+            for (const input of configs) {
+              const config = AdvancedConfigModule.normalizeConfig(input);
+              const rawData = config.load
+                ? config.load({ env: AdvancedConfigModule.envSourceInstance })
+                : {};
+              AdvancedConfigModule.globalStore.register(config, rawData as Record<string, unknown>);
+            }
+          },
+        },
+        {
+          provide: CONFIG_STORE,
+          useFactory: (_init: unknown) => AdvancedConfigModule.globalStore,
+          inject: [featureInitToken],
+        },
         ConfigService,
       ],
       exports: [ConfigService, CONFIG_STORE],
@@ -80,15 +96,9 @@ export class AdvancedConfigModule {
    * Resets internal state. Intended for testing only.
    */
   static reset(): void {
-    const freshStore = new ConfigStore();
-
-    for (const key of Object.getOwnPropertyNames(freshStore)) {
-      (AdvancedConfigModule.globalStore as unknown as Record<string, unknown>)[key] = (
-        freshStore as unknown as Record<string, unknown>
-      )[key];
-    }
-
+    AdvancedConfigModule.globalStore.clear();
     AdvancedConfigModule.envSourceInstance = new EnvSource();
+    AdvancedConfigModule.initialized = false;
   }
 
   private static normalizeConfig(input: ConfigDefinitionInput): ConfigDefinition {
@@ -104,6 +114,7 @@ export class AdvancedConfigModule {
 
   private static processConfigs(options: AdvancedConfigModuleOptions): void {
     AdvancedConfigModule.envSourceInstance = new EnvSource(options.envSource);
+    AdvancedConfigModule.initialized = true;
 
     for (const config of options.configs) {
       const rawData = config.load
@@ -113,7 +124,7 @@ export class AdvancedConfigModule {
       AdvancedConfigModule.globalStore.register(
         config,
         rawData as Record<string, unknown>,
-        overrides as Record<string, unknown> | undefined,
+        overrides,
       );
     }
   }

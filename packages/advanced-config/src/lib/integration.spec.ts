@@ -94,7 +94,7 @@ describe('Integration Test', () => {
 
     const explanation = configService.explain('database.password');
     expect(explanation.isSecret).toBe(true);
-    expect(explanation.value).toBe('super-secret');
+    expect(explanation.value).toBe('********');
     expect(explanation.source).toBe('loader');
   });
 

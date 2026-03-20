@@ -85,6 +85,7 @@ describe('ConfigStore', () => {
 
       const explanation = store.explain('database.password');
       expect(explanation.isSecret).toBe(true);
+      expect(explanation.value).toBe('********');
     });
   });
 
@@ -172,7 +173,7 @@ describe('ConfigStore', () => {
       expect(explanation.value).toBe(10);
     });
 
-    it('should fallback to default source for deep nested paths not in source map', () => {
+    it('should report correct source for deep nested paths from loader', () => {
       const config = defineConfig({
         namespace: 'db',
         schema: z.object({
@@ -185,7 +186,44 @@ describe('ConfigStore', () => {
       const explanation = store.explain('db.conn.host');
       expect(explanation.namespace).toBe('db');
       expect(explanation.key).toBe('conn.host');
-      expect(explanation.source).toBe('default');
+      expect(explanation.source).toBe('loader');
+    });
+
+    it('should report correct source for deep nested paths from overrides', () => {
+      const config = defineConfig({
+        namespace: 'db',
+        schema: z.object({
+          conn: z.object({ host: z.string(), port: z.number() }),
+        }),
+      });
+
+      store.register(
+        config,
+        { conn: { host: 'localhost', port: 5432 } },
+        { conn: { host: 'override-host', port: 9999 } },
+      );
+
+      expect(store.explain('db.conn.host').source).toBe('override');
+      expect(store.explain('db.conn.port').source).toBe('override');
+      expect(store.get('db.conn.host')).toBe('override-host');
+    });
+
+    it('should classify nested default objects correctly', () => {
+      const config = defineConfig({
+        namespace: 'svc',
+        schema: z.object({
+          opts: z
+            .object({ retries: z.number().default(3), timeout: z.number().default(1000) })
+            .default({ retries: 3, timeout: 1000 }),
+        }),
+      });
+
+      // raw has no 'opts' key — Zod default fills in the whole nested object
+      store.register(config, {});
+
+      expect(store.explain('svc.opts').source).toBe('default');
+      expect(store.explain('svc.opts.retries').source).toBe('default');
+      expect(store.get('svc.opts.retries')).toBe(3);
     });
 
     it('should explain a namespace-level path (no dot)', () => {
@@ -244,6 +282,24 @@ describe('ConfigStore', () => {
       expect(safe).toEqual({
         db: { url: 'postgres://localhost', password: '********' },
       });
+    });
+  });
+
+  describe('clear', () => {
+    it('should reset all internal state', () => {
+      const config = defineConfig({
+        namespace: 'db',
+        schema: z.object({ url: z.string(), password: z.string() }),
+        secretKeys: ['password'],
+      });
+
+      store.register(config, { url: 'postgres://localhost', password: 's3cret' });
+      expect(store.size).toBe(1);
+
+      store.clear();
+
+      expect(store.size).toBe(0);
+      expect(() => store.get('db.url')).toThrow('Configuration key "db.url" does not exist');
     });
   });
 });

@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import type { ZodError } from 'zod';
 import type { ConfigDefinition, ConfigExplanation } from './interfaces';
 import type { DeepReadonly } from './types';
 import { buildLookupMap, deepFreeze, maskSecrets } from './utils';
@@ -15,7 +14,7 @@ export class ConfigStore {
   private readonly logger = new Logger(ConfigStore.name);
   private readonly namespaces = new Map<string, NamespaceEntry>();
   private lookupMap = new Map<string, unknown>();
-  private allSecretKeys = new Set<string>();
+  private readonly allSecretKeys = new Set<string>();
 
   register(
     definition: ConfigDefinition,
@@ -35,7 +34,7 @@ export class ConfigStore {
 
     const result = schema.safeParse(merged);
     if (!result.success) {
-      const zodError = result.error as ZodError;
+      const zodError = result.error;
       const details = zodError.issues
         .map((issue) => {
           const path = issue.path.join('.');
@@ -50,15 +49,7 @@ export class ConfigStore {
     const frozen = deepFreeze({ ...validated });
 
     const sourceMap = new Map<string, 'loader' | 'default' | 'override'>();
-    for (const key of Object.keys(validated)) {
-      if (overrides && key in overrides) {
-        sourceMap.set(key, 'override');
-      } else if (key in rawData) {
-        sourceMap.set(key, 'loader');
-      } else {
-        sourceMap.set(key, 'default');
-      }
-    }
+    classifySource(sourceMap, validated, rawData, overrides, '');
 
     for (const sk of secretKeys) {
       this.allSecretKeys.add(`${namespace}.${sk}`);
@@ -94,10 +85,11 @@ export class ConfigStore {
     }
 
     const value = this.lookupMap.get(path);
-    const source = key ? (entry.source.get(key) ?? 'default') : 'loader';
+    const rawSource = key ? entry.source.get(key) : undefined;
+    const source = key ? /* c8 ignore next */ (rawSource ?? 'default') : 'loader';
     const isSecret = this.allSecretKeys.has(path);
 
-    return { path, namespace, key, value, source, isSecret };
+    return { path, namespace, key, value: isSecret ? '********' : value, source, isSecret };
   }
 
   getAll(): Record<string, unknown> {
@@ -121,8 +113,60 @@ export class ConfigStore {
     return this.namespaces.size;
   }
 
+  clear(): void {
+    this.namespaces.clear();
+    this.lookupMap.clear();
+    this.allSecretKeys.clear();
+  }
+
   private rebuildLookupMap(): void {
     const all = this.getAll();
     this.lookupMap = buildLookupMap(all);
+  }
+}
+
+type SourceType = 'loader' | 'default' | 'override';
+
+function resolveKeySource(
+  key: string,
+  raw: Record<string, unknown>,
+  over: Record<string, unknown> | undefined,
+): SourceType {
+  if (over && key in over) return 'override';
+  if (key in raw) return 'loader';
+  return 'default';
+}
+
+function asRecord(
+  parent: Record<string, unknown>,
+  key: string,
+): Record<string, unknown> | undefined {
+  const val = parent[key];
+  return key in parent && typeof val === 'object' && val !== null
+    ? (val as Record<string, unknown>)
+    : undefined;
+}
+
+function classifySource(
+  sourceMap: Map<string, SourceType>,
+  obj: Record<string, unknown>,
+  raw: Record<string, unknown>,
+  over: Record<string, unknown> | undefined,
+  prefix: string,
+): void {
+  for (const key of Object.keys(obj)) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    sourceMap.set(fullKey, resolveKeySource(key, raw, over));
+
+    const val = obj[key];
+    if (val !== null && typeof val === 'object' && !Array.isArray(val)) {
+      classifySource(
+        sourceMap,
+        val as Record<string, unknown>,
+        asRecord(raw, key) ?? {},
+        over ? asRecord(over, key) : undefined,
+        fullKey,
+      );
+    }
   }
 }
