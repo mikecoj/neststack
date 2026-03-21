@@ -24,7 +24,7 @@
       "outputs": ["{projectRoot}/out"]
     },
     "postbuild": {
-      "command": "pagefind --site out --output-path out/_pagefind && cp -r out/_pagefind public/_pagefind",
+      "command": "pagefind --site out --output-path out/_pagefind && mkdir -p public/_pagefind && cp -r out/_pagefind/. public/_pagefind",
       "options": { "cwd": "apps/docs" },
       "dependsOn": ["build"]
     }
