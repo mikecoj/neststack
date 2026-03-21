@@ -95,6 +95,11 @@ aside[class*="nextra-sidebar"],
   color: var(--color-text);
 }
 
+/* Hide theme switch from sidebar footer (moved to navbar) */
+.nextra-sidebar-footer [title="Change theme"] {
+  display: none;
+}
+
 /* Theme switch / toggle area in sidebar */
 [class*="nextra-sidebar"] button,
 [class*="nextra-sidebar"] [role="button"],
