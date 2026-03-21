@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Head } from 'nextra/components';
 import { getPageMap } from 'nextra/page-map';
-import { Footer, Layout, Navbar } from 'nextra-theme-docs';
+import { Footer, Layout, Navbar, ThemeSwitch } from 'nextra-theme-docs';
 import type { ReactNode } from 'react';
 import 'nextra-theme-docs/style.css';
 import './globals.css';
@@ -36,9 +36,16 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           sidebar={{ defaultMenuCollapseLevel: 2, toggleButton: true }}
           navbar={
             <Navbar
-              logo={<span style={{ fontWeight: 800, fontSize: '1.1rem' }}>NestStack</span>}
+              logo={
+                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <img src="/neststack/icon.svg" width={28} height={28} alt="NestStack logo" />
+                  <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>NestStack</span>
+                </span>
+              }
               projectLink={REPO_BASE}
-            />
+            >
+              <ThemeSwitch />
+            </Navbar>
           }
           footer={
             <Footer>
