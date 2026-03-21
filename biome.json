@@ -67,6 +67,19 @@
           }
         }
       }
+    },
+    {
+      "includes": ["apps/docs/app/layout.tsx"],
+      "linter": {
+        "rules": {
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          },
+          "performance": {
+            "noImgElement": "off"
+          }
+        }
+      }
     }
   ],
   "files": {

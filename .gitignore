@@ -10,7 +10,11 @@ tmp
 
 # Next.js (apps/docs)
 .next
-out
+apps/docs/out/
+
+# Pagefind search index (generated at build time)
+apps/docs/public/_pagefind/
+apps/docs/public/neststack/
 
 # TypeScript
 *.tsbuildinfo
@@ -23,6 +27,9 @@ coverage
 .vscode
 *.swp
 *.swo
+
+# Testing tools
+.playwright-mcp/
 
 # OS
 .DS_Store

@@ -1,4 +1,15 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'NestStack — Enterprise-Grade NestJS Packages',
+  description:
+    'NestStack is a collection of rigorously tested, type-safe NestJS packages built for banking, fintech, and mission-critical applications.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    url: 'https://mikecoj.github.io/neststack',
+  },
+};
 
 const features = [
   {

@@ -1,3 +1,10 @@
+export const metadata = {
+  title: 'Testing',
+  description:
+    'Test NestJS applications with @neststack/config using envSource injection and NestStackConfigModule.reset() to isolate configuration state between tests.',
+  alternates: { canonical: '/docs/config/testing' },
+};
+
 # Testing
 
 `@neststack/config` is designed to be easy to test. The key pattern: use `envSource` to inject fake environment variables and `NestStackConfigModule.reset()` to clear state between tests.
