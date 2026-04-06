@@ -76,7 +76,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^11.1.17",
-    "@nestjs/core": "^11.1.17",
+    "@nestjs/core": "^11.1.18",
     "@nestjs/platform-express": "^11.1.17",
     "axios": "^1.13.6",
     "reflect-metadata": "^0.2.2",
